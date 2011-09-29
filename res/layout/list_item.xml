@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/list_item_layout"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent">
+<!-- IMIE I NAZWISKO-->
+<TextView 
+	android:id="@+id/surname_name"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentTop="true"
+    android:padding="3dp"
+    android:textSize="12sp" >
+</TextView>
+<!-- CMENTARZ-->
+<TextView 
+	android:id="@+id/list_cementry"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_below="@id/surname_name"
+    android:padding="1dp"
+    android:textStyle="bold"
+    android:textSize="12sp" />
+
+<!-- DATA URODZIN-->
+<TextView
+	android:id="@+id/list_header_dateBirth"
+	android:layout_below="@id/list_cementry"
+	android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="ur. "
+	>
+</TextView>
+<TextView
+	android:id="@+id/list_value_dateBirth"
+	android:layout_toRightOf="@id/list_header_dateBirth"
+	android:layout_below="@id/list_cementry"
+	android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+	>
+</TextView>
+<!-- DATA SMIERCI-->
+
+<TextView
+	android:id="@+id/list_header_dateDeath"
+	android:layout_toRightOf="@id/list_value_dateBirth"
+	android:layout_width="wrap_content"
+	android:layout_below="@id/list_cementry"
+    android:layout_height="wrap_content"
+    android:text="zm. "
+	>
+</TextView>
+<TextView
+	android:layout_below="@id/list_cementry"
+	android:id="@+id/list_value_dateDeath"
+	android:layout_toRightOf="@id/list_header_dateDeath"
+	android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+	>
+</TextView>
+<!-- DATA POGRZEBU-->
+<TextView
+
+	android:id="@+id/list_header_dateBurial"
+	android:layout_below="@id/list_header_dateDeath"
+	android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+	>
+</TextView>
+<TextView
+	android:id="@+id/list_value_dateBurial"
+	android:layout_toRightOf="@id/list_header_dateBurial"
+	android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+	>
+</TextView>
+</RelativeLayout>

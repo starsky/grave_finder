@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="necropolis_prompt">Wybierz cmentarz</string>
+<string-array name="necropolises">
+<item>Dowolny</item>
+<item>Miłostowo</item>
+<item>Junikowo</item>
+<item>Lubowska</item>
+<item>Zabytkowy Jeżycki</item>
+<item>Wielkopolan</item>
+<item>Górczyn</item>
+<item>Żołnierzy Brytyjskich</item>
+<item>Garnizonowy</item>
+<item>Bohaterów Polskich</item>
+<item>Św.Wojciecha</item>
+</string-array>
+</resources>
