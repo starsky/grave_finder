@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
- android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
->
-<RelativeLayout 
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" 
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
+  
    	<RelativeLayout 
    	android:id="@+id/actionbar"
    	android:layout_width="fill_parent"
    	android:layout_height="40dp"
    	android:layout_alignParentTop="true"
-   	android:background="@drawable/top_actionbar">
+   	android:background="@android:drawable/title_bar_tall"
+   	>
    	<TextView
    	android:id="@+id/title_actionbar"
    	android:layout_height="fill_parent"
@@ -22,19 +21,48 @@
    	android:gravity="center_vertical"
    	android:textColor="@color/white"
    	android:paddingLeft="10dp"
+   	android:typeface="sans"
+   	android:textStyle="bold"
+   	android:textSize="18sp"
    	android:text="PoznanAPI ITINER"
-   	/>  
+   	/> 
    	<ProgressBar
    		android:id="@+id/progressbar_titlebar"
-   		android:layout_height="30dp"
+  		android:layout_height="30dp"
    		android:layout_width="30dp"
    		android:gravity="center_vertical"
+   		android:layout_centerVertical="true"
    		android:layout_alignParentRight="true"
-   		android:max="100"  	
+  		android:max="100"  	
    		android:visibility="gone"
-   			/> 	
+  			/> 	
+                         
+ 	
    	</RelativeLayout>
+<ScrollView 
+android:layout_below="@id/actionbar"
+ android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:drawable/screen_background_dark_transparent"
+>
+   	
+
+   	  
+	<RelativeLayout 
+		android:id="@+id/all"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_below="@id/actionbar"
+	>
+	  
+    <LinearLayout 
+   
+    				android:id="@+id/linear_main"
+    				android:layout_height="fill_parent"
+    				android:layout_width="fill_parent"
+    				android:orientation="vertical">
 <!--    	WYBÓR CMENTARZA -->
+	   
    	<LinearLayout
    		android:id="@+id/necropolis_choose"
 	   	android:layout_below="@id/actionbar"
@@ -82,6 +110,8 @@
 		android:textSize="14sp"
 		android:paddingLeft="4dp"
 		android:editable="true"
+		android:paddingTop="3dp"
+		android:paddingBottom="3dp"
 		android:textStyle="bold"
 		android:paddingRight="4dp"
 		android:textColor="@color/white"
@@ -99,6 +129,8 @@
 		android:textColor="@color/white"
 		android:background="@color/black"
 		android:text="śmierci"
+		android:paddingTop="3dp"
+		android:paddingBottom="3dp"
 		android:textStyle="bold"
 		android:layout_height="wrap_content"></TextView>
 			<TextView
@@ -112,6 +144,8 @@
 		android:textColor="@color/black"
 		android:background="@color/white"
 		android:text="pogrzebu"
+		android:paddingTop="3dp"
+		android:paddingBottom="3dp"
 		android:textStyle="bold"
 		android:layout_height="wrap_content"></TextView>
 		
@@ -162,7 +196,7 @@
 	   	android:layout_width="fill_parent"
 	   	android:layout_height="wrap_content"
 	   	android:hint="Imię"
-	   	android:text="Michał"
+	   	android:text=""
    	/>
    	<EditText 
 	   	android:paddingTop="5dp"
@@ -171,7 +205,7 @@
 	   	android:layout_width="fill_parent"
 	   	android:layout_height="wrap_content"
 	   	android:hint="Nazwisko"
-	   	android:text="Urbaniak"
+	   	android:text=""
    	/>
    	</LinearLayout>
    	</LinearLayout> 
@@ -189,6 +223,9 @@
    		android:layout_width="100dp"
    		android:layout_height="wrap_content"   		
    		android:text="Szukaj"  />
-</LinearLayout>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+</LinearLayout>  
+</LinearLayout> 
+</RelativeLayout>   
+</ScrollView>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </RelativeLayout>
-</ScrollView>
+

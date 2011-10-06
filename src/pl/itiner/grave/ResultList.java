@@ -109,6 +109,8 @@ public class ResultList extends ListActivity{
 				((TextView) convertView.findViewById(R.id.list_value_dateBirth)).setText(" ?  ");
 			else
 				((TextView) convertView.findViewById(R.id.list_value_dateBirth)).setText(dt.getDate_birth());
+			
+			
 			((TextView) convertView.findViewById(R.id.list_value_dateDeath)).setText(dt.getDeath_date());
 			return convertView;
 		}

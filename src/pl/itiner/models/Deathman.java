@@ -17,11 +17,12 @@ public class Deathman {
 	
 	public Deathman(String surname, String name, String burial_date,
 			String death_date, String cm_id, String place, String row, String family,
-			String field, String size, String birth_date, String id,double[] coordinates) {
+			String field, String size, String birth_date, String quarter, String id, double[] coordinates) {
 		super();
 		this.surname = surname;
 		this.name = name;
 		this.burial_date = burial_date;
+		this.date_birth = birth_date;
 		this.death_date = death_date;
 		this.cm_id = cm_id;
 		this.place = place;
@@ -29,6 +30,7 @@ public class Deathman {
 		this.family = family;
 		this.field = field;
 		this.size = size;
+		this.quater = quarter;
 		this.coordinates = coordinates;
 		this.id = id;
 	}

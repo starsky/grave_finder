@@ -10,7 +10,8 @@ android:layout_height="fill_parent">
     android:layout_height="fill_parent"
     android:layout_alignParentTop="true"
     android:padding="3dp"
-    android:textSize="12sp" >
+    android:typeface="sans"
+    android:textSize="18sp" >
 </TextView>
 <!-- CMENTARZ-->
 <TextView 
@@ -18,9 +19,10 @@ android:layout_height="fill_parent">
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_below="@id/surname_name"
-    android:padding="1dp"
+    android:padding="3dp"
     android:textStyle="bold"
-    android:textSize="12sp" />
+    android:typeface="sans"
+    android:textSize="14sp" />
 
 <!-- DATA URODZIN-->
 <TextView
@@ -29,33 +31,39 @@ android:layout_height="fill_parent">
 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="ur. "
+    
+    android:padding="3dp"
 	>
 </TextView>
 <TextView
+	android:padding="3dp"
 	android:id="@+id/list_value_dateBirth"
 	android:layout_toRightOf="@id/list_header_dateBirth"
 	android:layout_below="@id/list_cementry"
 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:textStyle="bold"
 	>
 </TextView>
 <!-- DATA SMIERCI-->
 
 <TextView
 	android:id="@+id/list_header_dateDeath"
-	android:layout_toRightOf="@id/list_value_dateBirth"
+	android:layout_below="@id/list_value_dateBirth"
 	android:layout_width="wrap_content"
-	android:layout_below="@id/list_cementry"
-    android:layout_height="wrap_content"
+	android:layout_height="wrap_content"
     android:text="zm. "
+    android:padding="3dp"
 	>
 </TextView>
 <TextView
-	android:layout_below="@id/list_cementry"
 	android:id="@+id/list_value_dateDeath"
+	android:layout_below="@id/list_value_dateBirth"
 	android:layout_toRightOf="@id/list_header_dateDeath"
 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:padding="3dp"
+    android:textStyle="bold"
 	>
 </TextView>
 <!-- DATA POGRZEBU-->
@@ -65,10 +73,11 @@ android:layout_height="fill_parent">
 	android:layout_below="@id/list_header_dateDeath"
 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-	>
+   	>
 </TextView>
 <TextView
 	android:id="@+id/list_value_dateBurial"
+	android:textStyle="bold"
 	android:layout_toRightOf="@id/list_header_dateBurial"
 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"

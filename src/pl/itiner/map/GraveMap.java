@@ -6,10 +6,12 @@ import pl.itiner.grave.GeoJSON;
 import pl.itiner.grave.R;
 import pl.itiner.grave.ResultList;
 import pl.itiner.models.Deathman;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -29,12 +31,24 @@ public class GraveMap extends MapActivity {
 	TextView mapBirthDate;
 	TextView mapDeathDate;
 	TextView mapCementry;
+	TextView mapRow;
+	TextView mapQuater;
+	TextView mapField;
 	MapController mc;
 	GeoPoint p;
 
 	/** Called when the activity is first created. */
 
 	class MapOverlay extends com.google.android.maps.Overlay {
+		String _start, _meta;
+		double _x, _y;
+		public MapOverlay(String start, String meta, double x, double y)
+		{
+			_x = x;
+			_y = y;
+			_start  = start;
+			_meta = meta;
+		}
 		@Override
 		public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
 				long when) {
@@ -50,6 +64,17 @@ public class GraveMap extends MapActivity {
 			canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 61, null);
 			return true;
 		}
+
+		@Override
+		public boolean onTap(GeoPoint arg0, MapView arg1) {
+			// TODO Auto-generated method stub
+		    Intent intent = new Intent("pl.itiner.ROUTER",Uri.parse("route://itiner.pl/52.402267/16.911813/"+_x+"/"+_y));
+		     startActivity(intent);
+//52.402267,16.911813
+			return true;
+			
+		}
+		
 	}
 
 	@Override
@@ -57,10 +82,14 @@ public class GraveMap extends MapActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
 
+		
 		Bundle b = getIntent().getExtras();
+		if(b!= null)
+		{
 		double x = b.getDouble("x");
 		double y = b.getDouble("y");
 		int id = b.getInt("id");
+		
 
 		Deathman tmp = GeoJSON.dList.get(id);
 		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
@@ -71,6 +100,15 @@ public class GraveMap extends MapActivity {
 		
 		mapDeathDate = (TextView) findViewById(R.id.map_value_dateDeath);
 		mapDeathDate.setText(tmp.getDeath_date());
+		
+		mapField = (TextView) findViewById(R.id.map_field_value);
+		mapField.setText(tmp.getField());
+		
+		mapRow = (TextView) findViewById(R.id.map_row_value);
+		mapRow.setText(tmp.getRow());
+		
+		mapQuater = (TextView) findViewById(R.id.map_quater_value);
+		mapQuater.setText(tmp.getQuater());
 
 		mapCementry = (TextView) findViewById(R.id.map_value_cementry);
 		String cm_name = ResultList.cementeries[Integer
@@ -96,12 +134,13 @@ public class GraveMap extends MapActivity {
 		mc.setZoom(17);
 
 		// ---Add a location marker---
-		MapOverlay mapOverlay = new MapOverlay();
+		MapOverlay mapOverlay = new MapOverlay("START", "META", x, y);
 		List<Overlay> listOfOverlays = mapView.getOverlays();
 		listOfOverlays.clear();
 		listOfOverlays.add(mapOverlay);
 
 		mapView.invalidate();
+		}
 	}
 
 	@Override

@@ -171,6 +171,7 @@ public ArrayList<Deathman> parseJSON(Context ctx, String JSON) {
 						properties.getString("g_field"), 
 						properties.getString("g_size"),
 						properties.getString("g_date_birth"),
+						properties.getString("g_quarter"),
 						id,
 						new double [] {doubles.getDouble(0),doubles.getDouble(1)}
 				);

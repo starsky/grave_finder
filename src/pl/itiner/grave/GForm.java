@@ -12,23 +12,30 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class GForm extends Activity {
     /** Called when the activity is first created. */
 	public static ArrayList <Deathman> dead = new ArrayList<Deathman>();
+	public static final int PROGRESSBAR = 1;
+	public static final int PROGRESSBAR_GONE =2;
+	public static final int TOAST = 3;
 	Spinner necropolis;
 	ConnectivityManager cm;
 	ProgressBar progressBar;
@@ -39,6 +46,7 @@ public class GForm extends Activity {
 	TextView deathDate;
 	TextView burialDate;
 	TextView birthDate;
+	RelativeLayout ll;
 	int whichDate = 1; //0 = deathDate was chosen, 1 = burialDate, 2 = birthDate
 	Button find;
 	OnCheckedChangeListener onCheckedDateVisiable = new OnCheckedChangeListener() {
@@ -63,8 +71,11 @@ public class GForm extends Activity {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			if(!checkBoxDate.isChecked())
+				checkBoxDate.setChecked(true);
 			if(v.getId() == deathDate.getId())
 			{
+				
 				whichDate = 0;
 				deathDate.setBackgroundColor(Color.WHITE);
 				deathDate.setTextColor(Color.BLACK);
@@ -126,7 +137,10 @@ public class GForm extends Activity {
 		GeoJSON gJSON;
 		if(checkBoxDate.isChecked())
 		{		
-			datePicker.clearFocus();
+			if(datePicker.isFocused())
+			{
+				datePicker.clearFocus();
+			}
 			tmpDate = datePicker.getYear()+"-"+(datePicker.getMonth()+1)+"-"+datePicker.getDayOfMonth();
 			gJSON = new GeoJSON(tmpNecropolisId, tmpName, tmpSurname, tmpDate, whichDate);
 		}
@@ -146,7 +160,35 @@ public class GForm extends Activity {
 	    }
 	    return false;
 	}
-
+	Runnable th_searchGraves = new Runnable() {
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			Message dbmsg = activityUIHandler.obtainMessage();
+		   
+			dbmsg.what = PROGRESSBAR;
+			activityUIHandler.sendMessage(dbmsg);	
+			runQuery();
+			if(dead.size() !=0){
+			Intent i;
+			i = new Intent(getApplicationContext(),ResultList.class);
+			startActivity(i);
+			}
+			else {
+				dbmsg = activityUIHandler.obtainMessage();
+				   
+				dbmsg.what = TOAST;
+				activityUIHandler.sendMessage(dbmsg);
+			}
+			dbmsg = activityUIHandler.obtainMessage();
+		   
+			dbmsg.what = PROGRESSBAR_GONE;
+			activityUIHandler.sendMessage(dbmsg);
+			
+		}
+	};
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,7 +198,7 @@ public class GForm extends Activity {
         /**
          * TITLEBAR PROGRESSBAR
          */
-        
+        ll = (RelativeLayout) findViewById(R.id.all);
         progressBar = (ProgressBar) findViewById(R.id.progressbar_titlebar);
         
         /**
@@ -169,23 +211,19 @@ public class GForm extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				
 				cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 				if (isOnline())
 				{
-				progressBar.setVisibility(View.VISIBLE);
-				
-				runQuery();
-				progressBar.setVisibility(View.GONE);
-				Intent i;
-				i = new Intent(getApplicationContext(),ResultList.class);
-				startActivity(i);
+					new Thread(th_searchGraves).start();				
 				}
-				else if (!isOnline())
+				if (!isOnline())
 				{					
 					Toast.makeText(getApplicationContext(), 
 					"Brak dostępu do Internetu\nSprawdź swoje połączenie", 
 					Toast.LENGTH_SHORT).show();
 				}
+				
 			}
 		});
         /**
@@ -227,5 +265,24 @@ public class GForm extends Activity {
         birthDate.setOnClickListener(onTextViewDateClick);
         
     }
+    Handler activityUIHandler = new Handler() {
+ 		// this method will handle the calls from other threads.
+ 		public void handleMessage(Message msg) {
+ 			Bundle b = msg.getData();
+ 			switch(msg.what){
+ 			 			
+ 			case PROGRESSBAR: 				
+ 			    progressBar.setVisibility(View.VISIBLE);
+ 		        break;
+ 			case PROGRESSBAR_GONE:
+ 				progressBar.setVisibility(View.GONE);
+ 				break;
+ 			case TOAST:
+ 				Toast.makeText(getApplicationContext(), "Brak wyników", Toast.LENGTH_SHORT).show();
+ 				break;
+ 			}
+ 		}
+
+    };
     
 }

@@ -5,23 +5,38 @@
       <RelativeLayout 
       	android:id="@+id/header_graveinfo"
      	android:layout_width="fill_parent"
-     	android:layout_height="100dp"
+     	android:layout_height="110dp"
+     	android:layout_alignParentTop="true"
+     	android:background="@android:drawable/screen_background_dark_transparent"
+     	
      >
+<!--      ARROW_LEFT -->
+     	
+<!--      <TextView  -->
+<!--      		android:id="@+id/map_arrow_left" -->
+<!--      		android:textSize="20dp" -->
+<!--        		android:layout_width="150dp" -->
+<!--      		-->
+<!--      		android:layout_alignLeft="@id/header_graveinfo" -->
+<!--      		android:layout_height="fill_parent"/> -->
+     		
      	<!-- IMIE I NAZWISKO-->
-<TextView 
+    <TextView 
 	android:id="@+id/map_surname_name"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
+	android:text="Imię i nazwisko"
     android:typeface="sans"
     android:padding="5dp"
     android:textSize="20sp"
     android:textStyle="bold" >
 </TextView>
+
+
 <!-- CMENTARZ-->
 <TextView 
 	android:id="@+id/map_value_cementry"
-    android:layout_width="fill_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@id/map_surname_name"
     android:padding="1dp"
@@ -38,11 +53,67 @@
     android:text="ur. "
 	>
 </TextView>
+<!-- KWATERA -->
+<TextView 
+	android:id="@+id/map_quater_value"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:layout_alignParentRight="true"
+	android:layout_below="@id/map_surname_name"
+	android:textStyle="bold"
+	/>
+<TextView 
+	android:id="@+id/map_quater_header"
+	android:layout_height="wrap_content"
+	android:layout_toLeftOf="@id/map_quater_value"
+	android:layout_width="wrap_content"
+	android:layout_below="@id/map_surname_name"
+	android:text="Kwatera:  "
+	android:typeface="sans"
+	/>
+	
+<!-- RZAD -->
+<TextView 
+	android:id="@+id/map_row_value"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:layout_alignParentRight="true"
+	android:layout_below="@id/map_quater_value"
+	android:textStyle="bold"
+	/>
+<TextView 
+	android:id="@+id/map_row_header"
+	android:layout_height="wrap_content"
+	android:layout_toLeftOf="@id/map_row_value"
+	android:layout_width="wrap_content"
+	android:layout_below="@id/map_quater_value"
+	android:text="Rząd:  "
+	android:typeface="sans"
+	/>
+<!-- POLE -->
+<TextView 
+	android:id="@+id/map_field_value"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:layout_alignParentRight="true"
+	android:layout_below="@id/map_row_value"
+	android:textStyle="bold"
+	/>
+<TextView 
+	android:id="@+id/map_field_header"
+	android:layout_height="wrap_content"
+	android:layout_toLeftOf="@id/map_field_value"
+	android:layout_width="wrap_content"
+	android:layout_below="@id/map_row_value"
+	android:text="Pole:  "
+	android:typeface="sans"
+	/>
 <TextView
 	android:id="@+id/map_value_dateBirth"
 	android:layout_toRightOf="@id/map_header_dateBirth"
 	android:layout_below="@id/map_value_cementry"
 	android:layout_width="wrap_content"
+	android:textStyle="bold"
     android:layout_height="wrap_content"
 	>
 </TextView>
@@ -50,18 +121,18 @@
 
 <TextView
 	android:id="@+id/map_header_dateDeath"
-	android:layout_toRightOf="@id/map_value_dateBirth"
 	android:layout_width="wrap_content"
-	android:layout_below="@id/map_value_cementry"
+	android:layout_below="@id/map_header_dateBirth"
     android:layout_height="wrap_content"
     android:text="zm. "
 	>
 </TextView>
 <TextView
-	android:layout_below="@id/map_value_cementry"
+	android:layout_below="@id/map_value_dateBirth"
 	android:id="@+id/map_value_dateDeath"
 	android:layout_toRightOf="@id/map_header_dateDeath"
 	android:layout_width="wrap_content"
+	android:textStyle="bold"
     android:layout_height="wrap_content"
 	>
 </TextView>
@@ -71,6 +142,7 @@
 	android:id="@+id/map_header_dateBurial"
 	android:layout_below="@id/map_header_dateDeath"
 	android:layout_width="wrap_content"
+	
     android:layout_height="wrap_content"
 	>
 </TextView>
@@ -85,14 +157,18 @@
  
     <com.google.android.maps.MapView 
         android:id="@+id/mapView"
-        android:layout_below="@id/header_graveinfo"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:enabled="true"
-        android:clickable="true"
-        android:apiKey="0fwLhF406wY8NWJfI8BBuiifYfUUnVvVo8g__hg"
+        android:layout_below="@id/header_graveinfo"
+        android:clickable="true"       
+        android:apiKey="0viAjndEYgLvxsPD1rMM-HFx4xXSjrzr_IeEeFw"
         />
-
+ 		<!--  
+ 		0fwLhF406wY-SCmtgcRpu3jYiiV8ZscgM48I-NQ       
+		android:apiKey="0fwLhF406wY8NWJfI8BBuiifYfUUnVvVo8g__hg" 
+		
+		-->
      <LinearLayout android:id="@+id/zoom" 
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content" 
