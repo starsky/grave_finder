@@ -156,6 +156,7 @@ android:layout_below="@id/actionbar"
    	<CheckBox  android:id="@+id/checkbox"
    	 android:layout_width="wrap_content"
    	  android:layout_height="wrap_content"
+   	  android:layout_marginLeft="10dp"
    	  android:text="Pokaż wybór daty"
    	  ></CheckBox>
    	<DatePicker 

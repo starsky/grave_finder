@@ -14,6 +14,9 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -23,7 +26,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -115,6 +117,26 @@ public class GForm extends Activity {
 			
 		}
 	};
+	
+	 @Override
+		public boolean onCreateOptionsMenu(Menu menu){
+			super.onCreateOptionsMenu(menu);
+			MenuInflater inflater=getMenuInflater();
+			inflater.inflate(R.menu.menu, menu);
+			return true;
+		}
+		
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item){
+			switch (item.getItemId())
+			{
+				case R.id.menuAbout:
+					Intent intentAboutView = new Intent(this.getApplicationContext(),AboutView.class);
+					startActivity(intentAboutView);
+					break;
+			}
+			return false;
+		}
 	
 	public void runQuery()
 	{
