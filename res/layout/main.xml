@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    
     >
   
    	<RelativeLayout 
@@ -44,10 +45,7 @@ android:layout_below="@id/actionbar"
  android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@android:drawable/screen_background_dark_transparent"
->
-   	
-
-   	  
+>   	  
 	<RelativeLayout 
 		android:id="@+id/all"
 		android:layout_width="fill_parent"
@@ -209,23 +207,28 @@ android:layout_below="@id/actionbar"
    	/>
    	</LinearLayout>
    	</LinearLayout> 
-   	<LinearLayout 
+   	<RelativeLayout 
    		android:id="@+id/buttons"
-	   	android:layout_below="@id/name_choose"
 	   	android:layout_width="fill_parent"
 	   	android:layout_height="wrap_content"
 	   	android:padding="10dp"
-	   	android:gravity="right|center_vertical"
-	   	android:orientation="horizontal"
-   	>
+	    android:layout_alignParentBottom="true"
+
+   	><!-- 	    android:layout_below="@id/surname" -->
    	<Button 
+   		
    		android:id="@+id/find_btn"
-   		android:layout_width="100dp"
-   		android:layout_height="wrap_content"   		
+   		android:layout_width="fill_parent"
+   		android:layout_height="wrap_content"
+   		   		
    		android:text="Szukaj"  />
-</LinearLayout>  
+</RelativeLayout>
+ 
 </LinearLayout> 
-</RelativeLayout>   
+   	
+
+   
+</RelativeLayout> 
 </ScrollView>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </RelativeLayout>
 
