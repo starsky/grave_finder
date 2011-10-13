@@ -27,6 +27,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -49,6 +50,7 @@ public class GForm extends Activity {
 	TextView deathDate;
 	TextView burialDate;
 	TextView birthDate;
+	LinearLayout ll_dataChooseHeader;
 	RelativeLayout ll;
 	int whichDate = 1; //0 = deathDate was chosen, 1 = burialDate, 2 = birthDate
 	Button find;
@@ -63,11 +65,13 @@ public class GForm extends Activity {
 			if (isChecked)
 			{
 				datePicker.setVisibility(View.VISIBLE);
+				ll_dataChooseHeader.setVisibility(View.VISIBLE);
 				checkBoxDate.setText("");
 			}
 			else if(!isChecked)
-			{	checkBoxDate.setText("Pokaż wybór daty");
+			{	checkBoxDate.setText("Dodatkowe opcje wyszukiwania");
 				datePicker.setVisibility(View.GONE);
+				ll_dataChooseHeader.setVisibility(View.GONE);
 			}
 		}
 	};
@@ -238,6 +242,8 @@ public class GForm extends Activity {
          */
         ll = (RelativeLayout) findViewById(R.id.all);
         progressBar = (ProgressBar) findViewById(R.id.progressbar_titlebar);
+        
+        ll_dataChooseHeader = (LinearLayout) findViewById(R.id.date_choose_header);
         
         /**
          * FIND BUTTON
