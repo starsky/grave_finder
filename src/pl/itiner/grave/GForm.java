@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -51,6 +52,9 @@ public class GForm extends Activity {
 	RelativeLayout ll;
 	int whichDate = 1; //0 = deathDate was chosen, 1 = burialDate, 2 = birthDate
 	Button find;
+	public static Drawable white; 
+	public static Drawable dark; 
+	
 	OnCheckedChangeListener onCheckedDateVisiable = new OnCheckedChangeListener() {
 		
 		@Override
@@ -79,40 +83,51 @@ public class GForm extends Activity {
 			{
 				
 				whichDate = 0;
-				deathDate.setBackgroundColor(Color.WHITE);
+				deathDate.setBackgroundDrawable(white);
 				deathDate.setTextColor(Color.BLACK);
 				
-				burialDate.setBackgroundColor(Color.BLACK);
+				burialDate.setBackgroundDrawable(dark);
 				burialDate.setTextColor(Color.WHITE);
 				
-				birthDate.setBackgroundColor(Color.BLACK);
+				birthDate.setBackgroundDrawable(dark);
 				birthDate.setTextColor(Color.WHITE);
+				
+				birthDate.invalidate();
+				deathDate.invalidate();
+				burialDate.invalidate();
 				
 			}
 			else if(v.getId() == burialDate.getId())
 			{
 				whichDate =1;
-				deathDate.setBackgroundColor(Color.BLACK);
+				deathDate.setBackgroundDrawable(dark);
 				deathDate.setTextColor(Color.WHITE);
 				
-				burialDate.setBackgroundColor(Color.WHITE);
+				burialDate.setBackgroundDrawable(white);
 				burialDate.setTextColor(Color.BLACK);
 				
-				birthDate.setBackgroundColor(Color.BLACK);
+				birthDate.setBackgroundDrawable(dark);
 				birthDate.setTextColor(Color.WHITE);
 				
+				birthDate.invalidate();
+				deathDate.invalidate();
+				burialDate.invalidate();
 			}
 			else if(v.getId() == birthDate.getId())
 			{
 				whichDate = 2;
-				deathDate.setBackgroundColor(Color.BLACK);
+				deathDate.setBackgroundDrawable(dark);
 				deathDate.setTextColor(Color.WHITE);
 				
-				burialDate.setBackgroundColor(Color.BLACK);
+				burialDate.setBackgroundDrawable(dark);
 				burialDate.setTextColor(Color.WHITE);
 			
-				birthDate.setBackgroundColor(Color.WHITE);
+				birthDate.setBackgroundDrawable(white);
 				birthDate.setTextColor(Color.BLACK);
+				
+				birthDate.invalidate();
+				deathDate.invalidate();
+				burialDate.invalidate();
 			}
 			
 		}
@@ -149,8 +164,8 @@ public class GForm extends Activity {
 		String tmpName = "";
 		String tmpSurname = "";
 		try {
-			tmpName = URLEncoder.encode(editTextName.getText().toString().toLowerCase(),"UTF-8");
-			tmpSurname = URLEncoder.encode(editTextSurname.getText().toString().toLowerCase(),"UTF-8");
+			tmpName = URLEncoder.encode(editTextName.getText().toString().toLowerCase().trim(),"UTF-8");
+			tmpSurname = URLEncoder.encode(editTextSurname.getText().toString().toLowerCase().trim(),"UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -216,7 +231,8 @@ public class GForm extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        
+        white = getApplicationContext().getResources().getDrawable(android.R.drawable.editbox_dropdown_light_frame);
+        dark =  getApplicationContext().getResources().getDrawable(android.R.drawable.editbox_dropdown_dark_frame);
         /**
          * TITLEBAR PROGRESSBAR
          */
@@ -273,12 +289,15 @@ public class GForm extends Activity {
          *
          */
         editTextSurname = (EditText) findViewById(R.id.surname);
-        editTextName = (EditText) findViewById(R.id.name);
+        editTextSurname.setSelected(false);
         
+        editTextName = (EditText) findViewById(R.id.name);
+        editTextName.setSelected(false);
         /**
          * TEXTBOXES
          */
         deathDate = (TextView) findViewById(R.id.death_date);
+       
         burialDate = (TextView) findViewById(R.id.burial_date);
         birthDate = (TextView) findViewById(R.id.birth_date);
         
@@ -300,7 +319,7 @@ public class GForm extends Activity {
  				progressBar.setVisibility(View.GONE);
  				break;
  			case TOAST:
- 				Toast.makeText(getApplicationContext(), "Brak wyników", Toast.LENGTH_SHORT).show();
+ 				Toast.makeText(getApplicationContext(), "\nBrak wyników\n", Toast.LENGTH_SHORT).show();
  				break;
  			}
  		}

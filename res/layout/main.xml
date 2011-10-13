@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" 
     android:orientation="vertical"
     android:layout_width="fill_parent"
+    
     android:layout_height="fill_parent"
     
     >
@@ -21,11 +22,12 @@
    	android:layout_width="wrap_content"
    	android:gravity="center_vertical"
    	android:textColor="@color/white"
+   	android:singleLine="true"
    	android:paddingLeft="10dp"
    	android:typeface="sans"
    	android:textStyle="bold"
-   	android:textSize="18sp"
-   	android:text="PoznanAPI ITINER"
+   	android:textSize="17sp"
+   	android:text="Wyszukiwarka grobów"
    	/> 
    	<ProgressBar
    		android:id="@+id/progressbar_titlebar"
@@ -33,6 +35,7 @@
    		android:layout_width="30dp"
    		android:gravity="center_vertical"
    		android:layout_centerVertical="true"
+   		style="@android:style/Widget.ProgressBar.Small"
    		android:layout_alignParentRight="true"
   		android:max="100"  	
    		android:visibility="gone"
@@ -44,13 +47,14 @@
 android:layout_below="@id/actionbar"
  android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:drawable/screen_background_dark_transparent"
+    android:background="@android:color/white"
 >   	  
 	<RelativeLayout 
 		android:id="@+id/all"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:layout_below="@id/actionbar"
+		
 	>
 	  
     <LinearLayout 
@@ -60,7 +64,53 @@ android:layout_below="@id/actionbar"
     				android:layout_width="fill_parent"
     				android:orientation="vertical">
 <!--    	WYBÓR CMENTARZA -->
+	
+   	<LinearLayout 
+   		android:id="@+id/name_choose"
+	   	android:layout_below="@id/actionbar"
+	   	android:layout_width="fill_parent"
+	   	android:layout_height="wrap_content"
+	   	android:paddingTop="5dp"
+	   	android:paddingLeft="10dp"
+	   	android:paddingRight="10dp"
+	   	android:paddingBottom="5dp"
+	   	android:orientation="vertical"
+	   	android:focusable="true" android:focusableInTouchMode="true"
+   	>
+   	<TextView 
+	   	android:id="@+id/date_header"
+	   	android:layout_width="fill_parent"
+	   	android:layout_height="wrap_content"
+	   	android:text="Wprowadź imię oraz nazwisko"
+	   	/>
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:weightSum="2" >
+   	<EditText 
+	   	android:paddingTop="5dp"
+	   	android:id="@+id/name"
+	   	android:layout_weight="1"
+	   	android:layout_width="fill_parent"
+	   	android:layout_height="wrap_content"
+	   	android:hint="Imię"
+	   	android:text=""
+	    android:singleLine="true"
+	   	
+   	/>
+   	<EditText 
+	   	android:paddingTop="5dp"
+	   	android:id="@+id/surname"
+	   	android:layout_weight="1"
+	   	android:layout_width="fill_parent"
+	   	android:layout_height="wrap_content"
+	   	android:hint="Nazwisko"
+	   	android:singleLine="true"
+	   	android:text=""
 	   
+   	/>
+   	</LinearLayout>
+   	</LinearLayout> 
    	<LinearLayout
    		android:id="@+id/necropolis_choose"
 	   	android:layout_below="@id/actionbar"
@@ -71,6 +121,7 @@ android:layout_below="@id/actionbar"
 	   	android:paddingRight="10dp"
 	   	android:paddingBottom="5dp"
 	   	android:orientation="vertical"
+	   	android:singleLine="true"
    	>
    	<TextView 
 	   	android:id="@+id/necropolis_header"
@@ -113,7 +164,7 @@ android:layout_below="@id/actionbar"
 		android:textStyle="bold"
 		android:paddingRight="4dp"
 		android:textColor="@color/white"
-		android:background="@color/black"
+		android:background="@android:drawable/editbox_dropdown_dark_frame"
 		android:text="urodzenia"
 		android:layout_height="wrap_content"></TextView>
 			<TextView
@@ -124,8 +175,8 @@ android:layout_below="@id/actionbar"
 		android:paddingLeft="4dp"
 		android:paddingRight="4dp"
 		android:editable="true"
-		android:textColor="@color/white"
-		android:background="@color/black"
+		android:textColor="@color/black"
+		android:background="@android:drawable/editbox_dropdown_light_frame"
 		android:text="śmierci"
 		android:paddingTop="3dp"
 		android:paddingBottom="3dp"
@@ -139,8 +190,8 @@ android:layout_below="@id/actionbar"
 		android:paddingLeft="4dp"
 		android:paddingRight="4dp"
 		android:editable="true"
-		android:textColor="@color/black"
-		android:background="@color/white"
+		android:textColor="@color/white"
+		android:background="@android:drawable/editbox_dropdown_dark_frame"
 		android:text="pogrzebu"
 		android:paddingTop="3dp"
 		android:paddingBottom="3dp"
@@ -168,46 +219,6 @@ android:layout_below="@id/actionbar"
    	/>
    	</LinearLayout>
  
-   	<LinearLayout 
-   		android:id="@+id/name_choose"
-	   	android:layout_below="@id/datechoose"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:paddingTop="5dp"
-	   	android:paddingLeft="10dp"
-	   	android:paddingRight="10dp"
-	   	android:paddingBottom="5dp"
-	   	android:orientation="vertical"
-   	>
-   	<TextView 
-	   	android:id="@+id/date_header"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:text="Wprowadź imię oraz nazwisko"/>
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:weightSum="2" >
-   	<EditText 
-	   	android:paddingTop="5dp"
-	   	android:id="@+id/name"
-	   	android:layout_weight="1"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:hint="Imię"
-	   	android:text=""
-   	/>
-   	<EditText 
-	   	android:paddingTop="5dp"
-	   	android:id="@+id/surname"
-	   	android:layout_weight="1"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:hint="Nazwisko"
-	   	android:text=""
-   	/>
-   	</LinearLayout>
-   	</LinearLayout> 
    	<RelativeLayout 
    		android:id="@+id/buttons"
 	   	android:layout_width="fill_parent"
@@ -221,14 +232,42 @@ android:layout_below="@id/actionbar"
    		android:id="@+id/find_btn"
    		android:layout_width="fill_parent"
    		android:layout_height="wrap_content"
+   		android:textSize="18dp"
+   		android:drawableRight="@android:drawable/ic_search_category_default"
    		   		
-   		android:text="Szukaj"  />
+   		android:text="  Szukaj"  />
 </RelativeLayout>
- 
+
+ <RelativeLayout 
+	android:layout_width="fill_parent"
+	android:layout_height="80px"
+	android:layout_below="@id/all"
+	android:layout_alignParentBottom="true"
+	>
+	<TextView 
+		android:id="@+id/tv_poweredby"
+		android:layout_height="fill_parent"
+		android:layout_width="wrap_content"
+		android:textSize="20dp"
+		android:paddingTop="20dp"
+		android:paddingLeft="10dp"
+		android:background="@color/white"
+		android:text="dane z"/>
+	<ImageView 
+		android:layout_toRightOf="@id/tv_poweredby"
+		android:id="@+id/poznanapi"
+		android:paddingLeft="20dp"
+		android:paddingRight="20dp"
+		android:paddingBottom="20dp"
+		android:layout_height="fill_parent"
+		android:layout_width="wrap_content"
+		android:background="@color/white"
+		android:src="@drawable/poznan"/>
+	</RelativeLayout>
+   
 </LinearLayout> 
    	
 
-   
 </RelativeLayout> 
 </ScrollView>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </RelativeLayout>
