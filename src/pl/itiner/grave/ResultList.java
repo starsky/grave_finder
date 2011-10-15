@@ -51,6 +51,10 @@ public class ResultList extends ListActivity{
 		  cementeries = getResources().getStringArray(R.array.necropolises);
 		  ListView lv = getListView();
 		  lv.setTextFilterEnabled(true);
+		  lv.setDividerHeight(2);
+		  lv.setFastScrollEnabled(true);
+		  lv.setFadingEdgeLength(2);
+//		  lv.setBackgroundDrawable(getResources().getDrawable(R.drawable.background));
 		  
 		  ListAdapter la = createAdapter();
 		  setListAdapter(la); //TODO set s
@@ -102,16 +106,26 @@ public class ResultList extends ListActivity{
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			convertView = (RelativeLayout) mInflater.inflate(R.layout.list_item, parent,false);
+		
+			
 			Deathman dt = (Deathman) (getItem(position));
 			((TextView) convertView.findViewById(R.id.surname_name)).setText(dt.getSurname() + " " + dt.getName());
 			((TextView) convertView.findViewById(R.id.list_cementry)).setText(getCmName(Integer.parseInt(dt.getCm_id())));
 			if(dt.getDate_birth() == "0001-01-01" || dt.getDate_birth() == null)
-				((TextView) convertView.findViewById(R.id.list_value_dateBirth)).setText(" ?  ");
+				((TextView) convertView.findViewById(R.id.list_value_dateBirth)).setText(" Brak danych ");
 			else
 				((TextView) convertView.findViewById(R.id.list_value_dateBirth)).setText(dt.getDate_birth());
 			
+			if(dt.getDeath_date() == "0001-01-01" || dt.getDeath_date() == null)
+				((TextView) convertView.findViewById(R.id.list_value_dateDeath)).setText(" Brak danych ");
+			else
+				((TextView) convertView.findViewById(R.id.list_value_dateDeath)).setText(dt.getDeath_date());
 			
-			((TextView) convertView.findViewById(R.id.list_value_dateDeath)).setText(dt.getDeath_date());
+			if(dt.getBurial_date()== "0001-01-01" || dt.getBurial_date() == null)
+				((TextView) convertView.findViewById(R.id.list_value_dateBurial)).setText(" Brak danych ");
+			else
+				((TextView) convertView.findViewById(R.id.list_value_dateBurial)).setText(dt.getBurial_date());
+			//((TextView) convertView.findViewById(R.id.list_value_dateDeath)).setText(dt.getDeath_date());
 			return convertView;
 		}
 

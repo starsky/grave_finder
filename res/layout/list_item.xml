@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/list_item_layout"
 android:layout_width="fill_parent"
-android:layout_height="fill_parent">
+android:layout_height="fill_parent"
+>
 <!-- IMIE I NAZWISKO-->
 <TextView 
 	android:id="@+id/surname_name"
@@ -30,13 +31,14 @@ android:layout_height="fill_parent">
 	android:layout_below="@id/list_cementry"
 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="ur. "
-    
-    android:padding="3dp"
+    android:text="ur. "    
+   android:paddingLeft="3dp"
+    android:paddingBottom="1dp"
 	>
 </TextView>
 <TextView
-	android:padding="3dp"
+	android:paddingLeft="3dp"
+    android:paddingBottom="1dp"
 	android:id="@+id/list_value_dateBirth"
 	android:layout_toRightOf="@id/list_header_dateBirth"
 	android:layout_below="@id/list_cementry"
@@ -53,7 +55,8 @@ android:layout_height="fill_parent">
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
     android:text="zm. "
-    android:padding="3dp"
+    android:paddingLeft="3dp"
+    android:paddingBottom="1dp"
 	>
 </TextView>
 <TextView
@@ -62,7 +65,8 @@ android:layout_height="fill_parent">
 	android:layout_toRightOf="@id/list_header_dateDeath"
 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="3dp"
+    android:paddingLeft="3dp"
+    android:paddingBottom="1dp"
     android:textStyle="bold"
 	>
 </TextView>
@@ -73,14 +77,20 @@ android:layout_height="fill_parent">
 	android:layout_below="@id/list_header_dateDeath"
 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:paddingLeft="3dp"
+    android:text="pogrzeb "
+    android:paddingBottom="1dp"
    	>
 </TextView>
 <TextView
 	android:id="@+id/list_value_dateBurial"
 	android:textStyle="bold"
+	android:layout_below="@id/list_header_dateDeath"
 	android:layout_toRightOf="@id/list_header_dateBurial"
 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:paddingLeft="3dp"
+    android:paddingBottom="1dp"
 	>
 </TextView>
 </RelativeLayout>
