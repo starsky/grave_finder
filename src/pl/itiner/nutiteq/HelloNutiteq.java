@@ -3,6 +3,7 @@ package pl.itiner.nutiteq;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pl.itiner.conversions.CoordinateConversion;
 import pl.itiner.grave.R;
 import sun.misc.Regexp;
 import android.app.Activity;
@@ -63,6 +64,7 @@ public class HelloNutiteq extends Activity{
 		"", "GetMap", ""
 		);	
 		
+		
 //		MapPos pos = wms.wgsToMapPos(new Point(6424660,5807886), 15);
 //	    String path = wms.buildPath(pos.getX(),pos.getY(),pos.getZoom());
 //	    String [] patches = path.split("BBOX=[0-9]+(.[0-9]+)*");
@@ -81,9 +83,14 @@ public class HelloNutiteq extends Activity{
 //	    		256, 1, 10,"plan_2177", "image/png",
 //	    		"", "GetMap", ""
 //	    		);	
+		CoordinateConversion cc = new CoordinateConversion();
+		String [] afterConv = cc.latLon2UTM(x, y).split(",");
+		int conv_x, conv_y;
+		conv_x = Integer.parseInt(afterConv[0],10);
+		conv_y = Integer.parseInt(afterConv[1],10);
 	    ExtendedSimpleWMSMap ewms = new ExtendedSimpleWMSMap("",
 	    		256, 1, 10,"plan_2177", "image/png",
-	    		"", "GetMap", ""
+	    		"", "GetMap", "", conv_x, conv_y
 	    		);
 	    ewms.toString();
 		//String path = wms.buildPath(13600, 95000, 10); 
