@@ -28,7 +28,7 @@
    	android:typeface="sans"
    	android:textStyle="bold"
    	android:textSize="17sp"
-   	android:text="Wyszukiwarka grobów"
+   	android:text="@string/app_name"
    	/> 
    	<ProgressBar
    		android:id="@+id/progressbar_titlebar"
@@ -205,6 +205,7 @@ android:layout_below="@id/actionbar"
 		android:layout_height="wrap_content"></TextView>
 			<TextView
 			android:clickable="true"
+			android:singleLine="true"
 		android:id="@+id/burial_date"
 		android:layout_width="wrap_content"
 		android:textSize="14sp"
@@ -286,6 +287,12 @@ android:layout_below="@id/actionbar"
 		android:layout_width="wrap_content"
 		android:background="@color/white"
 		android:src="@drawable/poznan"/>
+	<ImageView
+		android:id="@+id/gepoz"
+		android:layout_height="30dp"
+		android:layout_width="wrap_content"
+		android:layout_toRightOf="@id/poznanapi"
+		android:src="@drawable/geopoz" />
 	</RelativeLayout>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </RelativeLayout>
 

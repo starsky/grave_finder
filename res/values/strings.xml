@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, GForm!</string>
-    <string name="app_name">Grave</string>
-    <string name="description">Wyszukiwarka grobów na poznańskich centarzach. Sprawdź, gdzie dokładnie znajduje się grób poszukiwanej przez Ciebie osoby.\nAplikacja powstała dzięki połączeniu dwóch technologii POZNAN API oraz programu Itiner.</string>
+    <string name="app_name">Lokalizator grobów</string>
+    <string name="description">Lokalizator grobów na poznańskich centarzach. Sprawdź, gdzie dokładnie znajduje się grób poszukiwanej przez Ciebie osoby.\nAplikacja powstała dzięki połączeniu dwóch technologii POZNAN API oraz programu Itiner.</string>
 	<string name="version">Beta@12X2011</string>
 </resources>

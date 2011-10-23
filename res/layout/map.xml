@@ -5,7 +5,7 @@
       <RelativeLayout 
       	android:id="@+id/header_graveinfo"
      	android:layout_width="fill_parent"
-     	android:layout_height="110dp"
+     	android:layout_height="wrap_content"
      	android:layout_alignParentTop="true"
      	android:background="@android:drawable/screen_background_light_transparent"
      	
@@ -141,6 +141,7 @@
 	android:layout_toRightOf="@id/map_header_dateDeath"
 	android:layout_width="wrap_content"
 	android:textStyle="bold"
+	android:padding="2dp"
     android:layout_height="wrap_content"
 	>
 </TextView>
@@ -171,12 +172,12 @@
         android:enabled="true"
         android:layout_below="@id/header_graveinfo"
         android:clickable="true"       
-        android:apiKey="0fwLhF406wY-SCmtgcRpu3jYiiV8ZscgM48I-NQ"
+        android:apiKey="0fwLhF406wY9uEJIlDyf5X8KsMfoR0v1nv_8GBQ"
         />
  		<!--  
- 		0fwLhF406wY-SCmtgcRpu3jYiiV8ZscgM48I-NQ       
+ 		hdm1/win7/0fwLhF406wY-SCmtgcRpu3jYiiV8ZscgM48I-NQ       
 		android:apiKey="0fwLhF406wY8NWJfI8BBuiifYfUUnVvVo8g__hg" 
-		
+		hdm1/mint/0fwLhF406wY9uEJIlDyf5X8KsMfoR0v1nv_8GBQ
 		-->
      <LinearLayout android:id="@+id/zoom" 
         android:layout_width="wrap_content" 

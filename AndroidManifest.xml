@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AboutView"
-	 		android:configChanges="orientation|keyboardHidden" android:label="O programie"
+	 		android:configChanges="orientation|keyboardHidden" android:label="@string/app_name" android:icon="@drawable/icon"
 			android:theme="@android:style/Theme.Dialog">
 		</activity>
         <activity 

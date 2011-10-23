@@ -12,7 +12,7 @@
   		android:id="@+id/about_logo"
   		android:layout_width="fill_parent"
   		android:layout_height="wrap_content"
-  		android:background="@drawable/poznan"
+  		android:src="@drawable/poznan"
   		android:layout_alignParentTop="true"  		
   	>
   	</ImageView>

@@ -59,15 +59,16 @@ public class ResultList extends ListActivity{
 		  
 		  ListAdapter la = createAdapter();
 		  setListAdapter(la); //TODO set s
-		  Intent i;
-		  i = new Intent(getApplicationContext(), GraveMap.class);
+		  
 		
 		  lv.setOnItemClickListener(new OnItemClickListener() {
 		    public void onItemClick(AdapterView<?> parent, View view,
 		        int position, long id) {
 		      // When clicked, show a toast with the TextView text
-		    	 Intent i;
-				 i = new Intent(getApplicationContext(), HelloNutiteq.class);
+//		    	 Intent i;
+//				 i = new Intent(getApplicationContext(), HelloNutiteq.class);
+		    	Intent i;
+				 i = new Intent(getApplicationContext(), GraveMap.class);
 				 i.putExtra("y",((Deathman)parent.getItemAtPosition(position)).getCoordinates()[0]);
 				 i.putExtra("x",((Deathman)parent.getItemAtPosition(position)).getCoordinates()[1]);
 				 i.putExtra("id",position);
