@@ -5,7 +5,6 @@ import java.util.List;
 
 import pl.itiner.map.GraveMap;
 import pl.itiner.models.Deathman;
-import pl.itiner.nutiteq.HelloNutiteq;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -113,21 +112,9 @@ public class ResultList extends ListActivity{
 			Deathman dt = (Deathman) (getItem(position));
 			((TextView) convertView.findViewById(R.id.surname_name)).setText(dt.getSurname() + " " + dt.getName());
 			((TextView) convertView.findViewById(R.id.list_cementry)).setText(getCmName(Integer.parseInt(dt.getCm_id())));
-			if(dt.getDate_birth() == "0001-01-01" || dt.getDate_birth() == null)
-				((TextView) convertView.findViewById(R.id.list_value_dateBirth)).setText(" Brak danych ");
-			else
-				((TextView) convertView.findViewById(R.id.list_value_dateBirth)).setText(dt.getDate_birth());
-			
-			if(dt.getDeath_date() == "0001-01-01" || dt.getDeath_date() == null)
-				((TextView) convertView.findViewById(R.id.list_value_dateDeath)).setText(" Brak danych ");
-			else
-				((TextView) convertView.findViewById(R.id.list_value_dateDeath)).setText(dt.getDeath_date());
-			
-			if(dt.getBurial_date()== "0001-01-01" || dt.getBurial_date() == null)
-				((TextView) convertView.findViewById(R.id.list_value_dateBurial)).setText(" Brak danych ");
-			else
-				((TextView) convertView.findViewById(R.id.list_value_dateBurial)).setText(dt.getBurial_date());
-			//((TextView) convertView.findViewById(R.id.list_value_dateDeath)).setText(dt.getDeath_date());
+			((TextView) convertView.findViewById(R.id.list_value_dateBirth)).setText(dt.getDate_birth());		
+			((TextView) convertView.findViewById(R.id.list_value_dateDeath)).setText(dt.getDeath_date());
+			((TextView) convertView.findViewById(R.id.list_value_dateBurial)).setText(dt.getBurial_date());
 			return convertView;
 		}
 

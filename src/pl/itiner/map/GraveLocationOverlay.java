@@ -1,11 +1,7 @@
 package pl.itiner.map;
 
-import pl.itiner.grave.R;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.widget.Toast;
@@ -34,11 +30,12 @@ public class GraveLocationOverlay extends ItemizedOverlay<OverlayItem>
 				);
 		
 //		
-	_grave_marker = _ctx.getResources().getDrawable(R.drawable.pin);
+	    this._grave_marker = defaultMarker;
 ////		
 		_grave_marker.setBounds(0, 0, _grave_marker.getIntrinsicHeight(), _grave_marker.getIntrinsicWidth());
 //
 		_graveLocation.setMarker(_grave_marker);
+		boundCenter(_grave_marker);
 //		boundCenter(_grave_marker);
 		
 //		_userLocation = new OverlayItem(userLocation, "Ja", "jestem tutaj");
@@ -74,18 +71,20 @@ public class GraveLocationOverlay extends ItemizedOverlay<OverlayItem>
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
 		// wyłączamy rysowanie cienia za markerem
 	super.draw(canvas, mapView, false);
+	boundCenterBottom(_grave_marker);
+
 	//mapView.getProjection().toPixels(_graveLocation.getPoint(),Point myScreenCoords = new Point(); )
 //
 //		// ---translate the GeoPoint to screen pixels---
 	
-	Point screenPts = new Point();
-		mapView.getProjection().toPixels(_graveLocation.getPoint(), screenPts);
+//	Point screenPts = new Point();
+//		mapView.getProjection().toPixels(_graveLocation.getPoint(), screenPts);
 //
 //		// ---add the marker---
-	Bitmap bmp = BitmapFactory.decodeResource(_ctx.getResources(),
-			R.drawable.pin);
+//	Bitmap bmp = BitmapFactory.decodeResource(_ctx.getResources(),
+//			R.drawable.pin);
 //		
-	canvas.drawBitmap(bmp, screenPts.x, screenPts.y -bmp.getHeight(), null);
+//	canvas.drawBitmap(bmp, screenPts.x, screenPts.y -bmp.getHeight(), null);
 //		if(_userLocation.getPoint() != null)
 //		{
 //			Bitmap bmp1 = BitmapFactory.decodeResource(_ctx.getResources(), R.drawable.user_location);

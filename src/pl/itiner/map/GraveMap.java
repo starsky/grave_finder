@@ -6,11 +6,6 @@ import pl.itiner.grave.ResultList;
 import pl.itiner.models.Deathman;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,7 +13,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -37,7 +31,7 @@ public class GraveMap extends MapActivity {
 	TextView mapQuater;
 	TextView mapField;
 	MapController mc;
-	GeoPoint p;
+	GeoPoint grave;
 	GeoPoint user;
 
 	private MyLocationOverlay userLocationOverlay = null;
@@ -46,8 +40,10 @@ public class GraveMap extends MapActivity {
 	public LocationListener locListener;
 	private static final int REQUEST_CODE = 0;
 	private static final String TAG = "GraveMap";
-	UserOverlay userOverlay;
-	GraveOverlay graveOverlay;
+	private static boolean wasZoomed = false;
+//	UserOverlay userOverlay;
+	GraveLocationOverlay glo; 
+//	GraveOverlay graveOverlay;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,17 +55,17 @@ public class GraveMap extends MapActivity {
 		double x = b.getDouble("x");
 		double y = b.getDouble("y");
 		int id = b.getInt("id");
-		
 
 		Deathman tmp = GeoJSON.dList.get(id);
 		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
 		mapSurnameName.setText(tmp.getName() + " " + tmp.getSurname());
 		
 		mapBirthDate = (TextView) findViewById(R.id.map_value_dateBirth);
+		
 		mapBirthDate.setText(tmp.getDate_birth());
 		
 		mapDeathDate = (TextView) findViewById(R.id.map_value_dateDeath);
-		mapDeathDate.setText(tmp.getDeath_date());
+		mapDeathDate.setText(tmp.getDeath_date());		
 		
 		mapField = (TextView) findViewById(R.id.map_field_value);
 		mapField.setText(tmp.getField());
@@ -88,56 +84,58 @@ public class GraveMap extends MapActivity {
 		mapView = (MapView) findViewById(R.id.mapView);
 		mc = mapView.getController();
 
-		
-//		LinearLayout zoomLayout = (LinearLayout) findViewById(R.id.zoom);
-//		View zoomView = mapView.getZoomControls();
-//
-//		zoomLayout.addView(zoomView, new LinearLayout.LayoutParams(
-//				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-//		mapView.displayZoomControls(true);
-		
 		mapView.setBuiltInZoomControls(true);
 
 		double lat = x;
 		double lng = y;
-		p = new GeoPoint((int) (lat * 1E6), (int) (lng * 1E6));
-		//  user = new GeoPoint(52408333, 16908333);
+		grave = new GeoPoint((int) (lat * 1E6), (int) (lng * 1E6));
+	
 		mapView.getOverlays().clear();
-		user = new GeoPoint(52408333, 16908333);
+	//	user = new GeoPoint(52408333, 16908333);
 		
-		userOverlay = new UserOverlay(user);
-		graveOverlay = new GraveOverlay(p);
+//		userOverlay = new UserOverlay(user);
+	//	graveOverlay = new GraveOverlay(p);
+		glo  = new GraveLocationOverlay(
+				this.getResources().getDrawable(R.drawable.pin), 
+				getApplicationContext(),
+				grave);
 		
 		userLocationOverlay = new MyLocationOverlay(this, mapView);
+		userLocationOverlay.getMyLocation();
 		mapView.getOverlays().add(userLocationOverlay);
 		
-		mapView.getOverlays().add(userOverlay);
-		mapView.getOverlays().add(graveOverlay);
+		//mapView.getOverlays().add(userOverlay);
+		mapView.getOverlays().add(glo);
+		//mapView.getOverlays().add(graveOverlay);
 		mapView.invalidate();
 		
 		}
-//		mc.animateTo(p);
-//		mc.setZoom(17);
-//
-//		// ---Add a location marker---
-//		MapOverlay mapOverlay = new MapOverlay("START", "META", x, y);
-//		List<Overlay> listOfOverlays = mapView.getOverlays();
-//		listOfOverlays.clear();
-//		listOfOverlays.add(mapOverlay);
-//
-		
-		
+
 		locListener = new MyLocationListener();
 		locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
         mobileLocation = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		//user = new GeoPoint((int)(mobileLocation.getLatitude()*1e6),(int)(mobileLocation.getLongitude()*1e6)) ;
-      
+		user = new GeoPoint((int)(mobileLocation.getLatitude()*1e6),(int)(mobileLocation.getLongitude()*1e6)) ;
+//x        user = userLocationOverlay.getMyLocation();
 //		makeOverlay(p,user);
 //		mapView.invalidate();
-		mc.setZoom(12);
-    	mc.animateTo(new GeoPoint((p.getLatitudeE6()+user.getLatitudeE6())/2, (p.getLongitudeE6()+user.getLongitudeE6())/2));
-    	
+//		mc.setZoom(13);
+//    	mc.animateTo(new GeoPoint(
+//    			(grave.getLatitudeE6()+user.getLatitudeE6())/2, 
+//    			(grave.getLongitudeE6()+user.getLongitudeE6())/2)
+//    			);
+//    	
+        double latitudeSpan = Math.round(Math.abs(mobileLocation.getLatitude()*1e6- 
+                grave.getLatitudeE6()));
+		double longitudeSpan = Math.round(Math.abs(mobileLocation.getLongitude()*1e6 - 
+                grave.getLongitudeE6()));
+		
+		mc.zoomToSpan((int)(latitudeSpan*2), (int)(longitudeSpan*2));                
+				
+		mc.animateTo(new GeoPoint
+				((grave.getLatitudeE6()+user.getLatitudeE6())/2, 
+		    			(grave.getLongitudeE6()+user.getLongitudeE6())/2));
+		
     	String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
 		if(provider != null){
             Log.v(TAG, " Location providers: "+provider);
@@ -152,37 +150,31 @@ public class GraveMap extends MapActivity {
 		}
 	
 
-	public void makeOverlay(GeoPoint user)
-	{
-		Drawable marker_user = getResources().getDrawable(R.drawable.user_location);
-		marker_user.setBounds(0, 0, marker_user.getIntrinsicWidth(), marker_user.getIntrinsicHeight());
-		mapView.getOverlays().add(
-				new UserLocationOverlay(marker_user, this, user));
-		
-	}
-	public void updateUserLocation(GeoPoint newgp)
-	{
-		userOverlay.gp = newgp;
-	}
-	public void makeOverlay(GeoPoint gp, GeoPoint user)
-	{
-		mapView.getOverlays().clear();
-		mapView.invalidate();
-		userLocationOverlay = new MyLocationOverlay(this, mapView);
-		mapView.getOverlays().add(userLocationOverlay);
-		
-		Drawable marker_grave = getResources().getDrawable(R.drawable.pin);
-		marker_grave.setBounds(0, 0, marker_grave.getIntrinsicWidth(), marker_grave.getIntrinsicHeight());
-		mapView.getOverlays().add(
-				new GraveLocationOverlay(marker_grave, this, gp));
-		
-		Drawable marker_user = getResources().getDrawable(R.drawable.user_location);
-		marker_user.setBounds(0, 0, marker_user.getIntrinsicWidth(), marker_user.getIntrinsicHeight());
-		mapView.getOverlays().add(
-				new UserLocationOverlay(marker_user, this, user));
-		mapView.invalidate();
-			
-	}
+//	public void makeOverlay(GeoPoint user)
+//	{
+//		Drawable marker_user = getResources().getDrawable(R.drawable.user_location);
+//		marker_user.setBounds(0, 0, marker_user.getIntrinsicWidth(), marker_user.getIntrinsicHeight());
+//		mapView.getOverlays().add(
+//				new UserLocationOverlay(marker_user, this, user));
+//		
+//	}
+//	public void updateUserLocation(GeoPoint newgp)
+//	{
+//		userLocationOverlay.getMyLocation();
+//	}
+//	public void makeOverlay(GeoPoint gp, GeoPoint user)
+//	{
+//		mapView.getOverlays().clear();
+//		mapView.invalidate();
+//		userLocationOverlay = new MyLocationOverlay(this, mapView);
+//		mapView.getOverlays().add(userLocationOverlay);
+//		
+//		Drawable marker_grave = getResources().getDrawable(R.drawable.user_location);
+//		marker_grave.setBounds(0, 0, marker_grave.getIntrinsicWidth(), marker_grave.getIntrinsicHeight());
+//		mapView.getOverlays().add(
+//				new GraveLocationOverlay(marker_grave, this, gp));
+//			
+//	}
 	
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -214,66 +206,66 @@ public class GraveMap extends MapActivity {
 				(int)(userLocationOverlay.getLastFix().getLongitude() * 1e6));
 	}
 	
-class UserOverlay extends com.google.android.maps.Overlay {
-		
-		public GeoPoint gp;
-		public UserOverlay(GeoPoint gp)
-		{
-			this.gp = gp;
-		}
-		@Override
-		public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
-				long when) {
-			super.draw(canvas, mapView, shadow);
-
-			// ---translate the GeoPoint to screen pixels---
-			Point screenPts = new Point();
-			mapView.getProjection().toPixels(gp, screenPts);
-
-			// ---add the marker---
-			Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-					R.drawable.user_location);
-			canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 48, null);
-			return true;
-		}
+//class UserOverlay extends com.google.android.maps.Overlay {
+//		
+//		public GeoPoint gp;
+//		public UserOverlay(GeoPoint gp)
+//		{
+//			this.gp = gp;
+//		}
 //		@Override
-//		public boolean onTap(GeoPoint p, MapView mapView) {
-//			// TODO Auto-generated method stub
-//			Toast.makeText(getApplicationContext(), "Twoja pozycja", Toast.LENGTH_SHORT).show();
+//		public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
+//				long when) {
+//			super.draw(canvas, mapView, shadow);
+//
+//			// ---translate the GeoPoint to screen pixels---
+//			Point screenPts = new Point();
+//			mapView.getProjection().toPixels(gp, screenPts);
+//
+//			// ---add the marker---
+//			Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+//					R.drawable.user_location);
+//			canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 48, null);
 //			return true;
 //		}
-}
-
-class GraveOverlay extends com.google.android.maps.Overlay {
-	
-	GeoPoint gp;
-	public GraveOverlay(GeoPoint gp)
-	{
-		this.gp = gp;
-	}
-	@Override
-	public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
-			long when) {
-		super.draw(canvas, mapView, shadow);
-
-		// ---translate the GeoPoint to screen pixels---
-		Point screenPts = new Point();
-		mapView.getProjection().toPixels(gp, screenPts);
-
-		// ---add the marker---
-		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-				R.drawable.pin);
-		canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 61, null);
-		return true;
-	}
+////		@Override
+////		public boolean onTap(GeoPoint p, MapView mapView) {
+////			// TODO Auto-generated method stub
+////			Toast.makeText(getApplicationContext(), "Twoja pozycja", Toast.LENGTH_SHORT).show();
+////			return true;
+////		}
+//}
+//
+//class GraveOverlay extends com.google.android.maps.Overlay {
+//	
+//	GeoPoint gp;
+//	public GraveOverlay(GeoPoint gp)
+//	{
+//		this.gp = gp;
+//	}
 //	@Override
-//	public boolean onTap(GeoPoint p, MapView mapView) {
-//		// TODO Auto-generated method stub
-//		Toast.makeText(getApplicationContext(), "Grób", Toast.LENGTH_SHORT).show();
+//	public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
+//			long when) {
+//		super.draw(canvas, mapView, shadow);
+//
+//		// ---translate the GeoPoint to screen pixels---
+//		Point screenPts = new Point();
+//		mapView.getProjection().toPixels(gp, screenPts);
+//
+//		// ---add the marker---
+//		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+//				R.drawable.pin);
+//		canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 61, null);
 //		return true;
 //	}
-	
-}
+////	@Override
+////	public boolean onTap(GeoPoint p, MapView mapView) {
+////		// TODO Auto-generated method stub
+////		Toast.makeText(getApplicationContext(), "Grób", Toast.LENGTH_SHORT).show();
+////		return true;
+////	}
+//	
+//}
 	
 	
 	 protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -364,10 +356,31 @@ class GraveOverlay extends com.google.android.maps.Overlay {
 		public void onLocationChanged(Location location) {
 			// TODO Auto-generated method stub
 			mobileLocation = location;
-			updateUserLocation( new GeoPoint(
+			if(!wasZoomed)
+			{
+			GeoPoint newPos = new GeoPoint(
 					(int)(mobileLocation.getLatitude() * 1e6),
-					(int)(mobileLocation.getLongitude() * 1e6)));
+					(int)(mobileLocation.getLongitude() * 1e6));
+			
+			double latitudeSpan = Math.round(Math.abs(mobileLocation.getLatitude()*1e6- 
+	                grave.getLatitudeE6()));
+			double longitudeSpan = Math.round(Math.abs(mobileLocation.getLongitude()*1e6 - 
+	                grave.getLongitudeE6()));
+			
+//			double currentLatitudeSpan = (double)mapView.getLatitudeSpan();
+//			double currentLongitudeSpan = (double)mapView.getLongitudeSpan();
+//			
+//			double ratio = currentLongitudeSpan/currentLatitudeSpan;
+			
+			mc.zoomToSpan((int)(latitudeSpan*2), (int)(longitudeSpan*2));                
+					
+			mc.animateTo(new GeoPoint
+					((grave.getLatitudeE6()+newPos.getLatitudeE6())/2, 
+			    			(grave.getLongitudeE6()+newPos.getLongitudeE6())/2));
+			
 			mapView.invalidate();
+			wasZoomed = true;
+			}
 			Log.i("LOCATION","LONG: "+location.getLongitude()+ " LAT:"+location.getLatitude());
 		}
 

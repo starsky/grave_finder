@@ -1,6 +1,8 @@
 package pl.itiner.models;
 
 public class Deathman {
+	private static final String NO_DATA = " Brak danych ";
+	
 	private String surname; //surname
 	private String name; //imi�
 	private String burial_date;
@@ -54,6 +56,8 @@ public class Deathman {
 	}
 
 	public String getBurial_date() {
+		if(burial_date.equals("0001-01-01"))
+			return NO_DATA;
 		return burial_date;
 	}
 
@@ -62,6 +66,8 @@ public class Deathman {
 	}
 
 	public String getDeath_date() {
+		if(death_date.equals("0001-01-01"))
+			return NO_DATA;
 		return death_date;
 	}
 
@@ -126,6 +132,8 @@ public class Deathman {
 	}
 
 	public String getDate_birth() {
+		if(date_birth.equals("0001-01-01"))
+			return NO_DATA;
 		return date_birth;
 	}
 

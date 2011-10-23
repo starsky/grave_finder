@@ -8,17 +8,9 @@
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content"
   	android:orientation="vertical">
-  	<ImageView
-  		android:id="@+id/about_logo"
-  		android:layout_width="fill_parent"
-  		android:layout_height="wrap_content"
-  		android:src="@drawable/poznan"
-  		android:layout_alignParentTop="true"  		
-  	>
-  	</ImageView>
+  
 	<TextView
-		android:layout_below="@id/about_logo"
-	  	android:layout_marginTop="10dp"
+		android:layout_alignParentTop="true"  	
 	  	android:textColor="@color/white"
 	  	android:textColorHighlight="@color/green"
 	  	android:textColorLink="@color/blue"
@@ -27,5 +19,17 @@
 	  	android:id="@+id/about_description"
 	  	android:autoLink="web"	
 	  	android:text="@string/description"/>
-	  	</RelativeLayout>
+	<ImageView
+	    android:layout_below="@id/about_description"
+  		android:id="@+id/about_logo"
+  		android:layout_width="wrap_content"
+  		android:layout_height="wrap_content"
+  		android:src="@drawable/poznan"/>
+  	<ImageView
+	    android:layout_below="@id/about_logo"
+  		android:id="@+id/about_geopoz"
+  		android:layout_width="wrap_content"
+  		android:layout_height="wrap_content"
+  		android:src="@drawable/geopoz"/>
+  </RelativeLayout>
 </ScrollView>
