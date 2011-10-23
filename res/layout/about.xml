@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+  	<LinearLayout 
+  	    android:id="@+id/mainL"
+  	   android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_width="fill_parent"
+    android:weightSum="2"
+    android:padding="5dp"
+    android:background="@color/white">
+	<ImageView 
+		android:id="@+id/poznanapi"
+		android:layout_height="30dp"
+		android:layout_width="fill_parent"		
+		android:src="@drawable/poznan"
+		android:layout_weight="1"/>
+	<ImageView
+		android:id="@+id/gepoz"
+		android:layout_height="30dp"
+		android:layout_width="fill_parent"
+		android:layout_toRightOf="@id/poznanapi"
+		android:src="@drawable/geopoz"
+		android:layout_weight="1" />
+	</LinearLayout>
 <ScrollView
-	xmlns:android="http://schemas.android.com/apk/res/android"
-  	android:layout_width="fill_parent"
+	android:layout_width="fill_parent"
   	android:layout_height="wrap_content"
-  	android:scrollbarStyle="insideInset">
+  	android:scrollbarStyle="insideInset"
+  	android:layout_below="@id/mainL">
+
   <RelativeLayout
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content"
-  	android:orientation="vertical">
+  	android:orientation="vertical"
+  	android:padding="10dp">
   
 	<TextView
 		android:layout_alignParentTop="true"  	
 	  	android:textColor="@color/white"
 	  	android:textColorHighlight="@color/green"
-	  	android:textColorLink="@color/blue"
 	  	android:layout_width="fill_parent"
 	  	android:layout_height="wrap_content"
 	  	android:id="@+id/about_description"
-	  	android:autoLink="web"	
+	  	android:autoLink="web"
 	  	android:text="@string/description"/>
-	<ImageView
-	    android:layout_below="@id/about_description"
-  		android:id="@+id/about_logo"
-  		android:layout_width="wrap_content"
-  		android:layout_height="wrap_content"
-  		android:src="@drawable/poznan"/>
-  	<ImageView
-	    android:layout_below="@id/about_logo"
-  		android:id="@+id/about_geopoz"
-  		android:layout_width="wrap_content"
-  		android:layout_height="wrap_content"
-  		android:src="@drawable/geopoz"/>
+
   </RelativeLayout>
 </ScrollView>
+</RelativeLayout>

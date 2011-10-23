@@ -78,7 +78,8 @@ android:layout_below="@id/actionbar"
 	   	android:paddingRight="10dp"
 	   	android:paddingBottom="5dp"
 	   	android:orientation="vertical"
-	   	android:focusable="true" android:focusableInTouchMode="true"
+	   	android:focusable="true" 
+	   	android:focusableInTouchMode="true"
    	>
    	<TextView 
 	   	android:id="@+id/date_header"
@@ -264,35 +265,40 @@ android:layout_below="@id/actionbar"
 </RelativeLayout> 
 </ScrollView> 
   <RelativeLayout 
-	android:layout_width="fill_parent"
+	android:layout_width="wrap_content"
 	android:layout_height="30dp"
 	android:layout_alignParentBottom="true"
+	android:background="@color/white"
 	
 
 	>
-	<TextView 
-		android:id="@+id/tv_poweredby"
-		android:layout_height="fill_parent"
-		android:layout_width="wrap_content"
-		android:textSize="20dp"
-		android:layout_centerVertical="true"
-		android:layout_alignParentLeft="true"
-		android:paddingLeft="10dp"
-		android:background="@color/white"
-		android:text="Dane z API "/>
+<!--	<TextView -->
+<!--		android:id="@+id/tv_poweredby"-->
+<!--		android:layout_height="fill_parent"-->
+<!--		android:layout_width="wrap_content"-->
+<!--		android:textSize="20dp"-->
+<!--		android:layout_centerVertical="true"-->
+<!--		android:layout_alignParentLeft="true"-->
+<!--		android:paddingLeft="10dp"-->
+<!--		android:background="@color/white"-->
+<!--		android:text="Dane z API "/>-->
+<LinearLayout android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:weightSum="2">
 	<ImageView 
-		android:layout_toRightOf="@id/tv_poweredby"
 		android:id="@+id/poznanapi"
 		android:layout_height="30dp"
-		android:layout_width="wrap_content"
-		android:background="@color/white"
-		android:src="@drawable/poznan"/>
+		android:layout_width="fill_parent"		
+		android:src="@drawable/poznan"
+		android:layout_weight="1"/>
 	<ImageView
 		android:id="@+id/gepoz"
 		android:layout_height="30dp"
-		android:layout_width="wrap_content"
+		android:layout_width="fill_parent"
 		android:layout_toRightOf="@id/poznanapi"
-		android:src="@drawable/geopoz" />
+		android:src="@drawable/geopoz"
+		android:layout_weight="1" />
+	</LinearLayout>
 	</RelativeLayout>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 </RelativeLayout>
 

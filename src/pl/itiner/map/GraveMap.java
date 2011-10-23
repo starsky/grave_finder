@@ -95,8 +95,8 @@ public class GraveMap extends MapActivity {
 		
 //		userOverlay = new UserOverlay(user);
 	//	graveOverlay = new GraveOverlay(p);
-		glo  = new GraveLocationOverlay(
-				this.getResources().getDrawable(R.drawable.pin), 
+		glo  = new GraveLocationOverlay(mapView,
+				this.getResources().getDrawable(R.drawable.graveloc), 
 				getApplicationContext(),
 				grave);
 		
@@ -206,67 +206,6 @@ public class GraveMap extends MapActivity {
 				(int)(userLocationOverlay.getLastFix().getLongitude() * 1e6));
 	}
 	
-//class UserOverlay extends com.google.android.maps.Overlay {
-//		
-//		public GeoPoint gp;
-//		public UserOverlay(GeoPoint gp)
-//		{
-//			this.gp = gp;
-//		}
-//		@Override
-//		public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
-//				long when) {
-//			super.draw(canvas, mapView, shadow);
-//
-//			// ---translate the GeoPoint to screen pixels---
-//			Point screenPts = new Point();
-//			mapView.getProjection().toPixels(gp, screenPts);
-//
-//			// ---add the marker---
-//			Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-//					R.drawable.user_location);
-//			canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 48, null);
-//			return true;
-//		}
-////		@Override
-////		public boolean onTap(GeoPoint p, MapView mapView) {
-////			// TODO Auto-generated method stub
-////			Toast.makeText(getApplicationContext(), "Twoja pozycja", Toast.LENGTH_SHORT).show();
-////			return true;
-////		}
-//}
-//
-//class GraveOverlay extends com.google.android.maps.Overlay {
-//	
-//	GeoPoint gp;
-//	public GraveOverlay(GeoPoint gp)
-//	{
-//		this.gp = gp;
-//	}
-//	@Override
-//	public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
-//			long when) {
-//		super.draw(canvas, mapView, shadow);
-//
-//		// ---translate the GeoPoint to screen pixels---
-//		Point screenPts = new Point();
-//		mapView.getProjection().toPixels(gp, screenPts);
-//
-//		// ---add the marker---
-//		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-//				R.drawable.pin);
-//		canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 61, null);
-//		return true;
-//	}
-////	@Override
-////	public boolean onTap(GeoPoint p, MapView mapView) {
-////		// TODO Auto-generated method stub
-////		Toast.makeText(getApplicationContext(), "Grób", Toast.LENGTH_SHORT).show();
-////		return true;
-////	}
-//	
-//}
-	
 	
 	 protected void onActivityResult(int requestCode, int resultCode, Intent data){
 	        if(requestCode == REQUEST_CODE && resultCode == 0){
@@ -281,58 +220,7 @@ public class GraveMap extends MapActivity {
 	            }
 	        }
 	    }
-/*
-	class MapOverlay extends com.google.android.maps.Overlay {
-		
-		String _start, _meta;
-		double _x, _y;
-		public MapOverlay(String start, String meta, double x, double y)
-		{
-			_x = x;
-			_y = y;
-			_start  = start;
-			_meta = meta;
-		}
-		@Override
-		public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
-				long when) {
-			super.draw(canvas, mapView, shadow);
 
-			// ---translate the GeoPoint to screen pixels---
-			Point screenPts = new Point();
-			mapView.getProjection().toPixels(p, screenPts);
-
-			// ---add the marker---
-			Bitmap bmp = BitmapFactory.decodeResource(getResources(),
-					R.drawable.pin);
-			canvas.drawBitmap(bmp, screenPts.x, screenPts.y - 61, null);
-			return true;
-		}
-
-		@Override
-		public boolean onTap(GeoPoint arg0, MapView arg1) {
-			// TODO Auto-generated method stub
-			String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-			if(provider != null){
-                Log.v(TAG, " Location providers: "+provider);
-                //Start searching for location and update the location text when update available. 
-                // Do whatever you want
-               
-            }else{
-                //Users did not switch on the GPS
-            	Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-    			startActivityForResult(intent, REQUEST_CODE);
-            }
-			
-//		    Intent intent = new Intent("pl.itiner.ROUTER",Uri.parse("route://itiner.pl/52.402267/16.911813/"+_x+"/"+_y));
-//		     startActivity(intent);
-//52.402267,16.911813
-			return true;
-			
-		}
-		
-	}
-	*/
 	public class MyLocationListener implements LocationListener {
 		   
 		Location mobileLocation;
@@ -366,11 +254,6 @@ public class GraveMap extends MapActivity {
 	                grave.getLatitudeE6()));
 			double longitudeSpan = Math.round(Math.abs(mobileLocation.getLongitude()*1e6 - 
 	                grave.getLongitudeE6()));
-			
-//			double currentLatitudeSpan = (double)mapView.getLatitudeSpan();
-//			double currentLongitudeSpan = (double)mapView.getLongitudeSpan();
-//			
-//			double ratio = currentLongitudeSpan/currentLatitudeSpan;
 			
 			mc.zoomToSpan((int)(latitudeSpan*2), (int)(longitudeSpan*2));                
 					

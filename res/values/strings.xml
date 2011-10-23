@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Lokalizator grobów</string>
-    <string name="description">Lokalizator grobów na poznańskich centarzach. Sprawdź, gdzie dokładnie znajduje się grób poszukiwanej przez Ciebie osoby.\nAplikacja powstała dzięki połączeniu dwóch technologii POZNAN API oraz programu Itiner.</string>
+    <string name="description">Lokalizator grobów na poznańskich cmentarzach.\nSprawdź, gdzie dokładnie znajduje się grób poszukiwanej przez Ciebie osoby.\nAplikacja powstała dzięki połączeniu technologii POZNAN API, programu Itiner http://itiner.pl oraz danych GeoPoz.</string>
 	<string name="version">Beta@12X2011</string>
 </resources>

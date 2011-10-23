@@ -315,7 +315,7 @@ public class GForm extends Activity {
     Handler activityUIHandler = new Handler() {
  		// this method will handle the calls from other threads.
  		public void handleMessage(Message msg) {
- 			Bundle b = msg.getData();
+ 	//		Bundle b = msg.getData();
  			switch(msg.what){
  			 			
  			case PROGRESSBAR: 				
