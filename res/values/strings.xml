@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Lokalizator grobów</string>
-    <string name="description">Lokalizator grobów na poznańskich cmentarzach.\nSprawdź, gdzie dokładnie znajduje się grób poszukiwanej przez Ciebie osoby.\nAplikacja powstała dzięki połączeniu technologii POZNAN API, programu Itiner http://itiner.pl oraz danych GeoPoz.</string>
-	<string name="version">Beta@12X2011</string>
+    <string name="description">
+        Lokalizator grobów to aplikacja mobilna ułatwiająca odnalezienie grobu na poznańskich cmentarzach.\nPo wprowadzeniu imienia i nazwiska i/lub daty urodzenia, śmierci lub pogrzebu osoby zmarłej, lokalizacja mogiły wyświetlana jest na mapie.\nAplikacja, opracowana przez firmę Itiner (http://itiner.pl), opiera się na bazie danych Geopozu, która udostępniana jest w ramach API poznan.pl.
+        
+        </string>
 </resources>

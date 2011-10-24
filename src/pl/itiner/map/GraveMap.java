@@ -115,7 +115,7 @@ public class GraveMap extends MapActivity {
 		locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
         mobileLocation = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		user = new GeoPoint((int)(mobileLocation.getLatitude()*1e6),(int)(mobileLocation.getLongitude()*1e6)) ;
+	user = createUserGeoPoint(mobileLocation);
 //x        user = userLocationOverlay.getMyLocation();
 //		makeOverlay(p,user);
 //		mapView.invalidate();
@@ -125,9 +125,9 @@ public class GraveMap extends MapActivity {
 //    			(grave.getLongitudeE6()+user.getLongitudeE6())/2)
 //    			);
 //    	
-        double latitudeSpan = Math.round(Math.abs(mobileLocation.getLatitude()*1e6- 
+        double latitudeSpan = Math.round(Math.abs(user.getLatitudeE6()- 
                 grave.getLatitudeE6()));
-		double longitudeSpan = Math.round(Math.abs(mobileLocation.getLongitude()*1e6 - 
+		double longitudeSpan = Math.round(Math.abs(user.getLongitudeE6() - 
                 grave.getLongitudeE6()));
 		
 		mc.zoomToSpan((int)(latitudeSpan*2), (int)(longitudeSpan*2));                
@@ -135,7 +135,7 @@ public class GraveMap extends MapActivity {
 		mc.animateTo(new GeoPoint
 				((grave.getLatitudeE6()+user.getLatitudeE6())/2, 
 		    			(grave.getLongitudeE6()+user.getLongitudeE6())/2));
-		
+        }
     	String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
 		if(provider != null){
             Log.v(TAG, " Location providers: "+provider);
@@ -149,6 +149,15 @@ public class GraveMap extends MapActivity {
         }
 		}
 	
+	private GeoPoint createUserGeoPoint(Location location) {
+		if(location != null) {
+			return new GeoPoint((int)(location.getLatitude()*1e6),(int)(location.getLongitude()*1e6));
+		} else {
+			//return Poznan center position
+			String[] position = getResources().getStringArray(R.array.poznan_lat_lon);
+			return new GeoPoint((int) (Double.parseDouble(position[0])*1e6),(int) (Double.parseDouble(position[1])*1e6));
+		}
+	}
 
 //	public void makeOverlay(GeoPoint user)
 //	{
