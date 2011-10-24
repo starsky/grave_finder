@@ -115,7 +115,9 @@ public class GraveMap extends MapActivity {
 		locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
         mobileLocation = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-	user = createUserGeoPoint(mobileLocation);
+        user = createUserGeoPoint(mobileLocation);
+//        if(mobileLocation != null) {
+//		user = new GeoPoint((int)(mobileLocation.getLatitude()*1e6),(int)(mobileLocation.getLongitude()*1e6)) ;
 //x        user = userLocationOverlay.getMyLocation();
 //		makeOverlay(p,user);
 //		mapView.invalidate();
@@ -135,7 +137,7 @@ public class GraveMap extends MapActivity {
 		mc.animateTo(new GeoPoint
 				((grave.getLatitudeE6()+user.getLatitudeE6())/2, 
 		    			(grave.getLongitudeE6()+user.getLongitudeE6())/2));
-        }
+//        }
     	String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
 		if(provider != null){
             Log.v(TAG, " Location providers: "+provider);
@@ -159,32 +161,6 @@ public class GraveMap extends MapActivity {
 		}
 	}
 
-//	public void makeOverlay(GeoPoint user)
-//	{
-//		Drawable marker_user = getResources().getDrawable(R.drawable.user_location);
-//		marker_user.setBounds(0, 0, marker_user.getIntrinsicWidth(), marker_user.getIntrinsicHeight());
-//		mapView.getOverlays().add(
-//				new UserLocationOverlay(marker_user, this, user));
-//		
-//	}
-//	public void updateUserLocation(GeoPoint newgp)
-//	{
-//		userLocationOverlay.getMyLocation();
-//	}
-//	public void makeOverlay(GeoPoint gp, GeoPoint user)
-//	{
-//		mapView.getOverlays().clear();
-//		mapView.invalidate();
-//		userLocationOverlay = new MyLocationOverlay(this, mapView);
-//		mapView.getOverlays().add(userLocationOverlay);
-//		
-//		Drawable marker_grave = getResources().getDrawable(R.drawable.user_location);
-//		marker_grave.setBounds(0, 0, marker_grave.getIntrinsicWidth(), marker_grave.getIntrinsicHeight());
-//		mapView.getOverlays().add(
-//				new GraveLocationOverlay(marker_grave, this, gp));
-//			
-//	}
-	
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
