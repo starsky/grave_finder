@@ -30,7 +30,7 @@
                 android:id="@+id/map_surname_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:padding="2dp"
                 android:text="Imię i nazwisko"
                 android:textSize="20sp"
                 android:textStyle="bold"
