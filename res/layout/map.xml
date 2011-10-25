@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <RelativeLayout
+    <TableLayout
         android:id="@+id/header_graveinfo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -21,9 +21,8 @@
         <!-- android:layout_alignLeft="@id/header_graveinfo" -->
         <!-- android:layout_height="fill_parent"/> -->
 
-
+		<TableRow >
         <!-- IMIE I NAZWISKO -->
-
         <TextView
             android:id="@+id/map_surname_name"
             android:layout_width="wrap_content"
@@ -33,104 +32,83 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="sans" />
-
+		</TableRow>
+		
+		<TableRow >
         <!-- CMENTARZ -->
-
         <TextView
             android:id="@+id/map_value_cementry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/map_surname_name"
             android:padding="2dp"
             android:textSize="18sp"
             android:textStyle="bold"
             android:typeface="sans" />
 
-        <!-- DATA URODZIN -->
+        <!-- KWATERA -->
 
         <TextView
-            android:id="@+id/map_header_dateBirth"
+            android:id="@+id/map_quater_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/map_value_cementry"
-            android:padding="2dp"
-            android:text="ur. " >
-        </TextView>
-        <!-- KWATERA -->
+            android:text="Kwatera:  "
+            android:typeface="sans" />
 
         <TextView
             android:id="@+id/map_quater_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/map_surname_name"
             android:paddingRight="2dp"
             android:textStyle="bold" />
-
+		</TableRow>
+        
+        <TableRow >
+        <!-- DATA URODZIN -->
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
         <TextView
-            android:id="@+id/map_quater_header"
+            android:id="@+id/map_header_dateBirth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/map_surname_name"
-            android:layout_toLeftOf="@id/map_quater_value"
-            android:text="Kwatera:  "
-            android:typeface="sans" />
+            android:padding="2dp"
+            android:text="ur. " >
+        </TextView>
 
+        <TextView
+            android:id="@+id/map_value_dateBirth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:textStyle="bold" >
+        </TextView>
+        </LinearLayout>
+            
         <!-- RZAD -->
+
+        <TextView
+            android:id="@+id/map_row_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rząd:  "
+            android:typeface="sans" />
 
         <TextView
             android:id="@+id/map_row_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/map_quater_value"
             android:paddingRight="2dp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/map_row_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/map_quater_value"
-            android:layout_toLeftOf="@id/map_row_value"
-            android:text="Rząd:  "
-            android:typeface="sans" />
-        <!-- POLE -->
-
-        <TextView
-            android:id="@+id/map_field_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/map_row_value"
-            android:paddingRight="2dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/map_field_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/map_row_value"
-            android:layout_toLeftOf="@id/map_field_value"
-            android:text="Pole:  "
-            android:typeface="sans" />
-
-        <TextView
-            android:id="@+id/map_value_dateBirth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/map_value_cementry"
-            android:layout_toRightOf="@id/map_header_dateBirth"
-            android:padding="2dp"
-            android:textStyle="bold" >
-        </TextView>
+      	</TableRow>
+      	
+        <TableRow >    
         <!-- DATA SMIERCI -->
-
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
         <TextView
             android:id="@+id/map_header_dateDeath"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/map_header_dateBirth"
             android:paddingLeft="2dp"
             android:text="zm. " >
         </TextView>
@@ -139,12 +117,29 @@
             android:id="@+id/map_value_dateDeath"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/map_value_dateBirth"
-            android:layout_toRightOf="@id/map_header_dateDeath"
             android:textStyle="bold" >
         </TextView>
-        <!-- DATA POGRZEBU -->
+		</LinearLayout>        
+        <!-- POLE -->
 
+        <TextView
+            android:id="@+id/map_field_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pole:  "
+            android:typeface="sans" />
+
+        <TextView
+            android:id="@+id/map_field_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="2dp"
+            android:textStyle="bold" />
+
+		</TableRow>
+        <!-- DATA POGRZEBU -->
+<!--  
         <TextView
             android:id="@+id/map_header_dateBurial"
             android:layout_width="wrap_content"
@@ -159,7 +154,8 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/map_header_dateBurial" >
         </TextView>
-    </RelativeLayout>
+-->
+    </TableLayout>
 
     <com.google.android.maps.MapView
         android:id="@+id/mapView"
@@ -167,6 +163,7 @@
         android:layout_height="fill_parent"
         android:layout_below="@id/header_graveinfo"
         android:clickable="true"
+        android:apiKey="0jlML3cW7k8k0TGpJt421XxDTbYVv4eOUCDg3dg"
         android:enabled="true" />
     <!--
  		hdm1/win7/0fwLhF406wY-SCmtgcRpu3jYiiV8ZscgM48I-NQ       
