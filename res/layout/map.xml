@@ -1,187 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent">
-      <RelativeLayout 
-      	android:id="@+id/header_graveinfo"
-     	android:layout_width="fill_parent"
-     	android:layout_height="wrap_content"
-     	android:layout_alignParentTop="true"
-     	android:background="@android:drawable/screen_background_light_transparent"
-     	
-     >
-<!--      ARROW_LEFT -->
-     	
-<!--      <TextView  -->
-<!--      		android:id="@+id/map_arrow_left" -->
-<!--      		android:textSize="20dp" -->
-<!--        		android:layout_width="150dp" -->
-<!--      		-->
-<!--      		android:layout_alignLeft="@id/header_graveinfo" -->
-<!--      		android:layout_height="fill_parent"/> -->
-     		
-     	<!-- IMIE I NAZWISKO-->
-    <TextView 
-	android:id="@+id/map_surname_name"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-	android:text="Imię i nazwisko"
-    android:typeface="sans"
-    android:padding="5dp"
-    android:textSize="20sp"
-    android:textStyle="bold"
- 	 >
-</TextView>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/header_graveinfo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@android:drawable/screen_background_light_transparent" >
+
+        <!-- ARROW_LEFT -->
 
 
-<!-- CMENTARZ-->
-<TextView 
-	android:id="@+id/map_value_cementry"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/map_surname_name"
-    android:padding="2dp"
-    android:textStyle="bold"
-    android:typeface="sans"
-    android:textSize="18sp" />
+        <!-- <TextView -->
+        <!-- android:id="@+id/map_arrow_left" -->
+        <!-- android:textSize="20dp" -->
+        <!-- android:layout_width="150dp" -->
+        <!--  -->
+        <!-- android:layout_alignLeft="@id/header_graveinfo" -->
+        <!-- android:layout_height="fill_parent"/> -->
 
-<!-- DATA URODZIN-->
-<TextView
-	android:id="@+id/map_header_dateBirth"
-	android:layout_below="@id/map_value_cementry"
-	android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="2dp"
-    android:text="ur. "
-	>
-</TextView>
-<!-- KWATERA -->
-<TextView 
-	android:id="@+id/map_quater_value"
-	android:layout_height="wrap_content"
-	android:layout_width="wrap_content"
-	android:layout_alignParentRight="true"
-	android:layout_below="@id/map_surname_name"
-	android:textStyle="bold"
-	android:paddingRight="2dp"
-	/>
-<TextView 
-	android:id="@+id/map_quater_header"
-	android:layout_height="wrap_content"
-	android:layout_toLeftOf="@id/map_quater_value"
-	android:layout_width="wrap_content"
-	android:layout_below="@id/map_surname_name"
-	android:text="Kwatera:  "
-	android:typeface="sans"
-	/>
-	
-<!-- RZAD -->
-<TextView 
-	
-	android:id="@+id/map_row_value"
-	android:paddingRight="2dp"
-	android:layout_height="wrap_content"
-	android:layout_width="wrap_content"
-	android:layout_alignParentRight="true"
-	android:layout_below="@id/map_quater_value"
-	android:textStyle="bold"
-	/>
-<TextView 
-	android:id="@+id/map_row_header"
-	android:layout_height="wrap_content"
-	android:layout_toLeftOf="@id/map_row_value"
-	android:layout_width="wrap_content"
-	android:layout_below="@id/map_quater_value"
-	android:text="Rząd:  "
-	android:typeface="sans"
-	/>
-<!-- POLE -->
-<TextView 
-	android:id="@+id/map_field_value"
-	android:paddingRight="2dp"
-	android:layout_height="wrap_content"
-	android:layout_width="wrap_content"
-	android:layout_alignParentRight="true"
-	android:layout_below="@id/map_row_value"
-	android:textStyle="bold"
-	/>
-<TextView 
-	android:id="@+id/map_field_header"
-	android:layout_height="wrap_content"
-	android:layout_toLeftOf="@id/map_field_value"
-	android:layout_width="wrap_content"
-	android:layout_below="@id/map_row_value"
-	android:text="Pole:  "
-	android:typeface="sans"
-	/>
-<TextView
-	android:id="@+id/map_value_dateBirth"
-	android:padding="2dp"
-	android:layout_toRightOf="@id/map_header_dateBirth"
-	android:layout_below="@id/map_value_cementry"
-	android:layout_width="wrap_content"
-	android:textStyle="bold"
-    android:layout_height="wrap_content"
-	>
-</TextView>
-<!-- DATA SMIERCI-->
 
-<TextView
-	android:id="@+id/map_header_dateDeath"
-	android:layout_width="wrap_content"
-	android:paddingLeft="2dp"
-	android:layout_below="@id/map_header_dateBirth"
-    android:layout_height="wrap_content"
-    android:text="zm. "
-	>
-</TextView>
-<TextView
-	android:layout_below="@id/map_value_dateBirth"
-	android:id="@+id/map_value_dateDeath"
-	android:layout_toRightOf="@id/map_header_dateDeath"
-	android:layout_width="wrap_content"
-	android:textStyle="bold"
-    android:layout_height="wrap_content"
-	>
-</TextView>
-<!-- DATA POGRZEBU-->
-<TextView
+        <!-- IMIE I NAZWISKO -->
 
-	android:id="@+id/map_header_dateBurial"
-	android:paddingLeft="2dp"
-	android:layout_below="@id/map_header_dateDeath"
-	android:layout_width="wrap_content"	
-    android:layout_height="wrap_content"
-	>
-</TextView>
-<TextView
-	android:id="@+id/map_value_dateBurial"
-	android:layout_toRightOf="@id/map_header_dateBurial"
-	android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-	>
-</TextView>
-     </RelativeLayout>
- 
-    <com.google.android.maps.MapView 
+        <TextView
+            android:id="@+id/map_surname_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Imię i nazwisko"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
+
+        <!-- CMENTARZ -->
+
+        <TextView
+            android:id="@+id/map_value_cementry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/map_surname_name"
+            android:padding="2dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
+
+        <!-- DATA URODZIN -->
+
+        <TextView
+            android:id="@+id/map_header_dateBirth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/map_value_cementry"
+            android:padding="2dp"
+            android:text="ur. " >
+        </TextView>
+        <!-- KWATERA -->
+
+        <TextView
+            android:id="@+id/map_quater_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/map_surname_name"
+            android:paddingRight="2dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/map_quater_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/map_surname_name"
+            android:layout_toLeftOf="@id/map_quater_value"
+            android:text="Kwatera:  "
+            android:typeface="sans" />
+
+        <!-- RZAD -->
+
+        <TextView
+            android:id="@+id/map_row_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/map_quater_value"
+            android:paddingRight="2dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/map_row_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/map_quater_value"
+            android:layout_toLeftOf="@id/map_row_value"
+            android:text="Rząd:  "
+            android:typeface="sans" />
+        <!-- POLE -->
+
+        <TextView
+            android:id="@+id/map_field_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/map_row_value"
+            android:paddingRight="2dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/map_field_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/map_row_value"
+            android:layout_toLeftOf="@id/map_field_value"
+            android:text="Pole:  "
+            android:typeface="sans" />
+
+        <TextView
+            android:id="@+id/map_value_dateBirth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/map_value_cementry"
+            android:layout_toRightOf="@id/map_header_dateBirth"
+            android:padding="2dp"
+            android:textStyle="bold" >
+        </TextView>
+        <!-- DATA SMIERCI -->
+
+        <TextView
+            android:id="@+id/map_header_dateDeath"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/map_header_dateBirth"
+            android:paddingLeft="2dp"
+            android:text="zm. " >
+        </TextView>
+
+        <TextView
+            android:id="@+id/map_value_dateDeath"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/map_value_dateBirth"
+            android:layout_toRightOf="@id/map_header_dateDeath"
+            android:textStyle="bold" >
+        </TextView>
+        <!-- DATA POGRZEBU -->
+
+        <TextView
+            android:id="@+id/map_header_dateBurial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/map_header_dateDeath"
+            android:paddingLeft="2dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/map_value_dateBurial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/map_header_dateBurial" >
+        </TextView>
+    </RelativeLayout>
+
+    <com.google.android.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:enabled="true"
         android:layout_below="@id/header_graveinfo"
-        android:clickable="true"       
-        android:apiKey="0fwLhF406wY9uEJIlDyf5X8KsMfoR0v1nv_8GBQ"
-        />
- 		<!--  
+        android:clickable="true"
+        android:enabled="true" />
+    <!--
  		hdm1/win7/0fwLhF406wY-SCmtgcRpu3jYiiV8ZscgM48I-NQ       
 		android:apiKey="0fwLhF406wY8NWJfI8BBuiifYfUUnVvVo8g__hg" 
 		hdm1/mint/0fwLhF406wY9uEJIlDyf5X8KsMfoR0v1nv_8GBQ
-		-->
-     <LinearLayout android:id="@+id/zoom" 
-        android:layout_width="wrap_content" 
-        android:layout_height="wrap_content" 
-        android:layout_alignParentBottom="true" 
-        android:layout_centerHorizontal="true" 
-        /> 
- 
+    -->
+
+    <LinearLayout
+        android:id="@+id/zoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
