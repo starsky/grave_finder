@@ -8,7 +8,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@android:drawable/screen_background_light_transparent" >
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:stretchColumns="1" >
 
         <!-- ARROW_LEFT -->
 
@@ -48,23 +49,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:typeface="sans" />
-
-            <!-- KWATERA -->
-
-            <TextView
-                android:id="@+id/map_quater_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Kwatera:  "
-                android:typeface="sans" />
-
-            <TextView
-                android:id="@+id/map_quater_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:paddingRight="2dp"
-                android:textStyle="bold" />
         </TableRow>
 
         <TableRow >
@@ -92,17 +76,18 @@
                 </TextView>
             </LinearLayout>
 
-            <!-- RZAD -->
+            <!-- KWATERA -->
 
             <TextView
-                android:id="@+id/map_row_header"
+                android:id="@+id/map_quater_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rząd:  "
+                android:gravity="right"
+                android:text="Kwatera:  "
                 android:typeface="sans" />
 
             <TextView
-                android:id="@+id/map_row_value"
+                android:id="@+id/map_quater_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -133,12 +118,58 @@
                     android:textStyle="bold" >
                 </TextView>
             </LinearLayout>
+
+            <!-- RZAD -->
+
+            <TextView
+                android:id="@+id/map_row_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="Rząd:  "
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/map_row_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:paddingRight="2dp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <!-- DATA POGRZEBU -->
+
+                <TextView
+                    android:id="@+id/map_header_dateBurial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/map_header_dateDeath"
+                    android:paddingLeft="2dp"
+                    android:text="pogrzeb" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/map_value_dateBurial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/map_header_dateBurial" >
+                </TextView>
+            </LinearLayout>
+
             <!-- POLE -->
 
             <TextView
                 android:id="@+id/map_field_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="right"
                 android:text="Pole:  "
                 android:typeface="sans" />
 
@@ -150,23 +181,6 @@
                 android:paddingRight="2dp"
                 android:textStyle="bold" />
         </TableRow>
-        <!-- DATA POGRZEBU -->
-        <!--
-        <TextView
-            android:id="@+id/map_header_dateBurial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/map_header_dateDeath"
-            android:paddingLeft="2dp" >
-        </TextView>
-
-        <TextView
-            android:id="@+id/map_value_dateBurial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/map_header_dateBurial" >
-        </TextView>
-        -->
     </TableLayout>
 
     <com.google.android.maps.MapView
