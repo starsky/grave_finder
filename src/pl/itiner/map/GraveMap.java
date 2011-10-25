@@ -173,17 +173,17 @@ public class GraveMap extends MapActivity {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		userLocationOverlay.disableCompass();
 		userLocationOverlay.disableMyLocation();
+		locManager.removeUpdates(locListener);
 	}
 
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// TODO Auto-generated method stub
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
 		userLocationOverlay.enableMyLocation();
 		userLocationOverlay.enableCompass();
 	}
