@@ -145,20 +145,21 @@
                 <!-- DATA POGRZEBU -->
 
                 <TextView
-                    android:id="@+id/map_header_dateBurial"
+                    android:id="@+id/map_header_dateFunreal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/map_header_dateDeath"
                     android:paddingLeft="2dp"
-                    android:text="pogrzeb" >
+                    android:text="pogrzeb " >
                 </TextView>
 
                 <TextView
-                    android:id="@+id/map_value_dateBurial"
+                    android:id="@+id/map_value_dateFunreal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/map_header_dateBurial" >
-                </TextView>
+	                android:layout_alignParentRight="true"
+    	            android:paddingRight="2dp"
+        	        android:textStyle="bold" />
             </LinearLayout>
 
             <!-- POLE -->

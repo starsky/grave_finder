@@ -26,6 +26,7 @@ public class GraveMap extends MapActivity {
 	TextView mapSurnameName;
 	TextView mapBirthDate;
 	TextView mapDeathDate;
+	TextView mapFunrealDate;
 	TextView mapCementry;
 	TextView mapRow;
 	TextView mapQuater;
@@ -66,7 +67,10 @@ public class GraveMap extends MapActivity {
 		
 		mapDeathDate = (TextView) findViewById(R.id.map_value_dateDeath);
 		mapDeathDate.setText(tmp.getDeath_date());		
-		
+
+		mapFunrealDate = (TextView) findViewById(R.id.map_value_dateFunreal);
+		mapFunrealDate.setText(tmp.getBurial_date());		
+
 		mapField = (TextView) findViewById(R.id.map_field_value);
 		mapField.setText(tmp.getField());
 		
