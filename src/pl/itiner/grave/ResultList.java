@@ -5,6 +5,7 @@ import java.util.List;
 
 import pl.itiner.map.GraveMap;
 import pl.itiner.models.Deathman;
+import pl.itiner.nutiteq.NutiteqMap;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -64,13 +65,13 @@ public class ResultList extends ListActivity{
 		    public void onItemClick(AdapterView<?> parent, View view,
 		        int position, long id) {
 		      // When clicked, show a toast with the TextView text
-//		    	 Intent i;
-//				 i = new Intent(getApplicationContext(), HelloNutiteq.class);
-		    	Intent i;
-				 i = new Intent(getApplicationContext(), GraveMap.class);
-				 i.putExtra("y",((Deathman)parent.getItemAtPosition(position)).getCoordinates()[0]);
-				 i.putExtra("x",((Deathman)parent.getItemAtPosition(position)).getCoordinates()[1]);
-				 i.putExtra("id",position);
+		    	 Intent i;
+				 i = new Intent(getApplicationContext(), NutiteqMap.class);
+//		    	Intent i;
+//				 i = new Intent(getApplicationContext(), GraveMap.class);
+//				 i.putExtra("y",((Deathman)parent.getItemAtPosition(position)).getCoordinates()[0]);
+//				 i.putExtra("x",((Deathman)parent.getItemAtPosition(position)).getCoordinates()[1]);
+//				 i.putExtra("id",position);
 				 startActivity(i);
 		    }
 		  });
