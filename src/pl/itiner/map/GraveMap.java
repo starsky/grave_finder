@@ -1,5 +1,6 @@
 package pl.itiner.map;
 
+import pl.itiner.grave.AboutView;
 import pl.itiner.grave.GeoJSON;
 import pl.itiner.grave.R;
 import pl.itiner.grave.ResultList;
@@ -12,6 +13,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
@@ -256,6 +260,29 @@ public class GraveMap extends MapActivity {
 			Log.i("LOCATION","LONG: "+location.getLongitude()+ " LAT:"+location.getLatitude());
 		}
 
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater=getMenuInflater();
+		inflater.inflate(R.menu.map_menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		switch (item.getItemId())
+		{
+			case R.id.map_menu_streets:
+				mapView.setSatellite(false);
+				//mapView.setStreetView(true);
+				break;
+			case R.id.map_menu_satellites:
+				mapView.setSatellite(true);
+				//mapView.setStreetView(false);
+				break;
+		}
+		return false;
 	}
 	
 }
