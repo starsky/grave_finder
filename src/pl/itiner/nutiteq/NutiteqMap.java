@@ -126,6 +126,7 @@ public class NutiteqMap extends Activity {
 		final LocationMarker marker = new NutiteqLocationMarker(new PlaceIcon(
 				Image.createImage(icon), icon.getWidth(), icon.getHeight()),
 				3000, true);
+		marker.setTrackingEnabled(false);
 		locationSource.setLocationMarker(marker);
 		mapComponent.setLocationSource(locationSource);
 	}
