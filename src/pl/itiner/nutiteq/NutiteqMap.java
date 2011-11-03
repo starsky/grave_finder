@@ -1,6 +1,9 @@
 package pl.itiner.nutiteq;
 
+import pl.itiner.grave.GeoJSON;
 import pl.itiner.grave.R;
+import pl.itiner.grave.ResultList;
+import pl.itiner.models.Deathman;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.ZoomControls;
 
 import com.mgmaps.utils.Tools;
@@ -55,11 +59,13 @@ public class NutiteqMap extends Activity {
 		if (b != null) {
 			double x = b.getDouble("x");
 			double y = b.getDouble("y");
+			int id = b.getInt("id");
 			WgsPoint graveLoc = new WgsPoint(y, x);
 			mapComponent.addPlace(new Place(0, new PlaceLabel("Grób",
 					PlaceLabel.DISPLAY_TOP), new Image(BitmapFactory
 					.decodeResource(getResources(), R.drawable.graveloc)),
 					graveLoc));
+			fillHeaderWithData(id);
 		}
 
 		mapComponent.setPanningStrategy(new ThreadDrivenPanning());
@@ -72,15 +78,54 @@ public class NutiteqMap extends Activity {
 
 	}
 
+	private void fillHeaderWithData(int id) {
+		final TextView mapSurnameName;
+		final TextView mapBirthDate;
+		final TextView mapDeathDate;
+		final TextView mapFunrealDate;
+		final TextView mapCementry;
+		final TextView mapRow;
+		final TextView mapQuater;
+		final TextView mapField;
+
+		Deathman tmp = GeoJSON.dList.get(id);
+		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
+		mapSurnameName.setText(tmp.getName() + " " + tmp.getSurname());
+
+		mapBirthDate = (TextView) findViewById(R.id.map_value_dateBirth);
+
+		mapBirthDate.setText(tmp.getDate_birth());
+
+		mapDeathDate = (TextView) findViewById(R.id.map_value_dateDeath);
+		mapDeathDate.setText(tmp.getDeath_date());
+
+		mapFunrealDate = (TextView) findViewById(R.id.map_value_dateFunreal);
+		mapFunrealDate.setText(tmp.getBurial_date());
+
+		mapField = (TextView) findViewById(R.id.map_field_value);
+		mapField.setText(tmp.getField());
+
+		mapRow = (TextView) findViewById(R.id.map_row_value);
+		mapRow.setText(tmp.getRow());
+
+		mapQuater = (TextView) findViewById(R.id.map_quater_value);
+		mapQuater.setText(tmp.getQuater());
+
+		mapCementry = (TextView) findViewById(R.id.map_value_cementry);
+		String cm_name = ResultList.cementeries[Integer
+				.parseInt(tmp.getCm_id())];
+		mapCementry.setText(cm_name);
+	}
+
 	private void setupUserLocation() {
 		final LocationSource locationSource = new AndroidGPSProvider(
 				(LocationManager) getSystemService(Context.LOCATION_SERVICE),
 				1000L);
 		Bitmap icon = BitmapFactory.decodeResource(getResources(),
 				R.drawable.gps_marker);
-		final LocationMarker marker = new NutiteqLocationMarker(
-				new PlaceIcon(Image.createImage(icon), icon.getWidth(),
-						icon.getHeight()), 3000, true);
+		final LocationMarker marker = new NutiteqLocationMarker(new PlaceIcon(
+				Image.createImage(icon), icon.getWidth(), icon.getHeight()),
+				3000, true);
 		locationSource.setLocationMarker(marker);
 		mapComponent.setLocationSource(locationSource);
 	}
