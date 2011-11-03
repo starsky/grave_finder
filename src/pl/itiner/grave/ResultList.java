@@ -65,13 +65,13 @@ public class ResultList extends ListActivity{
 		    public void onItemClick(AdapterView<?> parent, View view,
 		        int position, long id) {
 		      // When clicked, show a toast with the TextView text
-		    	 Intent i;
+//		    	 Intent i;
+//				 i = new Intent(getApplicationContext(), NutiteqMap.class);
+		    	Intent i;
 				 i = new Intent(getApplicationContext(), NutiteqMap.class);
-//		    	Intent i;
-//				 i = new Intent(getApplicationContext(), GraveMap.class);
-//				 i.putExtra("y",((Deathman)parent.getItemAtPosition(position)).getCoordinates()[0]);
-//				 i.putExtra("x",((Deathman)parent.getItemAtPosition(position)).getCoordinates()[1]);
-//				 i.putExtra("id",position);
+				 i.putExtra("y",((Deathman)parent.getItemAtPosition(position)).getCoordinates()[0]);
+				 i.putExtra("x",((Deathman)parent.getItemAtPosition(position)).getCoordinates()[1]);
+				 i.putExtra("id",position);
 				 startActivity(i);
 		    }
 		  });

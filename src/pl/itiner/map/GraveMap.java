@@ -1,6 +1,5 @@
 package pl.itiner.map;
 
-import pl.itiner.grave.AboutView;
 import pl.itiner.grave.GeoJSON;
 import pl.itiner.grave.R;
 import pl.itiner.grave.ResultList;
@@ -164,8 +163,9 @@ public class GraveMap extends MapActivity {
 			return new GeoPoint((int)(location.getLatitude()*1e6),(int)(location.getLongitude()*1e6));
 		} else {
 			//return Poznan center position
-			String[] position = getResources().getStringArray(R.array.poznan_lat_lon);
-			return new GeoPoint((int) (Double.parseDouble(position[0])*1e6),(int) (Double.parseDouble(position[1])*1e6));
+//			String[] position = getResources().getStringArray(R.array.poznan_lat_lon);
+//			return new GeoPoint((int) (Double.parseDouble(position[0])*1e6),(int) (Double.parseDouble(position[1])*1e6));
+			return null;
 		}
 	}
 

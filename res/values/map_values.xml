@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<item name="poznan_centre_lat" type="string">52.406667</item>
+	<item name="poznan_centre_lon" type="string">16.923611</item>
+	<item name="nutiteq_key" type="string">NUTITEQ_API_KEY
+	</item>
+	<item name="base_url" type="string">http://www-bckp.city.poznan.pl/tilecache/tilecache.cgi?
+	</item>
+	<item name="base_layer_name" type="string">plan_2177</item>
+	<item name="graves_layer_name" type="string">poznan_cmentarze_2177</item>
+	<item name="tile_size" type="integer">256</item>
+	<item name="min_zoom" type="integer">1</item>
+	<item name="initial_zoom" type="integer">1</item>
+	<item name="png_type" type="string">image/png</item>
+	<item name="map_get_string" type="string">GetMap</item>
+	<item name="map_copyright_txt" type="string">Poznań API</item>
+	<item name="epsg_min_x" type="integer">6411860</item>
+	<item name="epsg_min_y" type="integer">5795086</item>
+	<string-array name="resolutions">
+		<item>50</item>
+		<item>25</item>
+		<item>12.5</item>
+		<item>6.25</item>
+		<item>3.125</item>
+		<item>1.5625</item>
+		<item>0.78125</item>
+		<item>0.390625</item>
+		<item>0.1953125</item>
+		<item>0.09765625</item>
+		<item>0.048828125</item>
+		<item>0.0244140625</item>
+	</string-array>
+</resources>
