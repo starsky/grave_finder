@@ -41,9 +41,9 @@ public class NutiteqMap extends Activity {
 			
 			@Override
 			public String getOverlayTileUrl(MapTile tile) {
-				String path = map.buildPath(tile.getX(), tile.getY(), tile.getZoom());
-				path.replaceFirst("plan_2177", "poznan_cmentarze_2177");
-				return path;
+				String baseUrl = map.createBaseUrl("http://www-bckp.city.poznan.pl/tilecache/tilecache.cgi?","poznan_cmentarze_2177"); 
+				return map.buildPath(tile.getX(), tile.getY(), tile.getZoom(),baseUrl);
+				
 			}
 		});
 		mapComponent.setMap(map);

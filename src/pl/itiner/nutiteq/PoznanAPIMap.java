@@ -10,7 +10,9 @@ import com.nutiteq.utils.Utils;
 
 public class PoznanAPIMap extends EPSG2177 implements GeoMap, UnstreamedMap {
 	private final String baseurl;
-
+	private final String format;
+	private final String style;
+	private final String request;
 	/**
 	 * Constructor for the simple WMS implementation
 	 * 
@@ -41,6 +43,10 @@ public class PoznanAPIMap extends EPSG2177 implements GeoMap, UnstreamedMap {
 			double minEpsgY) {
 		super(copyright, tileSize, minZoom, maxZoom, resolutions, minEpsgX,
 				minEpsgY);
+		this.format = format;
+		this.request = request;
+		this.style = style;
+		
 		final String epsgCode = "EPSG%3A2177";
 		final StringBuffer base = new StringBuffer(
 				Utils.prepareForParameters(baseurl));
@@ -60,7 +66,12 @@ public class PoznanAPIMap extends EPSG2177 implements GeoMap, UnstreamedMap {
 	}
 
 	public String buildPath(final int mapX, final int mapY, final int zoom) {
-		final StringBuffer result = new StringBuffer(baseurl);
+		return buildPath(mapX, mapY, zoom, baseurl);
+	}
+
+	public String buildPath(final int mapX, final int mapY, final int zoom,
+			String url) {
+		final StringBuffer result = new StringBuffer(url);
 
 		final MapPos minPos = new MapPos(mapX, mapY + getTileSize(), zoom);
 		final MapPos maxPos = new MapPos(mapX + getTileSize(), mapY, zoom);
@@ -74,6 +85,25 @@ public class PoznanAPIMap extends EPSG2177 implements GeoMap, UnstreamedMap {
 		result.append("&WIDTH=").append(getTileSize()).append("&HEIGHT=")
 				.append(getTileSize());
 		return result.toString();
+	}
+	
+	public String createBaseUrl(String baseUrl,String layer) {
+		final String epsgCode = "EPSG%3A2177";
+		final StringBuffer base = new StringBuffer(
+				Utils.prepareForParameters(baseUrl));
+		base.append("LAYERS=").append(Tools.urlEncode(layer));
+		base.append("&FORMAT=").append(Tools.urlEncode(format));
+		base.append("&BGCOLOR=0x000000");
+		base.append("&TRANSPARENT=FALSE");
+		base.append("&SERVICE=WMS&VERSION=1.1.1");
+		base.append("&REQUEST=").append(Tools.urlEncode(request));
+		base.append("&STYLES=").append(Tools.urlEncode(style));
+		base.append("&EXCEPTIONS=").append(
+				Tools.urlEncode("application/vnd.ogc.se_inimage"));
+		base.append("&SRS=");
+		base.append(epsgCode);
+		base.append("&BBOX=");
+		return base.toString();
 	}
 
 }
