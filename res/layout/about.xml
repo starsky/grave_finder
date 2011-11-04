@@ -33,8 +33,7 @@
 	  	android:textSize="12sp"
 	  	android:layout_width="fill_parent"
 	  	android:layout_height="wrap_content"
-	  	android:id="@+id/about_description"
-	  	android:text="@string/description"/>
+	  	android:id="@+id/about_description"/>
       
   </RelativeLayout>
 </ScrollView>
