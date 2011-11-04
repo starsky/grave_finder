@@ -89,8 +89,7 @@
                 android:id="@+id/map_quater_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:paddingRight="2dp"
+                android:paddingRight="4dp"
                 android:textStyle="bold" />
         </TableRow>
 
@@ -131,8 +130,7 @@
                 android:id="@+id/map_row_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:paddingRight="2dp"
+                android:paddingRight="4dp"
                 android:textStyle="bold" />
         </TableRow>
 
@@ -157,8 +155,7 @@
                     android:id="@+id/map_value_dateFunreal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:paddingRight="2dp"
+                    android:paddingRight="4dp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -175,8 +172,7 @@
                 android:id="@+id/map_field_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:paddingRight="2dp"
+                android:paddingRight="4dp"
                 android:textStyle="bold" />
         </TableRow>
     </TableLayout>
