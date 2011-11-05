@@ -1,14 +1,16 @@
 package pl.itiner.nutiteq;
 
 import pl.itiner.grave.GeoJSON;
+import pl.itiner.grave.Log;
 import pl.itiner.grave.R;
 import pl.itiner.grave.ResultList;
 import pl.itiner.models.Deathman;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
@@ -19,14 +21,10 @@ import com.mgmaps.utils.Tools;
 import com.nutiteq.BasicMapComponent;
 import com.nutiteq.android.MapView;
 import com.nutiteq.components.MapTile;
+import com.nutiteq.components.OnMapElement;
 import com.nutiteq.components.Place;
-import com.nutiteq.components.PlaceIcon;
-import com.nutiteq.components.PlaceLabel;
 import com.nutiteq.components.WgsPoint;
-import com.nutiteq.location.LocationMarker;
-import com.nutiteq.location.LocationSource;
-import com.nutiteq.location.NutiteqLocationMarker;
-import com.nutiteq.location.providers.AndroidGPSProvider;
+import com.nutiteq.listeners.OnMapElementListener;
 import com.nutiteq.maps.GeoMap;
 import com.nutiteq.maps.MapTileOverlay;
 import com.nutiteq.ui.ThreadDrivenPanning;
@@ -37,6 +35,43 @@ public class NutiteqMap extends Activity {
 	private BasicMapComponent mapComponent;
 	private GeoMap map;
 	private boolean onRetainCalled;
+	public boolean locationSet = false;
+//	private LocationSource locationSource;
+	public Image gps; 
+	public Image grave;
+	public WgsPoint userLocation;
+	public Place userPlace;
+	public Place gravePlace;
+	public Location mobileLocation;
+	public LocationManager locManager;
+	public LocationListener locListener;
+	int initialZoom;
+	String mapKey;
+	WgsPoint center;
+	OnMapElementListener elemListener = new OnMapElementListener() {
+		
+		@Override
+		public void elementLeft(OnMapElement arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void elementEntered(OnMapElement arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void elementClicked(OnMapElement mapElem) {
+			// TODO Auto-generated method st)
+			BalloonLabel tmp = (BalloonLabel) mapElem.getLabel();
+			if(tmp.name.equals("Grób")){
+				mapComponent.setMiddlePoint(mapElem.getPoints()[0]);
+				mapComponent.zoomIn();
+			}
+		}
+	};
 
 	/** Called when the activity is first created. */
 	@Override
@@ -45,37 +80,46 @@ public class NutiteqMap extends Activity {
 		onRetainCalled = false;
 		setContentView(R.layout.nutiteq);
 		Resources res = getResources();
-		final int initialZoom = res.getInteger(R.integer.initial_zoom);
-		final String mapKey = res.getString(R.string.nutiteq_key);
-		final WgsPoint center = new WgsPoint(Double.parseDouble(res
+		initialZoom = res.getInteger(R.integer.initial_zoom);
+		mapKey = res.getString(R.string.nutiteq_key);
+		center = new WgsPoint(Double.parseDouble(res
 				.getString(R.string.poznan_centre_lon)), Double.parseDouble(res
 				.getString(R.string.poznan_centre_lat)));
-
+		gps = new Image(BitmapFactory.decodeResource(getResources(), R.drawable.dot));
+		grave = new Image(BitmapFactory.decodeResource(getResources(), R.drawable.graveloc));
 		mapComponent = new BasicMapComponent(mapKey, new AppContext(this), 1,
 				1, center, initialZoom);
 		map = getMap();
 		mapComponent.setMap(map);
+		mapComponent.setSmoothZoom(true);
 		Bundle b = getIntent().getExtras();
+		WgsPoint graveLoc = null;
 		if (b != null) {
 			double x = b.getDouble("x");
 			double y = b.getDouble("y");
 			int id = b.getInt("id");
-			WgsPoint graveLoc = new WgsPoint(y, x);
-			mapComponent.addPlace(new Place(0, new PlaceLabel("Grób",
-					PlaceLabel.DISPLAY_TOP), new Image(BitmapFactory
-					.decodeResource(getResources(), R.drawable.graveloc)),
-					graveLoc));
+			graveLoc = new WgsPoint(y, x);		
 			fillHeaderWithData(id);
 		}
-
+		
 		mapComponent.setPanningStrategy(new ThreadDrivenPanning());
 		mapComponent.startMapping();
 		MapView mapView = (MapView) findViewById(R.id.nutiteq_mapview);
 		mapView.setMapComponent(mapComponent);
 
+		locListener = new NutiteqLocationListener();
+		locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
+       
+        BalloonLabel graveLocationLabel = new BalloonLabel("Grób", "Przybliż mapę");
+        BalloonLabel userLocationLabel = new BalloonLabel("Twoja pozycja","");
+    	gravePlace = new Place(0,graveLocationLabel,grave,graveLoc);
+		mapComponent.addPlace(gravePlace);
+		
+        userPlace = new Place(0, userLocationLabel, gps,
+							userLocation);
+        mapComponent.setOnMapElementListener(elemListener);
 		setupZoom();
-		setupUserLocation();
-
 	}
 
 	private void fillHeaderWithData(int id) {
@@ -115,20 +159,6 @@ public class NutiteqMap extends Activity {
 		String cm_name = ResultList.cementeries[Integer
 				.parseInt(tmp.getCm_id())];
 		mapCementry.setText(cm_name);
-	}
-
-	private void setupUserLocation() {
-		final LocationSource locationSource = new AndroidGPSProvider(
-				(LocationManager) getSystemService(Context.LOCATION_SERVICE),
-				1000L);
-		Bitmap icon = BitmapFactory.decodeResource(getResources(),
-				R.drawable.gps_marker);
-		final LocationMarker marker = new NutiteqLocationMarker(new PlaceIcon(
-				Image.createImage(icon), icon.getWidth(), icon.getHeight()),
-				3000, true);
-		marker.setTrackingEnabled(false);
-		locationSource.setLocationMarker(marker);
-		mapComponent.setLocationSource(locationSource);
 	}
 
 	private void setupZoom() {
@@ -196,7 +226,45 @@ public class NutiteqMap extends Activity {
 		super.onDestroy();
 		if (!onRetainCalled) {
 			mapComponent.stopMapping();
-			mapComponent = null;
 		}
+	}
+	public class NutiteqLocationListener implements LocationListener
+	{
+		BalloonLabel userLocationLabel = new BalloonLabel("Twoja pozycja","");
+		@Override
+		public void onLocationChanged(Location loc) {
+			// TODO Auto-generated method stub
+			Log.i("userLocation","LAT:"+loc.getLatitude()+" LONG:"+loc.getLongitude());
+			userLocation = new WgsPoint(loc.getLongitude(), loc.getLatitude());
+			if(userLocation != null)
+			{
+					try {
+					mapComponent.removePlace(userPlace);
+					}catch(NullPointerException nue)
+					{ /* ignored*/}					
+					 userPlace = new Place(0, userLocationLabel, gps,
+								userLocation);
+					mapComponent.addPlace(userPlace);
+			}
+		}
+
+		@Override
+		public void onProviderDisabled(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onProviderEnabled(String arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }
