@@ -36,7 +36,6 @@ public class NutiteqMap extends Activity {
 	private GeoMap map;
 	private boolean onRetainCalled;
 	public boolean locationSet = false;
-//	private LocationSource locationSource;
 	public Image gps; 
 	public Image grave;
 	public WgsPoint userLocation;
@@ -120,6 +119,18 @@ public class NutiteqMap extends Activity {
 							userLocation);
         mapComponent.setOnMapElementListener(elemListener);
 		setupZoom();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		locManager.removeUpdates(locListener);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
 	}
 
 	private void fillHeaderWithData(int id) {
@@ -233,7 +244,6 @@ public class NutiteqMap extends Activity {
 		BalloonLabel userLocationLabel = new BalloonLabel("Twoja pozycja","");
 		@Override
 		public void onLocationChanged(Location loc) {
-			// TODO Auto-generated method stub
 			Log.i("userLocation","LAT:"+loc.getLatitude()+" LONG:"+loc.getLongitude());
 			userLocation = new WgsPoint(loc.getLongitude(), loc.getLatitude());
 			if(userLocation != null)
@@ -250,20 +260,14 @@ public class NutiteqMap extends Activity {
 
 		@Override
 		public void onProviderDisabled(String arg0) {
-			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
 		public void onProviderEnabled(String arg0) {
-			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
 		public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-			// TODO Auto-generated method stub
-			
 		}
 		
 	}
