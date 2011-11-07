@@ -86,38 +86,42 @@ public class NutiteqMap extends Activity {
 				.getString(R.string.poznan_centre_lat)));
 		gps = new Image(BitmapFactory.decodeResource(getResources(), R.drawable.dot));
 		grave = new Image(BitmapFactory.decodeResource(getResources(), R.drawable.graveloc));
-		mapComponent = new BasicMapComponent(mapKey, new AppContext(this), 1,
-				1, center, initialZoom);
-		map = getMap();
-		mapComponent.setMap(map);
-		mapComponent.setSmoothZoom(true);
 		Bundle b = getIntent().getExtras();
 		WgsPoint graveLoc = null;
 		if (b != null) {
 			double x = b.getDouble("x");
 			double y = b.getDouble("y");
 			int id = b.getInt("id");
-			graveLoc = new WgsPoint(y, x);		
+			graveLoc = new WgsPoint(y, x);
 			fillHeaderWithData(id);
 		}
-		
-		mapComponent.setPanningStrategy(new ThreadDrivenPanning());
-		mapComponent.startMapping();
+		locListener = new NutiteqLocationListener();
+		locManager = (LocationManager) this
+				.getSystemService(Context.LOCATION_SERVICE);
+		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+				0, locListener);
+		mapComponent = (BasicMapComponent) getLastNonConfigurationInstance();
+		if (mapComponent == null) {
+			mapComponent = new BasicMapComponent(mapKey, new AppContext(this),
+					1, 1, center, initialZoom);
+			map = getMap();
+			mapComponent.setMap(map);
+			mapComponent.setSmoothZoom(true);
+			mapComponent.setPanningStrategy(new ThreadDrivenPanning());
+			mapComponent.startMapping();
+
+			BalloonLabel graveLocationLabel = new BalloonLabel("Grób",
+					"Przybliż mapę");
+			BalloonLabel userLocationLabel = new BalloonLabel("Twoja pozycja",
+					"");
+			gravePlace = new Place(0, graveLocationLabel, grave, graveLoc);
+			mapComponent.addPlace(gravePlace);
+
+			userPlace = new Place(0, userLocationLabel, gps, userLocation);
+			mapComponent.setOnMapElementListener(elemListener);
+		}
 		MapView mapView = (MapView) findViewById(R.id.nutiteq_mapview);
 		mapView.setMapComponent(mapComponent);
-
-		locListener = new NutiteqLocationListener();
-		locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
-       
-        BalloonLabel graveLocationLabel = new BalloonLabel("Grób", "Przybliż mapę");
-        BalloonLabel userLocationLabel = new BalloonLabel("Twoja pozycja","");
-    	gravePlace = new Place(0,graveLocationLabel,grave,graveLoc);
-		mapComponent.addPlace(gravePlace);
-		
-        userPlace = new Place(0, userLocationLabel, gps,
-							userLocation);
-        mapComponent.setOnMapElementListener(elemListener);
 		setupZoom();
 	}
 	
