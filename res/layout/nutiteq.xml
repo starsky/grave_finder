@@ -3,13 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <TableLayout
-        android:id="@+id/header_graveinfo"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@android:drawable/screen_background_light_transparent"
-        android:stretchColumns="0" >
 
         <!-- ARROW_LEFT -->
 
@@ -22,7 +15,6 @@
         <!-- android:layout_alignLeft="@id/header_graveinfo" -->
         <!-- android:layout_height="fill_parent"/> -->
 
-        <TableRow >
 
             <!-- IMIE I NAZWISKO -->
 
@@ -34,10 +26,8 @@
                 android:text="Imię i nazwisko"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:layout_alignParentTop="true"
                 android:typeface="sans" />
-        </TableRow>
-
-        <TableRow >
 
             <!-- CMENTARZ -->
 
@@ -48,10 +38,17 @@
                 android:padding="2dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
-        </TableRow>
+                android:typeface="sans"
+                android:layout_below="@id/map_surname_name" />
 
-        <TableRow >
+    <TableLayout
+        android:id="@+id/header_graveinfo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:layout_below="@id/map_value_cementry"
+        android:stretchColumns="0" >
+            <TableRow >
 
             <!-- DATA URODZIN -->
 
