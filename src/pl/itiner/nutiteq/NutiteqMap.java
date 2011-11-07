@@ -51,19 +51,14 @@ public class NutiteqMap extends Activity {
 		
 		@Override
 		public void elementLeft(OnMapElement arg0) {
-			// TODO Auto-generated method stub
-			
 		}
 		
 		@Override
 		public void elementEntered(OnMapElement arg0) {
-			// TODO Auto-generated method stub
-			
 		}
 		
 		@Override
 		public void elementClicked(OnMapElement mapElem) {
-			// TODO Auto-generated method st)
 			BalloonLabel tmp = (BalloonLabel) mapElem.getLabel();
 			if(tmp.name.equals("Grób")){
 				mapComponent.setMiddlePoint(mapElem.getPoints()[0]);
@@ -102,27 +97,31 @@ public class NutiteqMap extends Activity {
 				0, locListener);
 		mapComponent = (BasicMapComponent) getLastNonConfigurationInstance();
 		if (mapComponent == null) {
-			mapComponent = new BasicMapComponent(mapKey, new AppContext(this),
-					1, 1, center, initialZoom);
-			map = getMap();
-			mapComponent.setMap(map);
-			mapComponent.setSmoothZoom(true);
-			mapComponent.setPanningStrategy(new ThreadDrivenPanning());
-			mapComponent.startMapping();
-
-			BalloonLabel graveLocationLabel = new BalloonLabel("Grób",
-					"Przybliż mapę");
-			BalloonLabel userLocationLabel = new BalloonLabel("Twoja pozycja",
-					"");
-			gravePlace = new Place(0, graveLocationLabel, grave, graveLoc);
-			mapComponent.addPlace(gravePlace);
-
-			userPlace = new Place(0, userLocationLabel, gps, userLocation);
-			mapComponent.setOnMapElementListener(elemListener);
+			createMapComponent(graveLoc);
 		}
 		MapView mapView = (MapView) findViewById(R.id.nutiteq_mapview);
 		mapView.setMapComponent(mapComponent);
 		setupZoom();
+	}
+
+	private void createMapComponent(WgsPoint graveLoc) {
+		mapComponent = new BasicMapComponent(mapKey, new AppContext(this),
+				1, 1, center, initialZoom);
+		map = getMap();
+		mapComponent.setMap(map);
+		mapComponent.setSmoothZoom(true);
+		mapComponent.setPanningStrategy(new ThreadDrivenPanning());
+		mapComponent.startMapping();
+
+		BalloonLabel graveLocationLabel = new BalloonLabel("Grób",
+				"Przybliż mapę");
+		BalloonLabel userLocationLabel = new BalloonLabel("Twoja pozycja",
+				"");
+		gravePlace = new Place(0, graveLocationLabel, grave, graveLoc);
+		mapComponent.addPlace(gravePlace);
+
+		userPlace = new Place(0, userLocationLabel, gps, userLocation);
+		mapComponent.setOnMapElementListener(elemListener);
 	}
 	
 	@Override
