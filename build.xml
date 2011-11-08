@@ -4,7 +4,7 @@
     </description>
 	<property name="zip_file" location="lokalizator_grobow-src.zip" />
 	<target name="src" description="create source package" depends="clean">
-		<zip destfile="${zip_file}" basedir="." excludes="tmp/**,.hg/**,bin/**,values/nutiteq_api_key.xml" />
+		<zip destfile="${zip_file}" basedir="." excludes="tmp/**,.hg/**,bin/**,res/values/nutiteq_api_key.xml,.hg*" />
 	</target>
 
 	<target name="clean">
