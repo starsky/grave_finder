@@ -189,11 +189,6 @@
 		android:apiKey=""
         android:clickable="true"
         android:enabled="true" />
-    <!--
- 		hdm1/win7/0fwLhF406wY-SCmtgcRpu3jYiiV8ZscgM48I-NQ       
-		android:apiKey="0fwLhF406wY8NWJfI8BBuiifYfUUnVvVo8g__hg" 
-		hdm1/mint/0fwLhF406wY9uEJIlDyf5X8KsMfoR0v1nv_8GBQ
-    -->
 
     <LinearLayout
         android:id="@+id/zoom"
