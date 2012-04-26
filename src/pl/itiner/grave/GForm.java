@@ -18,6 +18,7 @@
 
 package pl.itiner.grave;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -206,7 +207,12 @@ public class GForm extends Activity {
 					-1);
 		}
 
-		dead = gJSON.parseJSON(this, gJSON.getJSON(this));
+		try {
+			dead = gJSON.parseJSON(this, gJSON.getJSON(this));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public boolean isOnline() {
