@@ -50,6 +50,7 @@ import com.google.gson.reflect.TypeToken;
  */
 public class GeoJSON {
 
+	private static final String USER_AGENT = "Grave-finder (www.itiner.pl)";
 	private static final int MAX_FETCH_SIZE = 5;
 	public static List<Departed> dList = new ArrayList<Departed>();
 	public static final String TAG = "GeoJSON";
@@ -104,7 +105,7 @@ public class GeoJSON {
 	public String getJSON(Context ctx) throws IOException {
 
 		AndroidHttpClient client = AndroidHttpClient
-				.newInstance("Grave-finder");
+				.newInstance(USER_AGENT);
 		HttpResponse resp = client.execute(new HttpGet(uri.toString()));
 		OutputStream os = new ByteArrayOutputStream();
 		resp.getEntity().writeTo(os);
