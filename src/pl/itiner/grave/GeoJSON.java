@@ -25,22 +25,21 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.client.HttpResponseException;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import pl.itiner.models.Departed;
 import pl.itiner.models.DepartedDeserializer;
 import pl.itiner.models.DepartedListDeserializer;
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -55,8 +54,8 @@ import com.google.gson.reflect.TypeToken;
  */
 
 /**
- * TODO Usunąć listę statyczną, urzyć urlbuildera do budowy url, usunuść parse
- * json tylko użyć biblioteki.
+ * TODO Usunąć listę statyczną, urzyć urlbuildera do budowy url, złap gdzieś
+ * wyjątek parsowania
  * 
  */
 public class GeoJSON {
@@ -68,7 +67,7 @@ public class GeoJSON {
 	// private String urlString =
 	// "http://www.poznan.pl/featureserver/featureserver.cgi/groby?queryable=";
 	private GsonBuilder g = new GsonBuilder();
-	public URL url;
+	private Uri uri;
 
 	/**
 	 * 
@@ -84,41 +83,69 @@ public class GeoJSON {
 	public GeoJSON(String cm_id, String g_name, String g_surname,
 			String g_date_burial, int whichDate) {
 		dList.clear();
-		url = prepeareURL(cm_id, g_name, g_surname, g_date_burial, whichDate);
+		switch (whichDate) {
+		case -1:
+			uri = prepeareURL(cm_id, g_name, g_surname, null, null, null);
+			break;
+		case 0:
+			uri = prepeareURL(cm_id, g_name, g_surname, g_date_burial, null,
+					null);
+			break;
+		case 1:
+			uri = prepeareURL(cm_id, g_name, g_surname, null, g_date_burial,
+					null);
+			break;
+		case 2:
+			uri = prepeareURL(cm_id, g_name, g_surname, null, null,
+					g_date_burial);
+			break;
+		}
 		g = new GsonBuilder();
 		g.registerTypeAdapter(Departed.class, new DepartedDeserializer());
 		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());
 	}
 
-	public URL prepeareURL(String cm_id, String g_name, String g_surname,
-			String g_date, int whichDate) {
-		String tmp_String = "http://www.poznan.pl/featureserver/featureserver.cgi/groby/all.json?maxFeatures=100&queryable=g_surname,g_name,cm_id,g_date_death,g_date_birth,g_date_burial&cm_id="
-				+ cm_id + "&g_surname=" + g_surname + "&g_name=" + g_name;
-		switch (whichDate) {
-		case -1:
-			tmp_String += "&g_date_death&g_date_burial&g_date_birth";
-			break;
-		case 0:
-			tmp_String += "&g_date_death=" + g_date;
-			break;
-		case 1:
-			tmp_String += "&g_date_burial=" + g_date;
-			break;
-		case 2:
-			tmp_String += "&g_date_birth=" + g_date;
-			break;
+	private static Map<String, String> createQueryParamsMap(String cmId,
+			String name, String surname, String deathDate, String birthDate,
+			String burialDate) {
+		Map<String, String> map = new HashMap<String, String>();
+		if (cmId != null) {
+			map.put("cm_id", cmId);
 		}
+		if (name != null) {
+			map.put("g_name", name);
+		}
+		if (surname != null) {
+			map.put("g_surname", surname);
+		}
+		if (deathDate != null) {
+			map.put("g_date_death", deathDate);
+		}
+		if (burialDate != null) {
+			map.put("g_date_burial", burialDate);
+		}
+		if (birthDate != null) {
+			map.put("g_date_birth", birthDate);
+		}
+		return map;
+	}
 
-		// +
-		// &g_date_burial=" + g_date_burial;// + "&g_date_birth="+g_date_birth;
-		// http://www.poznan.pl/featureserver/featureserver.cgi/groby?queryable=g_surname,g_name,cm_id,g_date_burial,g_date_birth&cm_id=&g_surname=&g_name=micha%C5%82&g_date_burial=&g_date_birth=
-		try {
-			return new URL(tmp_String);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public Uri prepeareURL(String cmId, String name, String surname,
+			String deathDate, String birthDate, String burialDate) {
+		Map<String, String> paramsMap = createQueryParamsMap(cmId, name,
+				surname, deathDate, birthDate, burialDate);
+		Uri.Builder b = Uri.parse(
+				"http://www.poznan.pl/featureserver/featureserver.cgi/groby")
+				.buildUpon();
+		b.appendQueryParameter("maxFeatures", 5 + "");
+		StringBuilder queryableParam = new StringBuilder();
+		for (String p : paramsMap.keySet()) {
+			queryableParam.append(p).append(",");
+			b.appendQueryParameter(p, paramsMap.get(p));
 		}
-		return null;
+		queryableParam.deleteCharAt(queryableParam.length() - 1);
+		b.appendQueryParameter("queryable", queryableParam.toString());
+		return b.build();
 	}
 
 	public String getJSON(Context ctx) {
@@ -129,6 +156,7 @@ public class GeoJSON {
 			// this is the file to be downloaded
 
 			// create the new connection
+			URL url = new URL(uri.toString());
 			HttpURLConnection urlConnection = (HttpURLConnection) url
 					.openConnection();
 
