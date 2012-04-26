@@ -21,7 +21,8 @@ package pl.itiner.map;
 import pl.itiner.grave.GeoJSON;
 import pl.itiner.grave.R;
 import pl.itiner.grave.ResultList;
-import pl.itiner.models.Deathman;
+import pl.itiner.models.Departed;
+import pl.itiner.models.DepartedProperties;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -43,7 +44,7 @@ import com.google.android.maps.MyLocationOverlay;
 
 public class GraveMap extends MapActivity {
 	MapView mapView;
-	Deathman dtDeathman;
+	DepartedProperties dtDeathman;
 	TextView mapSurnameName;
 	TextView mapBirthDate;
 	TextView mapDeathDate;
@@ -78,7 +79,7 @@ public class GraveMap extends MapActivity {
 		double y = b.getDouble("y");
 		int id = b.getInt("id");
 
-		Deathman tmp = GeoJSON.dList.get(id);
+		Departed tmp = GeoJSON.dList.get(id);
 		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
 		mapSurnameName.setText(tmp.getName() + " " + tmp.getSurname());
 		

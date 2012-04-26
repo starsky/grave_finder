@@ -6,5 +6,6 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="lib" path="libs/projector.jar"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="libs/gson.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

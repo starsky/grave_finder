@@ -22,7 +22,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
-
+/*
+ * TODO Połączyć w jednen widok
+ */
 public class LibrariesView extends Activity  {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

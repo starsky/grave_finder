@@ -22,7 +22,7 @@ import pl.itiner.grave.GeoJSON;
 import pl.itiner.grave.Log;
 import pl.itiner.grave.R;
 import pl.itiner.grave.ResultList;
-import pl.itiner.models.Deathman;
+import pl.itiner.models.Departed;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -164,7 +164,7 @@ public class NutiteqMap extends Activity {
 		final TextView mapQuater;
 		final TextView mapField;
 
-		Deathman tmp = GeoJSON.dList.get(id);
+		Departed tmp = GeoJSON.dList.get(id);
 		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
 		mapSurnameName.setText(tmp.getName() + " " + tmp.getSurname());
 
