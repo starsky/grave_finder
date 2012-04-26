@@ -64,7 +64,7 @@ public class GForm extends Activity {
 	public static final int PROGRESSBAR = 1;
 	public static final int PROGRESSBAR_GONE = 2;
 	public static final int TOAST = 3;
-	
+
 	private static final int BURIAL_DATE = 1;
 	private static final int BIRTH_DATE = 2;
 	private static final int DEATH_DATE = 0;
@@ -76,86 +76,76 @@ public class GForm extends Activity {
 	private CheckBox checkBoxDate;
 	private EditText editTextSurname;
 	private EditText editTextName;
-	private TextView deathDate;
-	private TextView burialDate;
-	private TextView birthDate;
-	private LinearLayout ll_dataChooseHeader;
-	private RelativeLayout ll;
+	private Button deathDate;
+	private Button burialDate;
+	private Button birthDate;
+	private LinearLayout dataChooseHeader;
 	private int whichDate = DEATH_DATE;
 	private Button find;
 	public static Drawable white;
 	public static Drawable dark;
 
-	OnCheckedChangeListener onCheckedDateVisiable = new OnCheckedChangeListener() {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+		progressBar = (ProgressBar) findViewById(R.id.progressbar_titlebar);
+		dataChooseHeader = (LinearLayout) findViewById(R.id.date_choose_header);
+
+		find = (Button) findViewById(R.id.find_btn);
+		setSearchClickListener();
+
+		necropolis = (Spinner) findViewById(R.id.necropolis_spinner);
+		necropolis.setAdapter(getNecropolisSpinnerAdapter());
+
+		datePicker = (DatePicker) findViewById(R.id.datepicker);
+
+		checkBoxDate = (CheckBox) findViewById(R.id.checkbox);
+		checkBoxDate.setOnCheckedChangeListener(onCheckedDateVisiable);
+
+		editTextSurname = (EditText) findViewById(R.id.surname);
+		editTextSurname.setSelected(false);
+		editTextName = (EditText) findViewById(R.id.name);
+		editTextName.setSelected(false);
+
+		deathDate = (Button) findViewById(R.id.death_date);
+		burialDate = (Button) findViewById(R.id.burial_date);
+		birthDate = (Button) findViewById(R.id.birth_date);
+		deathDate.setOnClickListener(onBtnDateClick);
+		burialDate.setOnClickListener(onBtnDateClick);
+		birthDate.setOnClickListener(onBtnDateClick);
+
+	}
+
+	private OnCheckedChangeListener onCheckedDateVisiable = new OnCheckedChangeListener() {
 
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
 			if (isChecked) {
-				datePicker.setVisibility(View.VISIBLE);
-				ll_dataChooseHeader.setVisibility(View.VISIBLE);
+				dataChooseHeader.setVisibility(View.VISIBLE);
 				checkBoxDate.setText("");
-			} else if (!isChecked) {
-				checkBoxDate.setText("Dodatkowe opcje wyszukiwania");
-				datePicker.setVisibility(View.GONE);
-				ll_dataChooseHeader.setVisibility(View.GONE);
+			} else {
+				checkBoxDate.setText(R.string.additional_query_params);
+				dataChooseHeader.setVisibility(View.GONE);
 			}
 		}
 	};
 
-	OnClickListener onTextViewDateClick = new OnClickListener() {
+	private OnClickListener onBtnDateClick = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			if (!checkBoxDate.isChecked())
-				checkBoxDate.setChecked(true);
 			if (v.getId() == deathDate.getId()) {
-
 				whichDate = DEATH_DATE;
-				deathDate.setBackgroundDrawable(white);
-				deathDate.setTextColor(Color.BLACK);
-
-				burialDate.setBackgroundDrawable(dark);
-				burialDate.setTextColor(Color.WHITE);
-
-				birthDate.setBackgroundDrawable(dark);
-				birthDate.setTextColor(Color.WHITE);
-
-				birthDate.invalidate();
-				deathDate.invalidate();
-				burialDate.invalidate();
-
 			} else if (v.getId() == burialDate.getId()) {
 				whichDate = BURIAL_DATE;
-				deathDate.setBackgroundDrawable(dark);
-				deathDate.setTextColor(Color.WHITE);
-
-				burialDate.setBackgroundDrawable(white);
-				burialDate.setTextColor(Color.BLACK);
-
-				birthDate.setBackgroundDrawable(dark);
-				birthDate.setTextColor(Color.WHITE);
-
-				birthDate.invalidate();
-				deathDate.invalidate();
-				burialDate.invalidate();
 			} else if (v.getId() == birthDate.getId()) {
 				whichDate = BIRTH_DATE;
-				deathDate.setBackgroundDrawable(dark);
-				deathDate.setTextColor(Color.WHITE);
-
-				burialDate.setBackgroundDrawable(dark);
-				burialDate.setTextColor(Color.WHITE);
-
-				birthDate.setBackgroundDrawable(white);
-				birthDate.setTextColor(Color.BLACK);
-
-				birthDate.invalidate();
-				deathDate.invalidate();
-				burialDate.invalidate();
 			}
-
+			birthDate.invalidate();
+			deathDate.invalidate();
+			burialDate.invalidate();
 		}
 	};
 
@@ -250,89 +240,29 @@ public class GForm extends Activity {
 		}
 	};
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+	private ArrayAdapter<CharSequence> getNecropolisSpinnerAdapter() {
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+				this, R.array.necropolises,
+				android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		return adapter;
+	}
 
-		white = getApplicationContext().getResources().getDrawable(
-				android.R.drawable.editbox_dropdown_light_frame);
-		dark = getApplicationContext().getResources().getDrawable(
-				android.R.drawable.editbox_dropdown_dark_frame);
-		/**
-		 * TITLEBAR PROGRESSBAR
-		 */
-		ll = (RelativeLayout) findViewById(R.id.all);
-		progressBar = (ProgressBar) findViewById(R.id.progressbar_titlebar);
-
-		ll_dataChooseHeader = (LinearLayout) findViewById(R.id.date_choose_header);
-
-		/**
-		 * FIND BUTTON
-		 */
-
-		find = (Button) findViewById(R.id.find_btn);
+	private void setSearchClickListener() {
 		find.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
 				cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 				if (isOnline()) {
 					new Thread(th_searchGraves).start();
 				}
 				if (!isOnline()) {
-					Toast.makeText(
-							getApplicationContext(),
-							"Brak dostępu do Internetu\nSprawdź swoje połączenie",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(),
+							R.string.check_conn, Toast.LENGTH_SHORT).show();
 				}
 
 			}
 		});
-		/**
-		 * SPINNER
-		 */
-		necropolis = (Spinner) findViewById(R.id.necropolis_spinner);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-				this, R.array.necropolises,
-				android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		necropolis.setAdapter(adapter);
-
-		/**
-		 * DATEPICKER
-		 */
-		datePicker = (DatePicker) findViewById(R.id.datepicker);
-
-		/**
-		 * CHECKBOX
-		 */
-		checkBoxDate = (CheckBox) findViewById(R.id.checkbox);
-		checkBoxDate.setOnCheckedChangeListener(onCheckedDateVisiable);
-
-		/**
-		 * EDITEXT
-		 * 
-		 */
-		editTextSurname = (EditText) findViewById(R.id.surname);
-		editTextSurname.setSelected(false);
-
-		editTextName = (EditText) findViewById(R.id.name);
-		editTextName.setSelected(false);
-		/**
-		 * TEXTBOXES
-		 */
-		deathDate = (TextView) findViewById(R.id.death_date);
-
-		burialDate = (TextView) findViewById(R.id.burial_date);
-		birthDate = (TextView) findViewById(R.id.birth_date);
-
-		deathDate.setOnClickListener(onTextViewDateClick);
-		burialDate.setOnClickListener(onTextViewDateClick);
-		birthDate.setOnClickListener(onTextViewDateClick);
-
 	}
 
 	Handler activityUIHandler = new Handler() {

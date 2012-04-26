@@ -80,7 +80,7 @@
             <LinearLayout
                 android:id="@+id/date_choose_header"
                 style="@style/group_separator_style"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <LinearLayout
                     android:id="@+id/date_picker_group"
@@ -96,30 +96,27 @@
                         android:text="@string/additional_query_params" >
                     </CheckBox>
 
-                    <LinearLayout
+                    <RadioGroup
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="wrap_content"
+                        android:checkedButton="@+id/death_date"
+                        android:orientation="horizontal" >
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/date" />
-
-                        <Button
+                        <RadioButton
                             android:id="@+id/birth_date"
                             style="@style/date_option_btn"
                             android:text="@string/birth_date" />
 
-                        <Button
+                        <RadioButton
                             android:id="@+id/death_date"
-                            style="@style/date_option_btn_selected"
+                            style="@style/date_option_btn"
                             android:text="@string/death_date" />
 
-                        <Button
+                        <RadioButton
                             android:id="@+id/burial_date"
                             style="@style/date_option_btn"
                             android:text="@string/burial_date" />
-                    </LinearLayout>
+                    </RadioGroup>
                 </LinearLayout>
 
                 <DatePicker
