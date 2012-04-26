@@ -31,8 +31,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import pl.itiner.models.Departed;
+import pl.itiner.models.DepartedDeserializer;
 import android.content.Context;
 import android.util.Log;
 
@@ -181,6 +183,8 @@ public class GeoJSON {
 
 		JSONObject mainJSONObject;
 		JSONArray featuresArray;
+		GsonBuilder g = new GsonBuilder();
+		g.registerTypeAdapter(Departed.class, new DepartedDeserializer());
 		final Gson gson = new Gson();
 		try {
 			mainJSONObject = new JSONObject(JSON);
