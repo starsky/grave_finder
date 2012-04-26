@@ -64,25 +64,25 @@ public class GForm extends Activity {
 	public static final int PROGRESSBAR = 1;
 	public static final int PROGRESSBAR_GONE = 2;
 	public static final int TOAST = 3;
+	
 	private static final int BURIAL_DATE = 1;
 	private static final int BIRTH_DATE = 2;
 	private static final int DEATH_DATE = 0;
 
-	Spinner necropolis;
-	ConnectivityManager cm;
-	ProgressBar progressBar;
-	DatePicker datePicker;
-	CheckBox checkBoxDate;
-	EditText editTextSurname;
-	EditText editTextName;
-	TextView deathDate;
-	TextView burialDate;
-	TextView birthDate;
-	LinearLayout ll_dataChooseHeader;
-	RelativeLayout ll;
-	int whichDate = DEATH_DATE; // 0 = deathDate was chosen, 1 = burialDate, 2 =
-	// birthDate
-	Button find;
+	private Spinner necropolis;
+	private ConnectivityManager cm;
+	private ProgressBar progressBar;
+	private DatePicker datePicker;
+	private CheckBox checkBoxDate;
+	private EditText editTextSurname;
+	private EditText editTextName;
+	private TextView deathDate;
+	private TextView burialDate;
+	private TextView birthDate;
+	private LinearLayout ll_dataChooseHeader;
+	private RelativeLayout ll;
+	private int whichDate = DEATH_DATE;
+	private Button find;
 	public static Drawable white;
 	public static Drawable dark;
 
@@ -179,7 +179,7 @@ public class GForm extends Activity {
 		return true;
 	}
 
-	public void runQuery() {
+	private void runQuery() {
 		Long tmpNecropolisId = necropolis.getSelectedItemId() != 0 ? necropolis
 				.getSelectedItemId() : null;
 		Date deathDate = null;
@@ -214,7 +214,7 @@ public class GForm extends Activity {
 		}
 	}
 
-	public boolean isOnline() {
+	private boolean isOnline() {
 
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
 		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
@@ -223,11 +223,10 @@ public class GForm extends Activity {
 		return true; // TODO Poprawić
 	}
 
-	Runnable th_searchGraves = new Runnable() {
+	private Runnable th_searchGraves = new Runnable() {
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			Message dbmsg = activityUIHandler.obtainMessage();
 
 			dbmsg.what = PROGRESSBAR;

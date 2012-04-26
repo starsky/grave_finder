@@ -1,314 +1,302 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    
     android:layout_height="fill_parent"
-   
-    
-    >
-  
-   	<RelativeLayout 
-   	android:id="@+id/actionbar"
-   	android:layout_width="fill_parent"
-   	android:layout_height="40dp"
-   	android:layout_alignParentTop="true"
-   	android:background="@android:drawable/title_bar_tall"
-   	>
-   	<TextView
-   	android:id="@+id/title_actionbar"
-   	android:layout_height="fill_parent"
-   	android:layout_alignParentLeft="true"
-   	android:layout_width="wrap_content"
-   	android:gravity="center_vertical"
-   	android:textColor="@color/white"
-   	android:singleLine="true"
-   	android:paddingLeft="10dp"
-   	android:typeface="sans"
-   	android:textStyle="bold"
-   	android:textSize="17sp"
-   	android:text="@string/app_name"
-   	/> 
-   	<ProgressBar
-   		android:id="@+id/progressbar_titlebar"
-  		android:layout_height="30dp"
-   		android:layout_width="30dp"
-   		android:gravity="center_vertical"
-   		android:layout_centerVertical="true"
-   		style="@android:style/Widget.ProgressBar.Small"
-   		android:layout_alignParentRight="true"
-  		android:max="100"  	
-   		android:visibility="gone"
-  			/> 	
-                         
- 	
-   	</RelativeLayout>
-<ScrollView 
-android:layout_below="@id/actionbar"
- android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/background"
-    android:isScrollContainer="false"
->   	  
-	<RelativeLayout 
-		android:id="@+id/all"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_below="@id/actionbar"
-		android:paddingBottom="20dp"
-		
-	>
-	  
-    <LinearLayout 
-   
-    				android:id="@+id/linear_main"
-    				android:layout_height="fill_parent"
-    				android:layout_width="fill_parent"
-    				android:orientation="vertical">
-<!--    	WYBÓR CMENTARZA -->
-	
-   	<LinearLayout 
-   		android:id="@+id/name_choose"
-	   	android:layout_below="@id/actionbar"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:paddingTop="5dp"
-	   	android:paddingLeft="10dp"
-	   	android:paddingRight="10dp"
-	   	android:paddingBottom="5dp"
-	   	android:orientation="vertical"
-	   	android:focusable="true" 
-	   	android:focusableInTouchMode="true"
-   	>
-   	<TextView 
-	   	android:id="@+id/date_header"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:text="Imię i/lub nazwisko osoby zmarłej"
-	   	android:paddingLeft="1dp"
-	   	/>
-	<LinearLayout
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:weightSum="2" >
-   	<EditText 
-	   	android:paddingTop="5dp"
-	   	android:id="@+id/name"
-	   	android:layout_weight="1"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:hint="Imię"
-	   	android:text=""
-	    android:singleLine="true"
-	    android:nextFocusDown="@+id/surname"
-	    android:imeOptions="actionNext"
-	   	
-   	/>
-   	<EditText 
-	   	android:paddingTop="5dp"
-	   	android:id="@+id/surname"
-	   	android:layout_weight="1"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:hint="Nazwisko"
-	   	android:singleLine="true"
-	   	android:text=""
-	   	android:imeOptions="actionDone"
-	   
-   	/>
-   	</LinearLayout>
-   	</LinearLayout> 
-   	<LinearLayout
-   		android:id="@+id/necropolis_choose"
-	   	android:layout_below="@id/actionbar"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:paddingTop="5dp"
-	   	android:paddingLeft="10dp"
-	   	android:paddingRight="10dp"
-	   	android:paddingBottom="5dp"
-	   	android:orientation="vertical"
-	   	android:singleLine="true"
-   	>
-   	<TextView 
-	   	android:id="@+id/necropolis_header"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:text="Cmentarz"
-	   	android:paddingLeft="1dp"/>
-   	<Spinner 
-	   	android:paddingTop="5dp"
-	   	android:id="@+id/necropolis_spinner"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:prompt="@string/necropolis_prompt"
-   	/>
-   	</LinearLayout>
-   	
-	<RelativeLayout 
-		android:id="@+id/datechoose"
-		android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	
-	   	>
-	   		<CheckBox  android:id="@+id/checkbox"
-   	 android:layout_width="wrap_content"
-   	  android:layout_height="wrap_content"
-   	  android:layout_marginLeft="10dp"
-   	  android:text="Dodatkowe opcje wyszukiwania"
-   	  ></CheckBox>
-	<LinearLayout 
-   		android:id="@+id/date_choose_header"
-	   	android:layout_below="@id/necropolis_spinner"
-	   	android:layout_toRightOf="@id/checkbox"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:paddingTop="5dp"
-	   	android:paddingLeft="10dp"
-	   	android:paddingRight="10dp"
-	   	android:paddingBottom="5dp"
-	   	android:orientation="horizontal"
-	   	android:visibility="gone"
-   	>
-   	<TextView 
-	   	android:id="@+id/date_header"
-	   	android:layout_width="wrap_content"
-	   	android:layout_height="wrap_content"
-	   	android:text="Data: "/> 
-	<TextView
-		android:id="@+id/birth_date"
-		android:clickable="true"
-		android:layout_width="wrap_content"
-		android:textSize="14sp"
-		android:paddingLeft="4dp"
-		android:editable="true"
-		android:paddingTop="3dp"
-		android:paddingBottom="3dp"
-		android:textStyle="bold"
-		android:paddingRight="4dp"
-		android:textColor="@color/white"
-		android:background="@android:drawable/editbox_dropdown_dark_frame"
-		android:text="urodzenia"
-		android:layout_height="wrap_content"></TextView>
-			<TextView
-			android:clickable="true"
-		android:id="@+id/death_date"
-		android:layout_width="wrap_content"
-		android:textSize="14sp"
-		android:paddingLeft="4dp"
-		android:paddingRight="4dp"
-		android:editable="true"
-		android:textColor="@color/black"
-		android:background="@android:drawable/editbox_dropdown_light_frame"
-		android:text="śmierci"
-		android:paddingTop="3dp"
-		android:paddingBottom="3dp"
-		android:textStyle="bold"
-		android:layout_height="wrap_content"></TextView>
-			<TextView
-			android:clickable="true"
-			android:singleLine="true"
-		android:id="@+id/burial_date"
-		android:layout_width="wrap_content"
-		android:textSize="14sp"
-		android:paddingLeft="4dp"
-		android:paddingRight="4dp"
-		android:editable="true"
-		android:textColor="@color/white"
-		android:background="@android:drawable/editbox_dropdown_dark_frame"
-		android:text="pogrzebu"
-		android:paddingTop="3dp"
-		android:paddingBottom="3dp"
-		android:textStyle="bold"
-		android:layout_height="wrap_content"></TextView>
-			
-	</LinearLayout>
-	<DatePicker 
-	   	android:id="@+id/datepicker"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:layout_below="@id/date_choose_header"
-	   	android:visibility="gone"
-	   	android:paddingTop="10dp"
-	   	
-   	/>
-   
-   
-   	</RelativeLayout>
- 
-   	<RelativeLayout 
-   		android:id="@+id/buttons"
-	   	android:layout_width="fill_parent"
-	   	android:layout_height="wrap_content"
-	   	android:paddingBottom="10dp"
-	   	android:paddingLeft="10dp"
-	   	android:paddingTop="5dp"
-	   	android:paddingRight="10dp"
-	    android:layout_alignParentBottom="true"
+    android:orientation="vertical" >
 
-   	><!-- 	    android:layout_below="@id/surname" -->
-   	<Button 
-   		
-   		android:id="@+id/find_btn"
-   		android:layout_width="fill_parent"
-   		android:layout_height="wrap_content"
-   		android:textSize="18dp"
-   		android:drawableRight="@android:drawable/ic_search_category_default"
-   		   		
-   		android:text="  Szukaj"  />
+    <RelativeLayout
+        android:id="@+id/actionbar"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:background="@android:drawable/title_bar_tall" >
+
+        <TextView
+            android:id="@+id/title_actionbar"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:typeface="sans" />
+
+        <ProgressBar
+            android:id="@+id/progressbar_titlebar"
+            style="@android:style/Widget.ProgressBar.Small"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:max="100"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/actionbar"
+        android:background="@drawable/background"
+        android:isScrollContainer="false" >
+
+        <RelativeLayout
+            android:id="@+id/all"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/actionbar"
+            android:paddingBottom="20dp" >
+
+            <LinearLayout
+                android:id="@+id/linear_main"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+
+                <!-- WYBÓR CMENTARZA -->
+
+                <LinearLayout
+                    android:id="@+id/name_choose"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/actionbar"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp" >
+
+                    <TextView
+                        android:id="@+id/date_header"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="1dp"
+                        android:text="Imię i/lub nazwisko osoby zmarłej" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="2" >
+
+                        <EditText
+                            android:id="@+id/name"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="Imię"
+                            android:imeOptions="actionNext"
+                            android:nextFocusDown="@+id/surname"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="" />
+
+                        <EditText
+                            android:id="@+id/surname"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="Nazwisko"
+                            android:imeOptions="actionDone"
+                            android:paddingTop="5dp"
+                            android:singleLine="true"
+                            android:text="" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/necropolis_choose"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/actionbar"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:singleLine="true" >
+
+                    <TextView
+                        android:id="@+id/necropolis_header"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="1dp"
+                        android:text="Cmentarz" />
+
+                    <Spinner
+                        android:id="@+id/necropolis_spinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:prompt="@string/necropolis_prompt" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/datechoose"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <CheckBox
+                        android:id="@+id/checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="Dodatkowe opcje wyszukiwania" >
+                    </CheckBox>
+
+                    <LinearLayout
+                        android:id="@+id/date_choose_header"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/necropolis_spinner"
+                        android:layout_toRightOf="@id/checkbox"
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:visibility="gone" >
+
+                        <TextView
+                            android:id="@+id/date_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Data: " />
+
+                        <TextView
+                            android:id="@+id/birth_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:drawable/editbox_dropdown_dark_frame"
+                            android:clickable="true"
+                            android:editable="true"
+                            android:paddingBottom="3dp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:paddingTop="3dp"
+                            android:text="urodzenia"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" >
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/death_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:drawable/editbox_dropdown_light_frame"
+                            android:clickable="true"
+                            android:editable="true"
+                            android:paddingBottom="3dp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:paddingTop="3dp"
+                            android:text="śmierci"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold" >
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/burial_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:drawable/editbox_dropdown_dark_frame"
+                            android:clickable="true"
+                            android:editable="true"
+                            android:paddingBottom="3dp"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:paddingTop="3dp"
+                            android:singleLine="true"
+                            android:text="pogrzebu"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" >
+                        </TextView>
+                    </LinearLayout>
+
+                    <DatePicker
+                        android:id="@+id/datepicker"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/date_choose_header"
+                        android:paddingTop="10dp"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/buttons"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp" > <!-- android:layout_below="@id/surname" -->
+
+                    <Button
+                        android:id="@+id/find_btn"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@android:drawable/ic_search_category_default"
+                        android:text="  Szukaj"
+                        android:textSize="18dp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white" >
+
+        <!-- <TextView -->
+        <!-- android:id="@+id/tv_poweredby" -->
+        <!-- android:layout_height="fill_parent" -->
+        <!-- android:layout_width="wrap_content" -->
+        <!-- android:textSize="20dp" -->
+        <!-- android:layout_centerVertical="true" -->
+        <!-- android:layout_alignParentLeft="true" -->
+        <!-- android:paddingLeft="10dp" -->
+        <!-- android:background="@color/white" -->
+        <!-- android:text="Dane z API "/> -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:paddingLeft="1dp"
+                android:text="Dane: API poznan.pl"
+                android:textColor="#606060" />
+
+            <ImageView
+                android:id="@+id/poznanapi"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/poznan_small" />
+
+            <ImageView
+                android:id="@+id/gepoz"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:layout_toRightOf="@id/poznanapi"
+                android:src="@drawable/geopoz_small" />
+        </LinearLayout>
+    </RelativeLayout>
+
 </RelativeLayout>
-
-
-   
-</LinearLayout> 
- 	
-
-</RelativeLayout> 
-</ScrollView> 
-  <RelativeLayout 
-	android:layout_width="wrap_content"
-	android:layout_height="30dp"
-	android:layout_alignParentBottom="true"
-	android:background="@color/white"
-	
-
-	>
-<!--	<TextView -->
-<!--		android:id="@+id/tv_poweredby"-->
-<!--		android:layout_height="fill_parent"-->
-<!--		android:layout_width="wrap_content"-->
-<!--		android:textSize="20dp"-->
-<!--		android:layout_centerVertical="true"-->
-<!--		android:layout_alignParentLeft="true"-->
-<!--		android:paddingLeft="10dp"-->
-<!--		android:background="@color/white"-->
-<!--		android:text="Dane z API "/>-->
-<LinearLayout android:layout_height="fill_parent"
-    android:layout_width="fill_parent"
-    >
-	<TextView android:layout_height="wrap_content"
-	    android:layout_width="wrap_content"
-	    android:text="Dane: API poznan.pl"
-	    android:gravity="center_vertical"
-	    android:textColor="#606060"
-	    android:layout_gravity="center_vertical"
-	    android:paddingLeft="1dp"
-	    />
-	<ImageView 
-		android:id="@+id/poznanapi"
-		android:layout_height="15dp"
-		android:layout_width="wrap_content"		
-		android:src="@drawable/poznan_small"
-		android:layout_gravity="center_vertical"/>
-	<ImageView
-		android:id="@+id/gepoz"
-		android:layout_height="15dp"
-		android:layout_width="wrap_content"
-		android:layout_toRightOf="@id/poznanapi"
-		android:src="@drawable/geopoz_small"
-		android:layout_gravity="center_vertical" />
-	</LinearLayout>
-	</RelativeLayout>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-</RelativeLayout>
-
