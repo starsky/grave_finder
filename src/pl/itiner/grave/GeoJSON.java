@@ -21,7 +21,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,33 +61,17 @@ public class GeoJSON {
 	private GsonBuilder g = new GsonBuilder();
 	private Uri uri;
 
-	public GeoJSON(String cm_id, String g_name, String g_surname,
-			String g_date_burial, int whichDate) {
+	public GeoJSON(Long cmId, String name, String surname, Date deathDate,
+			Date birthDate, Date burialDate) {
 		dList.clear();
-		switch (whichDate) {
-		case -1:
-			uri = prepeareURL(cm_id, g_name, g_surname, null, null, null);
-			break;
-		case 0:
-			uri = prepeareURL(cm_id, g_name, g_surname, g_date_burial, null,
-					null);
-			break;
-		case 1:
-			uri = prepeareURL(cm_id, g_name, g_surname, null, g_date_burial,
-					null);
-			break;
-		case 2:
-			uri = prepeareURL(cm_id, g_name, g_surname, null, null,
-					g_date_burial);
-			break;
-		}
+		uri = prepeareURL(cmId, name, surname, deathDate, birthDate, burialDate);
 		g = new GsonBuilder();
 		g.registerTypeAdapter(Departed.class, new DepartedDeserializer());
 		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());
 	}
 
-	public Uri prepeareURL(String cmId, String name, String surname,
-			String deathDate, String birthDate, String burialDate) {
+	public Uri prepeareURL(Long cmId, String name, String surname,
+			Date deathDate, Date birthDate, Date burialDate) {
 		Map<String, String> paramsMap = createQueryParamsMap(cmId, name,
 				surname, deathDate, birthDate, burialDate);
 		Uri.Builder b = Uri.parse(
@@ -104,11 +90,12 @@ public class GeoJSON {
 
 	public String getJSON(Context ctx) throws IOException {
 
-		AndroidHttpClient client = AndroidHttpClient
-				.newInstance(USER_AGENT);
+		AndroidHttpClient client = AndroidHttpClient.newInstance(USER_AGENT);
 		HttpResponse resp = client.execute(new HttpGet(uri.toString()));
 		OutputStream os = new ByteArrayOutputStream();
 		resp.getEntity().writeTo(os);
+		client.close();
+		os.close();
 		return os.toString();
 	}
 
@@ -118,29 +105,34 @@ public class GeoJSON {
 		return dList;
 	}
 
-	private static Map<String, String> createQueryParamsMap(String cmId,
-			String name, String surname, String deathDate, String birthDate,
-			String burialDate) {
+	private static Map<String, String> createQueryParamsMap(Long cmId,
+			String name, String surname, Date deathDate, Date birthDate,
+			Date burialDate) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Map<String, String> map = new HashMap<String, String>();
 		if (cmId != null) {
-			map.put("cm_id", cmId);
+			map.put("cm_id", cmId.toString());
 		}
-		if (name != null) {
+		if (filledStr(name)) {
 			map.put("g_name", name);
 		}
-		if (surname != null) {
+		if (filledStr(surname)) {
 			map.put("g_surname", surname);
 		}
 		if (deathDate != null) {
-			map.put("g_date_death", deathDate);
+			map.put("g_date_death", formatter.format(deathDate));
 		}
 		if (burialDate != null) {
-			map.put("g_date_burial", burialDate);
+			map.put("g_date_burial", formatter.format(burialDate));
 		}
 		if (birthDate != null) {
-			map.put("g_date_birth", birthDate);
+			map.put("g_date_birth", formatter.format(birthDate));
 		}
 		return map;
+	}
+
+	private static boolean filledStr(String str) {
+		return str != null && !str.equals("");
 	}
 
 }

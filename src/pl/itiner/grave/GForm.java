@@ -19,9 +19,9 @@
 package pl.itiner.grave;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import pl.itiner.models.Departed;
@@ -64,6 +64,10 @@ public class GForm extends Activity {
 	public static final int PROGRESSBAR = 1;
 	public static final int PROGRESSBAR_GONE = 2;
 	public static final int TOAST = 3;
+	private static final int BURIAL_DATE = 1;
+	private static final int BIRTH_DATE = 2;
+	private static final int DEATH_DATE = 0;
+
 	Spinner necropolis;
 	ConnectivityManager cm;
 	ProgressBar progressBar;
@@ -76,8 +80,8 @@ public class GForm extends Activity {
 	TextView birthDate;
 	LinearLayout ll_dataChooseHeader;
 	RelativeLayout ll;
-	int whichDate = 1; // 0 = deathDate was chosen, 1 = burialDate, 2 =
-						// birthDate
+	int whichDate = DEATH_DATE; // 0 = deathDate was chosen, 1 = burialDate, 2 =
+	// birthDate
 	Button find;
 	public static Drawable white;
 	public static Drawable dark;
@@ -108,7 +112,7 @@ public class GForm extends Activity {
 				checkBoxDate.setChecked(true);
 			if (v.getId() == deathDate.getId()) {
 
-				whichDate = 0;
+				whichDate = DEATH_DATE;
 				deathDate.setBackgroundDrawable(white);
 				deathDate.setTextColor(Color.BLACK);
 
@@ -123,7 +127,7 @@ public class GForm extends Activity {
 				burialDate.invalidate();
 
 			} else if (v.getId() == burialDate.getId()) {
-				whichDate = 1;
+				whichDate = BURIAL_DATE;
 				deathDate.setBackgroundDrawable(dark);
 				deathDate.setTextColor(Color.WHITE);
 
@@ -137,7 +141,7 @@ public class GForm extends Activity {
 				deathDate.invalidate();
 				burialDate.invalidate();
 			} else if (v.getId() == birthDate.getId()) {
-				whichDate = 2;
+				whichDate = BIRTH_DATE;
 				deathDate.setBackgroundDrawable(dark);
 				deathDate.setTextColor(Color.WHITE);
 
@@ -176,36 +180,34 @@ public class GForm extends Activity {
 	}
 
 	public void runQuery() {
-		String tmpNecropolisId = "";
-		if (necropolis.getSelectedItemId() != 0) {
-			tmpNecropolisId = "" + necropolis.getSelectedItemId();
-		}
+		Long tmpNecropolisId = necropolis.getSelectedItemId() != 0 ? necropolis
+				.getSelectedItemId() : null;
+		Date deathDate = null;
+		Date burialDate = null;
+		Date birthDate = null;
 
-		String tmpName = "";
-		String tmpSurname = "";
-		try {
-			tmpName = URLEncoder.encode(editTextName.getText().toString()
-					.toLowerCase().trim(), "UTF-8");
-			tmpSurname = URLEncoder.encode(editTextSurname.getText().toString()
-					.toLowerCase().trim(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String tmpDate = "";
-		GeoJSON gJSON;
 		if (checkBoxDate.isChecked()) {
 			if (datePicker.isFocused()) {
 				datePicker.clearFocus();
 			}
-			tmpDate = datePicker.getYear() + "-" + (datePicker.getMonth() + 1)
-					+ "-" + datePicker.getDayOfMonth();
-			gJSON = new GeoJSON(tmpNecropolisId, tmpName, tmpSurname, tmpDate,
-					whichDate);
-		} else {
-			gJSON = new GeoJSON(tmpNecropolisId, tmpName, tmpSurname, tmpDate,
-					-1);
+			Date tmpDate;
+			tmpDate = new GregorianCalendar(datePicker.getYear(),
+					datePicker.getMonth(), datePicker.getDayOfMonth())
+					.getTime();
+			switch (whichDate) {
+			case DEATH_DATE:
+				deathDate = tmpDate;
+				break;
+			case BIRTH_DATE:
+				birthDate = tmpDate;
+			case BURIAL_DATE:
+				burialDate = tmpDate;
+			}
 		}
+		GeoJSON gJSON;
+		gJSON = new GeoJSON(tmpNecropolisId, editTextName.getText().toString(),
+				editTextSurname.getText().toString(), deathDate, birthDate,
+				burialDate);
 
 		try {
 			dead = gJSON.parseJSON(this, gJSON.getJSON(this));
@@ -221,7 +223,7 @@ public class GForm extends Activity {
 		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
 			return true;
 		}
-		return false;
+		return true; //TODO Poprawić
 	}
 
 	Runnable th_searchGraves = new Runnable() {
