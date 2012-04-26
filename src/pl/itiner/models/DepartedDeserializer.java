@@ -22,14 +22,13 @@ public class DepartedDeserializer implements JsonDeserializer<Departed> {
 	public Departed deserialize(JsonElement jsonElement, Type typeOfT,
 			JsonDeserializationContext context) throws JsonParseException {
 		JsonObject j = jsonElement.getAsJsonObject();
-		j.getAsJsonObject(PROPERTIES_FIELD);
-		DepartedProperties properties = context.deserialize(j,
+		DepartedProperties properties = context.deserialize(j.getAsJsonObject(PROPERTIES_FIELD),
 				DepartedProperties.class);
 		String id = j.get(ID_FIELD).getAsString();
 		double lat = j.getAsJsonObject(GEOMETRY_FIELD)
-				.getAsJsonArray(COORDINATES_FIELD).get(0).getAsDouble();
+				.getAsJsonArray(COORDINATES_FIELD).get(0).getAsJsonArray().get(0).getAsDouble();
 		double lon = j.getAsJsonObject(GEOMETRY_FIELD)
-				.getAsJsonArray(COORDINATES_FIELD).get(1).getAsDouble();
+				.getAsJsonArray(COORDINATES_FIELD).get(0).getAsJsonArray().get(1).getAsDouble();
 		Location location = new Location(GRAVE_LOCATION_PROVIDER);
 		location.setLatitude(lat);
 		location.setLongitude(lon);

@@ -21,6 +21,7 @@ package pl.itiner.grave;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 import pl.itiner.models.Departed;
 import android.app.Activity;
@@ -58,7 +59,7 @@ import android.widget.Toast;
  */
 public class GForm extends Activity {
 	/** Called when the activity is first created. */
-	public static ArrayList<Departed> dead = new ArrayList<Departed>();
+	public static List<Departed> dead = new ArrayList<Departed>();
 	public static final int PROGRESSBAR = 1;
 	public static final int PROGRESSBAR_GONE = 2;
 	public static final int TOAST = 3;

@@ -20,23 +20,28 @@ package pl.itiner.grave;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.apache.http.client.HttpResponseException;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import pl.itiner.models.Departed;
 import pl.itiner.models.DepartedDeserializer;
+import pl.itiner.models.DepartedListDeserializer;
 import android.content.Context;
 import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * http://www.poznan.pl/featureserver/featureserver.cgi/groby/all.json?queryable
@@ -50,31 +55,39 @@ import android.util.Log;
  */
 
 /**
- * TODO
- * Usunąć listę statyczną, urzyć urlbuildera do budowy url,
- * usunuść parse json tylko użyć biblioteki.
- *
+ * TODO Usunąć listę statyczną, urzyć urlbuildera do budowy url, usunuść parse
+ * json tylko użyć biblioteki.
+ * 
  */
 public class GeoJSON {
 
-	public static ArrayList<Departed> dList = new ArrayList<Departed>();
+	public static List<Departed> dList = new ArrayList<Departed>();
 	public static final String TAG = "GeoJSON";
+	private static final Type COLLECTION_TYPE = new TypeToken<List<Departed>>() {
+	}.getType();
 	// private String urlString =
 	// "http://www.poznan.pl/featureserver/featureserver.cgi/groby?queryable=";
+	private GsonBuilder g = new GsonBuilder();
 	public URL url;
 
 	/**
 	 * 
-	 * @param cm_id Cementery id
-	 * @param g_name Person`s name
-	 * @param g_surname Persons` surenmae
-	 * @param g_date_burial 
+	 * @param cm_id
+	 *            Cementery id
+	 * @param g_name
+	 *            Person`s name
+	 * @param g_surname
+	 *            Persons` surenmae
+	 * @param g_date_burial
 	 * @param whichDate
 	 */
 	public GeoJSON(String cm_id, String g_name, String g_surname,
 			String g_date_burial, int whichDate) {
 		dList.clear();
 		url = prepeareURL(cm_id, g_name, g_surname, g_date_burial, whichDate);
+		g = new GsonBuilder();
+		g.registerTypeAdapter(Departed.class, new DepartedDeserializer());
+		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());
 	}
 
 	public URL prepeareURL(String cm_id, String g_name, String g_surname,
@@ -179,29 +192,9 @@ public class GeoJSON {
 		return baos.toString();
 	}
 
-	public ArrayList<Departed> parseJSON(Context ctx, String JSON) {
-
-		JSONObject mainJSONObject;
-		JSONArray featuresArray;
-		GsonBuilder g = new GsonBuilder();
-		g.registerTypeAdapter(Departed.class, new DepartedDeserializer());
-		final Gson gson = new Gson();
-		try {
-			mainJSONObject = new JSONObject(JSON);
-			featuresArray = mainJSONObject.getJSONArray("features");
-			for (int i = 0; i < featuresArray.length(); i++) {
-
-				JSONObject object = featuresArray.getJSONObject(i);
-				Departed dt = gson.fromJson(object.toString(), Departed.class);
-				dList.add(dt);
-
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+	public List<Departed> parseJSON(Context ctx, String JSON) {
+		Gson gson = g.create();
+		dList = gson.fromJson(JSON, COLLECTION_TYPE);
 		return dList;
-
 	}
 }
