@@ -35,6 +35,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -60,7 +61,6 @@ import android.widget.Toast;
  */
 public class GForm extends Activity {
 	/** Called when the activity is first created. */
-	public static List<Departed> dead = new ArrayList<Departed>();
 	public static final int PROGRESSBAR = 1;
 	public static final int PROGRESSBAR_GONE = 2;
 	public static final int TOAST = 3;
@@ -204,16 +204,13 @@ public class GForm extends Activity {
 				burialDate = tmpDate;
 			}
 		}
-		GeoJSON gJSON;
-		gJSON = new GeoJSON(tmpNecropolisId, editTextName.getText().toString(),
-				editTextSurname.getText().toString(), deathDate, birthDate,
-				burialDate);
-
 		try {
-			dead = gJSON.parseJSON(this, gJSON.getJSON(this));
+			GeoJSON.executeQuery(tmpNecropolisId, editTextName.getText()
+					.toString(), editTextSurname.getText().toString(),
+					deathDate, birthDate, burialDate);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Toast.makeText(this, R.string.query_io_err, Toast.LENGTH_LONG);
+			Log.e("GForm", "IO Err", e);
 		}
 	}
 
@@ -223,7 +220,7 @@ public class GForm extends Activity {
 		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
 			return true;
 		}
-		return true; //TODO Poprawić
+		return true; // TODO Poprawić
 	}
 
 	Runnable th_searchGraves = new Runnable() {
@@ -236,7 +233,7 @@ public class GForm extends Activity {
 			dbmsg.what = PROGRESSBAR;
 			activityUIHandler.sendMessage(dbmsg);
 			runQuery();
-			if (dead.size() != 0) {
+			if (GeoJSON.getResults().size() != 0) {
 				Intent i;
 				i = new Intent(getApplicationContext(), ResultList.class);
 				startActivity(i);

@@ -23,6 +23,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,6 @@ import org.apache.http.client.methods.HttpGet;
 import pl.itiner.models.Departed;
 import pl.itiner.models.DepartedDeserializer;
 import pl.itiner.models.DepartedListDeserializer;
-import android.content.Context;
 import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 
@@ -47,30 +47,41 @@ import com.google.gson.reflect.TypeToken;
  */
 
 /**
- * TODO Usunąć listę statyczną, złap gdzieś wyjątek parsowania
+ * TODO złap gdzieś wyjątek parsowania
  * 
  */
 public class GeoJSON {
 
+	private static List<Departed> dList = new ArrayList<Departed>();
+	public static final String TAG = "GeoJSON";
+
 	private static final String USER_AGENT = "Grave-finder (www.itiner.pl)";
 	private static final int MAX_FETCH_SIZE = 5;
-	public static List<Departed> dList = new ArrayList<Departed>();
-	public static final String TAG = "GeoJSON";
-	private static final Type COLLECTION_TYPE = new TypeToken<List<Departed>>() {
-	}.getType();
-	private GsonBuilder g = new GsonBuilder();
-	private Uri uri;
+	private static final Type COLLECTION_TYPE = new TypeToken<List<Departed>>() {}.getType();
+	
+	private static GsonBuilder g;
 
-	public GeoJSON(Long cmId, String name, String surname, Date deathDate,
-			Date birthDate, Date burialDate) {
-		dList.clear();
-		uri = prepeareURL(cmId, name, surname, deathDate, birthDate, burialDate);
+	static {
 		g = new GsonBuilder();
 		g.registerTypeAdapter(Departed.class, new DepartedDeserializer());
-		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());
+		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());		
+	}
+	
+	public static List<Departed> getResults() {
+		return Collections.unmodifiableList(dList);
+	}
+	
+	public GeoJSON() {
+	}
+	
+	public static void executeQuery(Long cmId, String name, String surname, Date deathDate,
+			Date birthDate, Date burialDate) throws IOException {
+		Uri uri = prepeareURL(cmId, name, surname, deathDate, birthDate, burialDate);
+		String resp = getResponse(uri);
+		parseJSON(resp);
 	}
 
-	public Uri prepeareURL(Long cmId, String name, String surname,
+	private static Uri prepeareURL(Long cmId, String name, String surname,
 			Date deathDate, Date birthDate, Date burialDate) {
 		Map<String, String> paramsMap = createQueryParamsMap(cmId, name,
 				surname, deathDate, birthDate, burialDate);
@@ -88,7 +99,7 @@ public class GeoJSON {
 		return b.build();
 	}
 
-	public String getJSON(Context ctx) throws IOException {
+	private static String getResponse(Uri uri) throws IOException {
 
 		AndroidHttpClient client = AndroidHttpClient.newInstance(USER_AGENT);
 		HttpResponse resp = client.execute(new HttpGet(uri.toString()));
@@ -99,10 +110,9 @@ public class GeoJSON {
 		return os.toString();
 	}
 
-	public List<Departed> parseJSON(Context ctx, String JSON) {
+	private static void parseJSON(String JSON) {
 		Gson gson = g.create();
 		dList = gson.fromJson(JSON, COLLECTION_TYPE);
-		return dList;
 	}
 
 	private static Map<String, String> createQueryParamsMap(Long cmId,
