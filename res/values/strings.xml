@@ -7,4 +7,14 @@
     <string name="license_txt">Aplikacja jest wydawana na licencji GNU GPLv3 (http://www.gnu.org/copyleft/gpl.html)\nWięcej informacji na stronie: https://bitbucket.org/itiner/lokalizator_grobow/wiki</string>
     <string name="libraries_txt">Nutiteq Map SDK (http://www.nutiteq.com/)\nJava Map Projection Library (http://www.jhlabs.com/java/maps/proj/)</string>
     <string name="query_io_err">Nastąpił błąd podczas próby połączenia. Spróbuj ponownie później.</string>
+    <string name="name">Imię</string>
+    <string name="surname">Nazwisko</string>
+    <string name="name_query_hint">Imię i/lub nazwisko osoby zmarłej</string>
+    <string name="necropolis">Cmentarz</string>
+    <string name="additional_query_params">Dodatkowe opcje wyszukiwania</string>
+    <string name="date">"Data: "</string>
+    <string name="birth_date">urodzenia</string>
+    <string name="death_date">śmierci</string>
+    <string name="burial_date">pogrzebu</string>
+    <string name="search">Szukaj</string>
 </resources>
