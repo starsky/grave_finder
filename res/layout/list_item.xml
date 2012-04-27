@@ -1,97 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_item_layout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
-
-    <!-- IMIE I NAZWISKO -->
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/surname_name"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
+        style="@style/list_text"
         android:padding="3dp"
-        android:textSize="18sp"
-        android:typeface="sans" >
-    </TextView>
-    <!-- CMENTARZ -->
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/list_cementry"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/surname_name"
-        android:padding="3dp"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:typeface="sans" />
+        style="@style/list_text_highlighted"
+        android:padding="3dp" />
 
-    <!-- DATA URODZIN -->
+    <LinearLayout style="@style/list_grp" >
 
-    <TextView
-        android:id="@+id/list_header_dateBirth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/list_cementry"
-        android:paddingBottom="1dp"
-        android:paddingLeft="3dp"
-        android:text="ur. " >
-    </TextView>
+        <TextView
+            style="@style/list_text"
+            android:text="@string/born_abv" />
 
-    <TextView
-        android:id="@+id/list_value_dateBirth"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/list_cementry"
-        android:layout_toRightOf="@id/list_header_dateBirth"
-        android:paddingBottom="1dp"
-        android:paddingLeft="3dp"
-        android:textStyle="bold" >
-    </TextView>
-    <!-- DATA SMIERCI -->
+        <TextView
+            android:id="@+id/list_value_dateBirth"
+            style="@style/list_text_highlighted" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/list_header_dateDeath"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/list_value_dateBirth"
-        android:paddingBottom="1dp"
-        android:paddingLeft="3dp"
-        android:text="zm. " >
-    </TextView>
+    <LinearLayout style="@style/list_grp" >
 
-    <TextView
-        android:id="@+id/list_value_dateDeath"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/list_value_dateBirth"
-        android:layout_toRightOf="@id/list_header_dateDeath"
-        android:paddingBottom="1dp"
-        android:paddingLeft="3dp"
-        android:textStyle="bold" >
-    </TextView>
-    <!-- DATA POGRZEBU -->
+        <TextView
+            style="@style/list_text"
+            android:text="@string/died_abv" />
 
-    <TextView
-        android:id="@+id/list_header_dateBurial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/list_header_dateDeath"
-        android:paddingBottom="1dp"
-        android:paddingLeft="3dp"
-        android:text="pogrzeb " >
-    </TextView>
+        <TextView
+            android:id="@+id/list_value_dateDeath"
+            style="@style/list_text_highlighted" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/list_value_dateBurial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/list_header_dateDeath"
-        android:layout_toRightOf="@id/list_header_dateBurial"
-        android:paddingBottom="1dp"
-        android:paddingLeft="3dp"
-        android:textStyle="bold" >
-    </TextView>
+    <LinearLayout style="@style/list_grp" >
 
-</RelativeLayout>
+        <TextView
+            style="@style/list_text"
+            android:text="@string/funreal" />
+
+        <TextView
+            android:id="@+id/list_value_dateBurial"
+            style="@style/list_text_highlighted" />
+    </LinearLayout>
+
+</LinearLayout>

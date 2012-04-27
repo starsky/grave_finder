@@ -35,7 +35,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ResultList extends ListActivity {
@@ -95,8 +94,7 @@ public class ResultList extends ListActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			convertView = (RelativeLayout) mInflater.inflate(
-					R.layout.list_item, parent, false);
+			convertView = mInflater.inflate(R.layout.list_item, parent, false);
 			final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 			final Departed dt = (Departed) (getItem(position));
 

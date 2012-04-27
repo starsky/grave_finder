@@ -19,4 +19,7 @@
     <string name="search">Szukaj</string>
     <string name="check_conn">Brak dostępu do Internetu\nSprawdź swoje połączenie</string>
     <string name="data_api_poznan">Dane: API poznan.pl</string>
+    <string name="born_abv">"ur. "</string>
+    <string name="died_abv">"zm. "</string>
+    <string name="funreal">"pogrzeb "</string>
 </resources>
