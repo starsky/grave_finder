@@ -21,7 +21,8 @@ package pl.itiner.grave;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import pl.itiner.models.Departed;
+import pl.itiner.fetch.GeoJSON;
+import pl.itiner.model.Departed;
 import pl.itiner.nutiteq.NutiteqMap;
 import android.app.ListActivity;
 import android.content.Context;

@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  */
-package pl.itiner.grave;
+package pl.itiner.fetch;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,9 +32,9 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 
-import pl.itiner.models.Departed;
-import pl.itiner.models.DepartedDeserializer;
-import pl.itiner.models.DepartedListDeserializer;
+import pl.itiner.model.Departed;
+import pl.itiner.model.DepartedDeserializer;
+import pl.itiner.model.DepartedListDeserializer;
 import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 

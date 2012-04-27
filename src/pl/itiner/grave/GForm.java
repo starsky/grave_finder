@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import pl.itiner.fetch.GeoJSON;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

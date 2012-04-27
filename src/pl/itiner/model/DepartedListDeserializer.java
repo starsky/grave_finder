@@ -1,4 +1,4 @@
-package pl.itiner.models;
+package pl.itiner.model;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

@@ -20,9 +20,9 @@ package pl.itiner.nutiteq;
 
 import java.text.SimpleDateFormat;
 
-import pl.itiner.grave.GeoJSON;
+import pl.itiner.fetch.GeoJSON;
 import pl.itiner.grave.R;
-import pl.itiner.models.Departed;
+import pl.itiner.model.Departed;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
