@@ -17,15 +17,21 @@ public class DepartedProperties {
 	private String g_size;
 	private Date g_date_birth;
 
+	private static String capitalizeFirstLetter(String str) {
+		if (str != null)
+			return str.substring(0, 1).toUpperCase() + str.substring(1);
+		return null;
+	}
+
 	protected DepartedProperties() {
 	}
 
 	public String getSurname() {
-		return g_surname;
+		return capitalizeFirstLetter(g_surname);
 	}
 
 	public String getName() {
-		return g_name;
+		return capitalizeFirstLetter(g_name);
 	}
 
 	public Date getBurialDate() {
