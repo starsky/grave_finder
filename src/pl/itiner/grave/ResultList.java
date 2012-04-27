@@ -39,102 +39,103 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class ResultList extends ListActivity{
-	
+public class ResultList extends ListActivity {
+
 	MyBaseAdapter listAdapter;
-	public static String [] cementeries; //wyrzucić
+	public static String[] cementeries; // wyrzucić
 	public List<String> adapterList = new ArrayList<String>();
-	String [] deads;
+	String[] deads;
 	TextView list_item_name_surmane;
-	
-	//TODO Nie robić tego String`a!!
-	public ListAdapter createAdapter()
-	{
+
+	// TODO Nie robić tego String`a!!
+	public ListAdapter createAdapter() {
 		adapterList = new ArrayList<String>();
-		for (int i = 0; i < GeoJSON.getResults().size(); i++)
-		{
+		for (int i = 0; i < GeoJSON.getResults().size(); i++) {
 			Departed d = GeoJSON.getResults().get(i);
-			double [] c = d.getLocation();
-			adapterList.add(d.getSurname() +" "+ d.getName()+ "\n" +d.getDeath_date()+"\n("+ c[0]+","+c[1]+")" );			
+			double[] c = d.getLocation();
+			adapterList.add(d.getSurname() + " " + d.getName() + "\n"
+					+ d.getDeath_date() + "\n(" + c[0] + "," + c[1] + ")");
 		}
 		listAdapter = new MyBaseAdapter(this);
 		return listAdapter;
-		
+
 	}
-	public String getCmName(int id)
-	{
+
+	public String getCmName(int id) {
 		return cementeries[id];
 	}
-	
+
 	public void onCreate(Bundle savedInstanceState) {
-		  super.onCreate(savedInstanceState);
-		  cementeries = getResources().getStringArray(R.array.necropolises);
-		  ListView lv = getListView();
-		  lv.setTextFilterEnabled(true);
-		  lv.setDividerHeight(2);
-		  lv.setFastScrollEnabled(true);
-		  lv.setFadingEdgeLength(2);
-//		  lv.setBackgroundDrawable(getResources().getDrawable(R.drawable.background));
-		  
-		  ListAdapter la = createAdapter();
-		  setListAdapter(la); //TODO set s
-		  
-		
-		  lv.setOnItemClickListener(new OnItemClickListener() {
-		    public void onItemClick(AdapterView<?> parent, View view,
-		        int position, long id) {
-		      // When clicked, show a toast with the TextView text
-//		    	 Intent i;
-//				 i = new Intent(getApplicationContext(), NutiteqMap.class);
-		    	Intent i;
-				 i = new Intent(getApplicationContext(), NutiteqMap.class);
-				 i.putExtra("y",((Departed)parent.getItemAtPosition(position)).getLocation()[0]);
-				 i.putExtra("x",((Departed)parent.getItemAtPosition(position)).getLocation()[1]);
-				 i.putExtra("id",position);
-				 startActivity(i);
-		    }
-		  });
-		}
+		super.onCreate(savedInstanceState);
+		cementeries = getResources().getStringArray(R.array.necropolises);
+		ListView lv = getListView();
+		lv.setTextFilterEnabled(true);
+		lv.setDividerHeight(2);
+		lv.setFastScrollEnabled(true);
+		lv.setFadingEdgeLength(2);
+
+		ListAdapter la = createAdapter();
+		setListAdapter(la); // TODO set s
+
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// When clicked, show a toast with the TextView text
+				// Intent i;
+				// i = new Intent(getApplicationContext(), NutiteqMap.class);
+				Intent i;
+				i = new Intent(getApplicationContext(), NutiteqMap.class);
+				i.putExtra("y", ((Departed) parent.getItemAtPosition(position))
+						.getLocation()[0]);
+				i.putExtra("x", ((Departed) parent.getItemAtPosition(position))
+						.getLocation()[1]);
+				i.putExtra("id", position);
+				startActivity(i);
+			}
+		});
+	}
+
 	public class MyBaseAdapter extends BaseAdapter {
 
 		Context c;
 		private LayoutInflater mInflater;
-		public MyBaseAdapter(Context ctx)
-		{
-			c = ctx;	
+
+		public MyBaseAdapter(Context ctx) {
+			c = ctx;
 			mInflater = LayoutInflater.from(c);
 		}
-		
+
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
 			return GeoJSON.getResults().size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			// TODO Auto-generated method stub
 			return GeoJSON.getResults().get(position);
 		}
 
 		@Override
 		public long getItemId(int position) {
-			// TODO Auto-generated method stub
 			return position;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
-			convertView = (RelativeLayout) mInflater.inflate(R.layout.list_item, parent,false);
-		
-			
+			convertView = (RelativeLayout) mInflater.inflate(
+					R.layout.list_item, parent, false);
+
 			Departed dt = (Departed) (getItem(position));
-			((TextView) convertView.findViewById(R.id.surname_name)).setText(dt.getSurname() + " " + dt.getName());
-			((TextView) convertView.findViewById(R.id.list_cementry)).setText(getCmName(Integer.parseInt(dt.getCm_id())));
-			((TextView) convertView.findViewById(R.id.list_value_dateBirth)).setText(dt.getDate_birth());		
-			((TextView) convertView.findViewById(R.id.list_value_dateDeath)).setText(dt.getDeath_date());
-			((TextView) convertView.findViewById(R.id.list_value_dateBurial)).setText(dt.getBurial_date());
+			((TextView) convertView.findViewById(R.id.surname_name)).setText(dt
+					.getSurname() + " " + dt.getName());
+			((TextView) convertView.findViewById(R.id.list_cementry))
+					.setText(getCmName(Integer.parseInt(dt.getCm_id())));
+			((TextView) convertView.findViewById(R.id.list_value_dateBirth))
+					.setText(dt.getDate_birth());
+			((TextView) convertView.findViewById(R.id.list_value_dateDeath))
+					.setText(dt.getDeath_date());
+			((TextView) convertView.findViewById(R.id.list_value_dateBurial))
+					.setText(dt.getBurial_date());
 			return convertView;
 		}
 
