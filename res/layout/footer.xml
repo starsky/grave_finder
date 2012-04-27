@@ -18,12 +18,14 @@
         android:layout_width="wrap_content"
         android:layout_height="15dp"
         android:layout_gravity="center_vertical"
+        android:contentDescription="@string/poznan_logo_desc"
         android:src="@drawable/poznan_small" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="15dp"
         android:layout_gravity="center_vertical"
+        android:contentDescription="@string/geopoz_logo_desc"
         android:src="@drawable/geopoz_small" />
 
 </LinearLayout>

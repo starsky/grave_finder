@@ -27,6 +27,9 @@
     <string name="quater">"Kwatera:  "</string>
     <string name="row">Rząd:</string>
     <string name="field">Pole:</string>
+    <string name="poznan_logo_desc">Poznań-logo</string>
+    <string name="geopoz_logo_desc">GeoPoz-logo</string>
+    <string name="itiner_logo_desc">Itiner-logo</string>
     
     
 

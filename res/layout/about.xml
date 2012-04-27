@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-  	<LinearLayout 
-  	    android:id="@+id/mainL"
-  	   android:layout_height="50dp"
-    android:layout_alignParentTop="true"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:background="@color/white"
-    android:gravity="left">
-	<ImageView 
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"		
-		android:src="@drawable/itiner_logo"
-		android:padding="4dp"
-		/>
-	</LinearLayout>
-<ScrollView
-	android:layout_width="fill_parent"
-  	android:layout_height="wrap_content"
-  	android:scrollbarStyle="insideInset"
-  	android:layout_below="@id/mainL">
+    android:layout_height="fill_parent" >
 
-  <RelativeLayout
-  	android:layout_width="fill_parent"
-  	android:layout_height="wrap_content"
-  	android:orientation="vertical"
-  	android:padding="10dp">
-	<TextView
-		android:layout_alignParentTop="true"  	
-	  	android:textColor="@color/white"
-	  	android:textColorHighlight="@color/green"
-	  	android:textSize="12sp"
-	  	android:layout_width="fill_parent"
-	  	android:layout_height="wrap_content"
-	  	android:id="@+id/about_description"/>
-      
-  </RelativeLayout>
-</ScrollView>
+    <LinearLayout
+        android:id="@+id/mainL"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/white"
+        android:gravity="left" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/itiner_logo_desc"
+            android:padding="4dp"
+            android:src="@drawable/itiner_logo" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mainL"
+        android:scrollbarStyle="insideInset" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp" >
+
+            <TextView
+                android:id="@+id/about_description"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textColor="@color/white"
+                android:textColorHighlight="@color/green"
+                android:textSize="12sp" />
+        </RelativeLayout>
+    </ScrollView>
+
 </RelativeLayout>

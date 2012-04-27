@@ -12,7 +12,6 @@
         android:layout_gravity="center_horizontal"
         android:drawableLeft="@drawable/icon_mini"
         android:gravity="center"
-        android:text="10"
         android:textSize="13sp"
         android:textStyle="bold" >
     </TextView>
