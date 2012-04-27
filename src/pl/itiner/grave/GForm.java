@@ -197,7 +197,8 @@ public class GForm extends Activity {
 		switch (item.getItemId()) {
 		case R.id.menuAbout:
 			Intent intentAboutView = new Intent(this.getApplicationContext(),
-					AboutView.class);
+					About.class);
+			intentAboutView.putExtra(GenericAbout.DESC_ID,R.string.description);
 			startActivity(intentAboutView);
 			break;
 		}

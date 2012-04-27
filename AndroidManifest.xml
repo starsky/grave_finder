@@ -30,7 +30,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:icon="@drawable/icon"
             android:label="@string/app_name"
-            android:name=".AboutView"
+            android:name=".About"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
