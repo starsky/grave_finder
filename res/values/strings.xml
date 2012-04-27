@@ -24,6 +24,9 @@
     <string name="grave">Grób</string>
     <string name="zoom_map">Przybliż mapę</string>
     <string name="your_location">Twoja pozycja</string>
+    <string name="quater">"Kwatera:  "</string>
+    <string name="row">Rząd:</string>
+    <string name="field">Pole:</string>
     
     
 

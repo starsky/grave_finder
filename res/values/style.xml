@@ -49,4 +49,12 @@
         <item name="android:layout_height">wrap_content</item>    	    
 	</style>
     
+    <style name="map_header_text" parent="@style/list_text">
+        <item name="android:padding">2dp</item>
+    </style>
+    
+    <style name="map_header_text_highlighted" parent="@style/list_text_highlighted">
+        <item name="android:padding">2dp</item>
+    </style>
+    	
 </resources>
