@@ -79,7 +79,7 @@ public class GraveMap extends MapActivity {
 		double y = b.getDouble("y");
 		int id = b.getInt("id");
 
-		Departed tmp = GeoJSON.dList.get(id);
+		Departed tmp = GeoJSON.getResults().get(id);
 		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
 		mapSurnameName.setText(tmp.getName() + " " + tmp.getSurname());
 		

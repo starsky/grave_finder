@@ -51,9 +51,9 @@ public class ResultList extends ListActivity{
 	public ListAdapter createAdapter()
 	{
 		adapterList = new ArrayList<String>();
-		for (int i = 0; i < GeoJSON.dList.size(); i++)
+		for (int i = 0; i < GeoJSON.getResults().size(); i++)
 		{
-			Departed d = GeoJSON.dList.get(i);
+			Departed d = GeoJSON.getResults().get(i);
 			double [] c = d.getLocation();
 			adapterList.add(d.getSurname() +" "+ d.getName()+ "\n" +d.getDeath_date()+"\n("+ c[0]+","+c[1]+")" );			
 		}
@@ -108,13 +108,13 @@ public class ResultList extends ListActivity{
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return GeoJSON.dList.size();
+			return GeoJSON.getResults().size();
 		}
 
 		@Override
 		public Object getItem(int position) {
 			// TODO Auto-generated method stub
-			return GeoJSON.dList.get(position);
+			return GeoJSON.getResults().get(position);
 		}
 
 		@Override

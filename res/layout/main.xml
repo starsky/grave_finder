@@ -79,14 +79,13 @@
 
             <LinearLayout
                 android:id="@+id/date_choose_header"
-                style="@style/group_separator_style"
-                android:visibility="visible" >
+                style="@style/group_separator_style" >
 
                 <LinearLayout
                     android:id="@+id/date_picker_group"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="horizontal" >
 
                     <CheckBox
                         android:id="@+id/checkbox"
@@ -97,10 +96,12 @@
                     </CheckBox>
 
                     <RadioGroup
+                        android:id="@+id/dates_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checkedButton="@+id/death_date"
-                        android:orientation="horizontal" >
+                        android:orientation="horizontal"
+                        android:visibility="gone" >
 
                         <RadioButton
                             android:id="@+id/birth_date"
@@ -123,7 +124,8 @@
                     android:id="@+id/datepicker"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp" />
+                    android:paddingTop="10dp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <Button
