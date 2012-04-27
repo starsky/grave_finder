@@ -1,96 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/list_item_layout"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
->
-<!-- IMIE I NAZWISKO-->
-<TextView 
-	android:id="@+id/surname_name"
+    android:id="@+id/list_item_layout"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_alignParentTop="true"
-    android:padding="3dp"
-    android:typeface="sans"
-    android:textSize="18sp" >
-</TextView>
-<!-- CMENTARZ-->
-<TextView 
-	android:id="@+id/list_cementry"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_below="@id/surname_name"
-    android:padding="3dp"
-    android:textStyle="bold"
-    android:typeface="sans"
-    android:textSize="14sp" />
+    android:layout_height="fill_parent" >
 
-<!-- DATA URODZIN-->
-<TextView
-	android:id="@+id/list_header_dateBirth"
-	android:layout_below="@id/list_cementry"
-	android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="ur. "    
-   android:paddingLeft="3dp"
-    android:paddingBottom="1dp"
-	>
-</TextView>
-<TextView
-	android:paddingLeft="3dp"
-    android:paddingBottom="1dp"
-	android:id="@+id/list_value_dateBirth"
-	android:layout_toRightOf="@id/list_header_dateBirth"
-	android:layout_below="@id/list_cementry"
-	android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textStyle="bold"
-	>
-</TextView>
-<!-- DATA SMIERCI-->
+    <!-- IMIE I NAZWISKO -->
 
-<TextView
-	android:id="@+id/list_header_dateDeath"
-	android:layout_below="@id/list_value_dateBirth"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-    android:text="zm. "
-    android:paddingLeft="3dp"
-    android:paddingBottom="1dp"
-	>
-</TextView>
-<TextView
-	android:id="@+id/list_value_dateDeath"
-	android:layout_below="@id/list_value_dateBirth"
-	android:layout_toRightOf="@id/list_header_dateDeath"
-	android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingLeft="3dp"
-    android:paddingBottom="1dp"
-    android:textStyle="bold"
-	>
-</TextView>
-<!-- DATA POGRZEBU-->
-<TextView
+    <TextView
+        android:id="@+id/surname_name"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:padding="3dp"
+        android:textSize="18sp"
+        android:typeface="sans" >
+    </TextView>
+    <!-- CMENTARZ -->
 
-	android:id="@+id/list_header_dateBurial"
-	android:layout_below="@id/list_header_dateDeath"
-	android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingLeft="3dp"
-    android:text="pogrzeb "
-    android:paddingBottom="1dp"
-   	>
-</TextView>
-<TextView
-	android:id="@+id/list_value_dateBurial"
-	android:textStyle="bold"
-	android:layout_below="@id/list_header_dateDeath"
-	android:layout_toRightOf="@id/list_header_dateBurial"
-	android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:paddingLeft="3dp"
-    android:paddingBottom="1dp"
-	>
-</TextView>
+    <TextView
+        android:id="@+id/list_cementry"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/surname_name"
+        android:padding="3dp"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+    <!-- DATA URODZIN -->
+
+    <TextView
+        android:id="@+id/list_header_dateBirth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_cementry"
+        android:paddingBottom="1dp"
+        android:paddingLeft="3dp"
+        android:text="ur. " >
+    </TextView>
+
+    <TextView
+        android:id="@+id/list_value_dateBirth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_cementry"
+        android:layout_toRightOf="@id/list_header_dateBirth"
+        android:paddingBottom="1dp"
+        android:paddingLeft="3dp"
+        android:textStyle="bold" >
+    </TextView>
+    <!-- DATA SMIERCI -->
+
+    <TextView
+        android:id="@+id/list_header_dateDeath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_value_dateBirth"
+        android:paddingBottom="1dp"
+        android:paddingLeft="3dp"
+        android:text="zm. " >
+    </TextView>
+
+    <TextView
+        android:id="@+id/list_value_dateDeath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_value_dateBirth"
+        android:layout_toRightOf="@id/list_header_dateDeath"
+        android:paddingBottom="1dp"
+        android:paddingLeft="3dp"
+        android:textStyle="bold" >
+    </TextView>
+    <!-- DATA POGRZEBU -->
+
+    <TextView
+        android:id="@+id/list_header_dateBurial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_header_dateDeath"
+        android:paddingBottom="1dp"
+        android:paddingLeft="3dp"
+        android:text="pogrzeb " >
+    </TextView>
+
+    <TextView
+        android:id="@+id/list_value_dateBurial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_header_dateDeath"
+        android:layout_toRightOf="@id/list_header_dateBurial"
+        android:paddingBottom="1dp"
+        android:paddingLeft="3dp"
+        android:textStyle="bold" >
+    </TextView>
+
 </RelativeLayout>

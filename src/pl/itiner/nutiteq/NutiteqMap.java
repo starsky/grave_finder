@@ -170,13 +170,13 @@ public class NutiteqMap extends Activity {
 
 		mapBirthDate = (TextView) findViewById(R.id.map_value_dateBirth);
 
-		mapBirthDate.setText(tmp.getDate_birth());
+		mapBirthDate.setText(tmp.getBirthDate().toLocaleString());
 
 		mapDeathDate = (TextView) findViewById(R.id.map_value_dateDeath);
-		mapDeathDate.setText(tmp.getDeath_date());
+		mapDeathDate.setText(tmp.getDeathDate().toLocaleString());
 
 		mapFunrealDate = (TextView) findViewById(R.id.map_value_dateFunreal);
-		mapFunrealDate.setText(tmp.getBurial_date());
+		mapFunrealDate.setText(tmp.getBurialDate().toLocaleString());
 
 		mapField = (TextView) findViewById(R.id.map_field_value);
 		mapField.setText(tmp.getField());
@@ -188,8 +188,7 @@ public class NutiteqMap extends Activity {
 		mapQuater.setText(tmp.getQuater());
 
 		mapCementry = (TextView) findViewById(R.id.map_value_cementry);
-		String cm_name = ResultList.cementeries[Integer
-				.parseInt(tmp.getCm_id())];
+		String cm_name = "";//TODO ResultList.cementeries[tmp.getCmId().intValue()];
 		mapCementry.setText(cm_name);
 	}
 

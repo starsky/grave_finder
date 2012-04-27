@@ -18,6 +18,8 @@
 
 package pl.itiner.models;
 
+import java.util.Date;
+
 import android.location.Location;
 
 public class Departed {
@@ -26,13 +28,6 @@ public class Departed {
 	private String id;
 	private DepartedProperties properties;
 	
-	public Departed(String surname, String name, String burial_date,
-			String death_date, String cm_id, String place, String row,
-			String family, String field, String size, String birth_date,
-			String quarter, String id, double[] coordinates) {
-		super();
-	}
-
 	protected Departed(DepartedProperties properties, String id, Location location) {
 		this.properties = properties;
 		this.location = location;
@@ -47,16 +42,16 @@ public class Departed {
 		return properties.getName();
 	}
 
-	public String getBurial_date() {
-		return properties.getBurial_date();
+	public Date getBurialDate() {
+		return properties.getBurialDate();
 	}
 
-	public String getDeath_date() {
-		return properties.getDeath_date();
+	public Date getDeathDate() {
+		return properties.getDeathDate();
 	}
 
-	public String getCm_id() {
-		return properties.getCm_id();
+	public Long getCmId() {
+		return properties.getCmId();
 	}
 
 	public String getQuater() {
@@ -83,8 +78,8 @@ public class Departed {
 		return properties.getSize();
 	}
 
-	public String getDate_birth() {
-		return properties.getDate_birth();
+	public Date getBirthDate() {
+		return properties.getDateBirth();
 	}
 
 	public double[] getLocation() {

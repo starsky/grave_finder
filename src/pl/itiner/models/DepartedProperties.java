@@ -1,21 +1,21 @@
 package pl.itiner.models;
 
-public class DepartedProperties {
+import java.util.Date;
 
-	static final String NO_DATA = " Brak danych ";
+public class DepartedProperties {
 
 	private String g_surname;
 	private String g_name;
-	private String g_date_burial;
-	private String g_date_death;
-	private String cm_id;
+	private Date g_date_burial;
+	private Date g_date_death;
+	private Long cm_id;
 	private String g_quater;
 	private String g_place;
 	private String g_row;
 	private String g_family;
 	private String g_field;
 	private String g_size;
-	private String g_date_birth;
+	private Date g_date_birth;
 
 	protected DepartedProperties() {
 	}
@@ -28,19 +28,15 @@ public class DepartedProperties {
 		return g_name;
 	}
 
-	public String getBurial_date() {
-		if (g_date_burial.equals("0001-01-01"))
-			return NO_DATA;
+	public Date getBurialDate() {
 		return g_date_burial;
 	}
 
-	public String getDeath_date() {
-		if (g_date_death.equals("0001-01-01"))
-			return NO_DATA;
+	public Date getDeathDate() {
 		return g_date_death;
 	}
 
-	public String getCm_id() {
+	public Long getCmId() {
 		return cm_id;
 	}
 
@@ -68,9 +64,7 @@ public class DepartedProperties {
 		return g_size;
 	}
 
-	public String getDate_birth() {
-		if (g_date_birth.equals("0001-01-01"))
-			return NO_DATA;
+	public Date getDateBirth() {
 		return g_date_birth;
 	}
 

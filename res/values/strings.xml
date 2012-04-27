@@ -18,4 +18,5 @@
     <string name="burial_date">pogrzebu</string>
     <string name="search">Szukaj</string>
     <string name="check_conn">Brak dostępu do Internetu\nSprawdź swoje połączenie</string>
+    <string name="data_api_poznan">Dane: API poznan.pl</string>
 </resources>

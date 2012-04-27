@@ -52,6 +52,7 @@ import com.google.gson.reflect.TypeToken;
  */
 public class GeoJSON {
 
+	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	private static List<Departed> dList = new ArrayList<Departed>();
 	public static final String TAG = "GeoJSON";
 
@@ -63,6 +64,7 @@ public class GeoJSON {
 
 	static {
 		g = new GsonBuilder();
+		g.setDateFormat(DATE_FORMAT);
 		g.registerTypeAdapter(Departed.class, new DepartedDeserializer());
 		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());		
 	}
@@ -118,7 +120,7 @@ public class GeoJSON {
 	private static Map<String, String> createQueryParamsMap(Long cmId,
 			String name, String surname, Date deathDate, Date birthDate,
 			Date burialDate) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 		Map<String, String> map = new HashMap<String, String>();
 		if (cmId != null) {
 			map.put("cm_id", cmId.toString());

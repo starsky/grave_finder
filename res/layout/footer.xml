@@ -11,7 +11,7 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:paddingLeft="1dp"
-        android:text="Dane: API poznan.pl"
+        android:text="@string/data_api_poznan"
         android:textColor="#606060" />
 
     <ImageView
