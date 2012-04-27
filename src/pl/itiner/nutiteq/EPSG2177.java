@@ -32,7 +32,6 @@ public class EPSG2177 extends BaseMap {
 	private static final String[] ARGS = { "+proj=tmerc", "+lat_0=0",
 			"+lon_0=18", "+k=0.999923", "+x_0=6500000", "+y_0=0",
 			"+ellps=GRS80", "+units=m", "+no_defs" };
-	private final int EARTH_CIRCUMFERENCE;
 	private final Projection projection;
 	private final double[] resolutions;
 	private double minEpsgX;
@@ -42,8 +41,6 @@ public class EPSG2177 extends BaseMap {
 			double[] resolutions, double minEpsgX, double minEpsgY) {
 		super(copyright, tileSize, minZoom, maxZoom);
 		projection = ProjectionFactory.fromPROJ4Specification(ARGS);
-		EARTH_CIRCUMFERENCE = (int) (2 * Math.PI * projection
-				.getEquatorRadius());
 		this.resolutions = resolutions;
 		this.minEpsgX = minEpsgX;
 		this.minEpsgY = minEpsgY;
@@ -73,7 +70,8 @@ public class EPSG2177 extends BaseMap {
 	public Point2D.Double mapPosToEpsg(MapPos mapPos) {
 		int zoomIndex = mapPos.getZoom() - getMinZoom();
 		double resolution = resolutions[zoomIndex];
-		double mapHeightMeters = getTileSize() * (2 << (mapPos.getZoom() - 1)) * resolution;
+		double mapHeightMeters = getTileSize() * (2 << (mapPos.getZoom() - 1))
+				* resolution;
 		double metersX = (mapPos.getX() * resolution + minEpsgX);
 		double metersY = ((mapHeightMeters - (mapPos.getY() * resolution)) + minEpsgY);
 		return new Point2D.Double(metersX, metersY);
