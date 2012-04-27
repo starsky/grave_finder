@@ -19,6 +19,7 @@
 package pl.itiner.grave;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import pl.itiner.fetch.GeoJSON;
@@ -96,7 +97,6 @@ public class ResultList extends ListActivity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			convertView = mInflater.inflate(R.layout.list_item, parent, false);
-			final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 			final Departed dt = (Departed) (getItem(position));
 
 			((TextView) convertView.findViewById(R.id.surname_name)).setText(dt
@@ -104,14 +104,23 @@ public class ResultList extends ListActivity {
 			((TextView) convertView.findViewById(R.id.list_cementry))
 					.setText(getCmName(dt.getCmId()));
 			((TextView) convertView.findViewById(R.id.list_value_dateBirth))
-					.setText(f.format(dt.getBirthDate()));
+					.setText(formatDate(dt.getBirthDate()));
 			((TextView) convertView.findViewById(R.id.list_value_dateDeath))
-					.setText(f.format(dt.getDeathDate()));
+					.setText(formatDate(dt.getDeathDate()));
 			((TextView) convertView.findViewById(R.id.list_value_dateBurial))
-					.setText(f.format(dt.getBurialDate()));
+					.setText(formatDate(dt.getBurialDate()));
 			return convertView;
 		}
 
+	}
+
+	private static final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+
+	private static String formatDate(Date d) {
+		if (d == null) {
+			return null;
+		}
+		return f.format(d);
 	}
 
 }

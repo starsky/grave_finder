@@ -19,6 +19,7 @@
 package pl.itiner.nutiteq;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import pl.itiner.fetch.GeoJSON;
 import pl.itiner.grave.R;
@@ -164,21 +165,19 @@ public class NutiteqMap extends Activity {
 		final TextView mapField;
 		final String[] cementeries = getResources().getStringArray(
 				R.array.necropolises);
-		final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-
 
 		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
 		mapSurnameName
 				.setText(departed.getName() + " " + departed.getSurname());
 
 		mapBirthDate = (TextView) findViewById(R.id.map_value_dateBirth);
-		mapBirthDate.setText(f.format(departed.getBirthDate()));
+		mapBirthDate.setText(formatDate(departed.getBirthDate()));
 
 		mapDeathDate = (TextView) findViewById(R.id.map_value_dateDeath);
-		mapDeathDate.setText(f.format(departed.getDeathDate()));
+		mapDeathDate.setText(formatDate(departed.getDeathDate()));
 
 		mapFunrealDate = (TextView) findViewById(R.id.map_value_dateFunreal);
-		mapFunrealDate.setText(f.format(departed.getBurialDate()));
+		mapFunrealDate.setText(formatDate(departed.getBurialDate()));
 
 		mapField = (TextView) findViewById(R.id.map_field_value);
 		mapField.setText(departed.getField());
@@ -192,6 +191,15 @@ public class NutiteqMap extends Activity {
 		mapCementry = (TextView) findViewById(R.id.map_value_cementry);
 		String cm_name = cementeries[departed.getCmId().intValue()];
 		mapCementry.setText(cm_name);
+	}
+
+	private static final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+
+	private static String formatDate(Date d) {
+		if (d == null) {
+			return null;
+		}
+		return f.format(d);
 	}
 
 	private void setupZoom() {

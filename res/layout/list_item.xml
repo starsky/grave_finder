@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:itiner="http://itiner.pl/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
+    <pl.itiner.view.TextView
         android:id="@+id/surname_name"
         style="@style/list_text"
+        itiner:default_text="@string/no_data"
         android:padding="3dp"
         android:textSize="18sp" />
 
-    <TextView
+    <pl.itiner.view.TextView
         android:id="@+id/list_cementry"
         style="@style/list_text_highlighted"
+        itiner:default_text="@string/no_data"
         android:padding="3dp" />
 
     <LinearLayout style="@style/list_grp" >
@@ -21,8 +24,9 @@
             style="@style/list_text"
             android:text="@string/born_abv" />
 
-        <TextView
+        <pl.itiner.view.TextView
             android:id="@+id/list_value_dateBirth"
+            itiner:default_text="@string/no_data"
             style="@style/list_text_highlighted" />
     </LinearLayout>
 
@@ -32,8 +36,9 @@
             style="@style/list_text"
             android:text="@string/died_abv" />
 
-        <TextView
+        <pl.itiner.view.TextView
             android:id="@+id/list_value_dateDeath"
+            itiner:default_text="@string/no_data"
             style="@style/list_text_highlighted" />
     </LinearLayout>
 
@@ -43,8 +48,9 @@
             style="@style/list_text"
             android:text="@string/funreal" />
 
-        <TextView
+        <pl.itiner.view.TextView
             android:id="@+id/list_value_dateBurial"
+            itiner:default_text="@string/no_data"
             style="@style/list_text_highlighted" />
     </LinearLayout>
 

@@ -1,6 +1,7 @@
 package pl.itiner.model;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DepartedProperties {
 
@@ -23,6 +24,16 @@ public class DepartedProperties {
 		return null;
 	}
 
+	private static final long missingDate = new GregorianCalendar(1,
+			GregorianCalendar.JANUARY, 1).getTime().getTime(); // 0001-01-01
+
+	private static Date checkMissingValues(Date date) {
+		if (date.getTime() == missingDate) {
+			return null;
+		}
+		return date;
+	}
+
 	protected DepartedProperties() {
 	}
 
@@ -35,11 +46,11 @@ public class DepartedProperties {
 	}
 
 	public Date getBurialDate() {
-		return g_date_burial;
+		return checkMissingValues(g_date_burial);
 	}
 
 	public Date getDeathDate() {
-		return g_date_death;
+		return checkMissingValues(g_date_death);
 	}
 
 	public Long getCmId() {
@@ -71,7 +82,7 @@ public class DepartedProperties {
 	}
 
 	public Date getDateBirth() {
-		return g_date_birth;
+		return checkMissingValues(g_date_birth);
 	}
 
 }
