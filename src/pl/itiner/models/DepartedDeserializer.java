@@ -12,8 +12,8 @@ import com.google.gson.JsonParseException;
 
 public class DepartedDeserializer implements JsonDeserializer<Departed> {
 	
-	private static final int LON = 1;
-	private static final int LAT = 0;
+	private static final int LON = 0;
+	private static final int LAT = 1;
 	private static final String GRAVE_LOCATION_PROVIDER = "GRAVE_LOCATION_PROVIDER";
 	private static final String COORDINATES_FIELD = "coordinates";
 	private static final String GEOMETRY_FIELD = "geometry";

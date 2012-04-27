@@ -18,10 +18,10 @@
 
 package pl.itiner.nutiteq;
 
+import java.text.SimpleDateFormat;
+
 import pl.itiner.grave.GeoJSON;
-import pl.itiner.grave.Log;
 import pl.itiner.grave.R;
-import pl.itiner.grave.ResultList;
 import pl.itiner.models.Departed;
 import android.app.Activity;
 import android.content.Context;
@@ -53,32 +53,26 @@ public class NutiteqMap extends Activity {
 	private BasicMapComponent mapComponent;
 	private GeoMap map;
 	private boolean onRetainCalled;
-	public boolean locationSet = false;
-	public Image gps; 
-	public Image grave;
-	public WgsPoint userLocation;
-	public Place userPlace;
-	public Place gravePlace;
-	public Location mobileLocation;
-	public LocationManager locManager;
-	public LocationListener locListener;
-	int initialZoom;
-	String mapKey;
-	WgsPoint center;
-	OnMapElementListener elemListener = new OnMapElementListener() {
-		
+	private Image gps;
+	private WgsPoint userLocation;
+	private Place userPlace;
+	private LocationManager locManager;
+	private LocationListener locListener;
+	private Departed departed;
+	private OnMapElementListener elemListener = new OnMapElementListener() {
+
 		@Override
 		public void elementLeft(OnMapElement arg0) {
 		}
-		
+
 		@Override
 		public void elementEntered(OnMapElement arg0) {
 		}
-		
+
 		@Override
 		public void elementClicked(OnMapElement mapElem) {
 			BalloonLabel tmp = (BalloonLabel) mapElem.getLabel();
-			if(tmp.name.equals("Grób")){
+			if (tmp.name.equals(getResources().getString(R.string.grave))) {
 				mapComponent.setMiddlePoint(mapElem.getPoints()[0]);
 				mapComponent.zoomIn();
 			}
@@ -91,70 +85,75 @@ public class NutiteqMap extends Activity {
 		super.onCreate(savedInstanceState);
 		onRetainCalled = false;
 		setContentView(R.layout.nutiteq);
-		Resources res = getResources();
-		initialZoom = res.getInteger(R.integer.initial_zoom);
-		mapKey = res.getString(R.string.nutiteq_key);
-		center = new WgsPoint(Double.parseDouble(res
-				.getString(R.string.poznan_centre_lon)), Double.parseDouble(res
-				.getString(R.string.poznan_centre_lat)));
-		gps = new Image(BitmapFactory.decodeResource(getResources(), R.drawable.dot));
-		grave = new Image(BitmapFactory.decodeResource(getResources(), R.drawable.graveloc));
-		Bundle b = getIntent().getExtras();
-		WgsPoint graveLoc = null;
-		if (b != null) {
-			double x = b.getDouble("x");
-			double y = b.getDouble("y");
-			int id = b.getInt("id");
-			graveLoc = new WgsPoint(y, x);
-			fillHeaderWithData(id);
-		}
+		gps = new Image(BitmapFactory.decodeResource(getResources(),
+				R.drawable.dot));
+		// Get death person data
+		int id = getIntent().getExtras().getInt("id");
+		departed = GeoJSON.getResults().get(id);
+		// fill data header
+		fillHeaderWithData();
+		// setup position listeners
 		locListener = new NutiteqLocationListener();
 		locManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
-		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-				0, locListener);
+		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+				locListener);
+		// setup map
 		mapComponent = (BasicMapComponent) getLastNonConfigurationInstance();
 		if (mapComponent == null) {
-			createMapComponent(graveLoc);
+			createMapComponent();
 		}
 		MapView mapView = (MapView) findViewById(R.id.nutiteq_mapview);
 		mapView.setMapComponent(mapComponent);
 		setupZoom();
 	}
 
-	private void createMapComponent(WgsPoint graveLoc) {
-		mapComponent = new BasicMapComponent(mapKey, new AppContext(this),
-				1, 1, center, initialZoom);
+	private void createMapComponent() {
+		final Resources res = getResources();
+		final int initialZoom = res.getInteger(R.integer.initial_zoom);
+		final String mapKey = res.getString(R.string.nutiteq_key);
+		final WgsPoint center = new WgsPoint(Double.parseDouble(res
+				.getString(R.string.poznan_centre_lon)), Double.parseDouble(res
+				.getString(R.string.poznan_centre_lat)));
+		final Image graveImg = new Image(BitmapFactory.decodeResource(
+				getResources(), R.drawable.graveloc));
+		final BalloonLabel graveLocationLabel = new BalloonLabel(
+				res.getString(R.string.grave), res.getString(R.string.zoom_map));
+		final BalloonLabel userLocationLabel = new BalloonLabel(
+				res.getString(R.string.your_location), "");
+		final WgsPoint graveLoc = new WgsPoint(departed.getLocation()
+				.getLongitude(), departed.getLocation().getLatitude());
+		final Place gravePlace = new Place(0, graveLocationLabel, graveImg,
+				graveLoc);
+
+		mapComponent = new BasicMapComponent(mapKey, new AppContext(this), 1,
+				1, center, initialZoom);
 		map = getMap();
 		mapComponent.setMap(map);
 		mapComponent.setSmoothZoom(true);
 		mapComponent.setPanningStrategy(new ThreadDrivenPanning());
 		mapComponent.startMapping();
 
-		BalloonLabel graveLocationLabel = new BalloonLabel("Grób",
-				"Przybliż mapę");
-		BalloonLabel userLocationLabel = new BalloonLabel("Twoja pozycja",
-				"");
-		gravePlace = new Place(0, graveLocationLabel, grave, graveLoc);
 		mapComponent.addPlace(gravePlace);
 
 		userPlace = new Place(0, userLocationLabel, gps, userLocation);
 		mapComponent.setOnMapElementListener(elemListener);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
 		locManager.removeUpdates(locListener);
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locListener);
+		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+				locListener);
 	}
 
-	private void fillHeaderWithData(int id) {
+	private void fillHeaderWithData() {
 		final TextView mapSurnameName;
 		final TextView mapBirthDate;
 		final TextView mapDeathDate;
@@ -163,32 +162,35 @@ public class NutiteqMap extends Activity {
 		final TextView mapRow;
 		final TextView mapQuater;
 		final TextView mapField;
+		final String[] cementeries = getResources().getStringArray(
+				R.array.necropolises);
+		final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
-		Departed tmp = GeoJSON.getResults().get(id);
+
 		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
-		mapSurnameName.setText(tmp.getName() + " " + tmp.getSurname());
+		mapSurnameName
+				.setText(departed.getName() + " " + departed.getSurname());
 
 		mapBirthDate = (TextView) findViewById(R.id.map_value_dateBirth);
-
-		mapBirthDate.setText(tmp.getBirthDate().toLocaleString());
+		mapBirthDate.setText(f.format(departed.getBirthDate()));
 
 		mapDeathDate = (TextView) findViewById(R.id.map_value_dateDeath);
-		mapDeathDate.setText(tmp.getDeathDate().toLocaleString());
+		mapDeathDate.setText(f.format(departed.getDeathDate()));
 
 		mapFunrealDate = (TextView) findViewById(R.id.map_value_dateFunreal);
-		mapFunrealDate.setText(tmp.getBurialDate().toLocaleString());
+		mapFunrealDate.setText(f.format(departed.getBurialDate()));
 
 		mapField = (TextView) findViewById(R.id.map_field_value);
-		mapField.setText(tmp.getField());
+		mapField.setText(departed.getField());
 
 		mapRow = (TextView) findViewById(R.id.map_row_value);
-		mapRow.setText(tmp.getRow());
+		mapRow.setText(departed.getRow());
 
 		mapQuater = (TextView) findViewById(R.id.map_quater_value);
-		mapQuater.setText(tmp.getQuater());
+		mapQuater.setText(departed.getQuater());
 
 		mapCementry = (TextView) findViewById(R.id.map_value_cementry);
-		String cm_name = "";//TODO ResultList.cementeries[tmp.getCmId().intValue()];
+		String cm_name = cementeries[departed.getCmId().intValue()];
 		mapCementry.setText(cm_name);
 	}
 
@@ -259,22 +261,21 @@ public class NutiteqMap extends Activity {
 			mapComponent.stopMapping();
 		}
 	}
-	public class NutiteqLocationListener implements LocationListener
-	{
-		BalloonLabel userLocationLabel = new BalloonLabel("Twoja pozycja","");
+
+	private class NutiteqLocationListener implements LocationListener {
+		private BalloonLabel userLocationLabel = new BalloonLabel(
+				getResources().getString(R.string.your_location), "");
+
 		@Override
 		public void onLocationChanged(Location loc) {
-			Log.i("userLocation","LAT:"+loc.getLatitude()+" LONG:"+loc.getLongitude());
 			userLocation = new WgsPoint(loc.getLongitude(), loc.getLatitude());
-			if(userLocation != null)
-			{
-					try {
+			if (userLocation != null) {
+				try {
 					mapComponent.removePlace(userPlace);
-					}catch(NullPointerException nue)
-					{ /* ignored*/}					
-					 userPlace = new Place(0, userLocationLabel, gps,
-								userLocation);
-					mapComponent.addPlace(userPlace);
+				} catch (NullPointerException nue) { /* ignored */
+				}
+				userPlace = new Place(0, userLocationLabel, gps, userLocation);
+				mapComponent.addPlace(userPlace);
 			}
 		}
 
@@ -289,6 +290,6 @@ public class NutiteqMap extends Activity {
 		@Override
 		public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
 		}
-		
+
 	}
 }
