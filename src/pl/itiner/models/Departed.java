@@ -23,12 +23,12 @@ import java.util.Date;
 import android.location.Location;
 
 public class Departed {
-
 	private Location location;
 	private String id;
 	private DepartedProperties properties;
-	
-	protected Departed(DepartedProperties properties, String id, Location location) {
+
+	protected Departed(DepartedProperties properties, String id,
+			Location location) {
 		this.properties = properties;
 		this.location = location;
 		this.properties = properties;
@@ -82,11 +82,8 @@ public class Departed {
 		return properties.getDateBirth();
 	}
 
-	public double[] getLocation() {
-		double[] ret = new double[2];
-		ret[0] = 0;//location.getLatitude();
-		ret[1] = 0;//location.getLongitude();
-		return ret;
+	public Location getLocation() {
+		return location;
 	}
 
 	public String getId() {
