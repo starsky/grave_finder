@@ -15,8 +15,8 @@ public class GenericAbout extends Activity {
 		Window w = getWindow();
 		w.requestFeature(Window.FEATURE_LEFT_ICON);
 		setContentView(R.layout.about);
-		TextView text = (TextView) findViewById(contentId);
-		text.setText(getResources().getString(R.string.description));
+		TextView text = (TextView) findViewById(R.id.about_description);
+		text.setText(getResources().getString(contentId));
 		w.setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, R.drawable.icon);
 	}
 
