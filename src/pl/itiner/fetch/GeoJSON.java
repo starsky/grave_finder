@@ -105,7 +105,8 @@ public class GeoJSON {
 			queryableParam.append(p).append(",");
 			b.appendQueryParameter(p, paramsMap.get(p));
 		}
-		queryableParam.deleteCharAt(queryableParam.length() - 1);
+		if(queryableParam.length() > 0)
+			queryableParam.deleteCharAt(queryableParam.length() - 1);
 		b.appendQueryParameter("queryable", queryableParam.toString());
 		return b.build();
 	}
