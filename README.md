@@ -11,4 +11,5 @@ Lokalizator grobów to aplikacja mobilna ułatwiająca odnalezienie grobu na poz
 
 ##Kontakt
 mail(at)itiner.pl
+
 michal(at)itiner.pl            
