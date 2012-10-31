@@ -57,7 +57,7 @@ public class GeoJSON {
 	public static final String TAG = "GeoJSON";
 
 	private static final String USER_AGENT = "Grave-finder (www.itiner.pl)";
-	private static final int MAX_FETCH_SIZE = 5;
+	private static final int MAX_FETCH_SIZE = 200;
 	private static final Type COLLECTION_TYPE = new TypeToken<List<Departed>>() {}.getType();
 	
 	private static GsonBuilder g;

@@ -19,7 +19,7 @@ public class DepartedProperties {
 	private Date g_date_birth;
 
 	private static String capitalizeFirstLetter(String str) {
-		if (str != null)
+		if (str != null && str.length() > 1)
 			return str.substring(0, 1).toUpperCase() + str.substring(1);
 		return null;
 	}
