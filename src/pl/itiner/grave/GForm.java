@@ -163,20 +163,23 @@ public class GForm extends Activity {
 
 		@Override
 		public void run() {
-			Message dbmsg = activityUIHandler.obtainMessage();
-
-			dbmsg.what = PROGRESSBAR;
-			activityUIHandler.sendMessage(dbmsg);
+			{
+				Message dbmsg = Message.obtain();
+				dbmsg.what = PROGRESSBAR;
+				activityUIHandler.sendMessage(dbmsg);
+			}
 			runQuery();
-			dbmsg = activityUIHandler.obtainMessage();
-			dbmsg.what = PROGRESSBAR_GONE;
-			activityUIHandler.sendMessage(dbmsg);
-
+			{
+				Message dbmsg = Message.obtain();
+				dbmsg.what = PROGRESSBAR_GONE;
+				activityUIHandler.sendMessage(dbmsg);
+			}
 			if (GeoJSON.getResults().size() != 0) {
-				dbmsg = activityUIHandler.obtainMessage();
+				Message dbmsg = Message.obtain();
 				dbmsg.what = RESULTS_RECEIVED;
 				activityUIHandler.sendMessage(dbmsg);
 			} else {
+				Message dbmsg = Message.obtain();
 				dbmsg.what = TOAST;
 				activityUIHandler.sendMessage(dbmsg);
 			}

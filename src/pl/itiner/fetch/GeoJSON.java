@@ -19,6 +19,7 @@ package pl.itiner.fetch;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -29,14 +30,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import pl.itiner.model.Departed;
 import pl.itiner.model.DepartedDeserializer;
 import pl.itiner.model.DepartedListDeserializer;
+import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.net.http.AndroidHttpClient;
+import android.os.Build;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -58,27 +65,29 @@ public class GeoJSON {
 
 	private static final String USER_AGENT = "Grave-finder (www.itiner.pl)";
 	private static final int MAX_FETCH_SIZE = 200;
-	private static final Type COLLECTION_TYPE = new TypeToken<List<Departed>>() {}.getType();
-	
+	private static final Type COLLECTION_TYPE = new TypeToken<List<Departed>>() {
+	}.getType();
+
 	private static GsonBuilder g;
 
 	static {
 		g = new GsonBuilder();
 		g.setDateFormat(DATE_FORMAT);
 		g.registerTypeAdapter(Departed.class, new DepartedDeserializer());
-		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());		
+		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());
 	}
-	
+
 	public static List<Departed> getResults() {
 		return Collections.unmodifiableList(dList);
 	}
-	
+
 	public GeoJSON() {
 	}
-	
-	public static void executeQuery(Long cmId, String name, String surname, Date deathDate,
-			Date birthDate, Date burialDate) throws IOException {
-		Uri uri = prepeareURL(cmId, name, surname, deathDate, birthDate, burialDate);
+
+	public static void executeQuery(Long cmId, String name, String surname,
+			Date deathDate, Date birthDate, Date burialDate) throws IOException {
+		Uri uri = prepeareURL(cmId, name, surname, deathDate, birthDate,
+				burialDate);
 		String resp = getResponse(uri);
 		parseJSON(resp);
 	}
@@ -101,15 +110,37 @@ public class GeoJSON {
 		return b.build();
 	}
 
+	@SuppressLint("NewApi")
 	private static String getResponse(Uri uri) throws IOException {
-
-		AndroidHttpClient client = AndroidHttpClient.newInstance(USER_AGENT);
-		HttpResponse resp = client.execute(new HttpGet(uri.toString()));
-		OutputStream os = new ByteArrayOutputStream();
-		resp.getEntity().writeTo(os);
-		client.close();
-		os.close();
-		return os.toString();
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+			AndroidHttpClient client = AndroidHttpClient
+					.newInstance(USER_AGENT);
+			HttpResponse resp = client.execute(new HttpGet(uri.toString()));
+			OutputStream os = new ByteArrayOutputStream();
+			resp.getEntity().writeTo(os);
+			client.close();
+			os.close();
+			return os.toString();
+		} else {
+			HttpClient client = new DefaultHttpClient();
+			HttpGet request = new HttpGet(uri.toString());
+			request.setHeader("User-Agent", USER_AGENT);
+			HttpResponse response = client.execute(request);
+			StatusLine status = response.getStatusLine();
+			if (status.getStatusCode() != 200) {
+				throw new IOException("Invalid response from server: "
+						+ status.toString());
+			}
+			HttpEntity entity = response.getEntity();
+			InputStream inputStream = entity.getContent();
+			ByteArrayOutputStream content = new ByteArrayOutputStream();
+			int readBytes = 0;
+			byte[] sBuffer = new byte[512];
+			while ((readBytes = inputStream.read(sBuffer)) != -1) {
+				content.write(sBuffer, 0, readBytes);
+			}
+			return new String(content.toByteArray());
+		}
 	}
 
 	private static void parseJSON(String JSON) {
