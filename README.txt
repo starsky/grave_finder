@@ -7,4 +7,4 @@ To do it you NEED TO CREATE file in res/values/nutiteq_api_key.xml with content:
 </resources>
 
 2. CONTACT
-If you have any question write to mail@itiner.pl
+If you have any question write to grave.finder.app(at)gmail.com
