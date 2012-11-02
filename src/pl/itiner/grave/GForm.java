@@ -231,13 +231,17 @@ public class GForm extends Activity {
 			burialDate = tmpDate;
 		}
 		try {
-			GeoJSON.executeQuery(tmpNecropolisId, editTextName.getText()
-					.toString(), editTextSurname.getText().toString(),
+			GeoJSON.executeQuery(tmpNecropolisId, cleanStr(editTextName.getText().toString())
+					.toString(), cleanStr(editTextSurname.getText().toString()),
 					deathDate, birthDate, burialDate);
 		} catch (IOException e) {
 			Toast.makeText(this, R.string.query_io_err, Toast.LENGTH_LONG);
 			Log.e("GForm", "IO Err", e);
 		}
+	}
+	
+	private static String cleanStr(String str) {
+		return str.toLowerCase().trim();
 	}
 
 	private boolean isOnline() {

@@ -2,7 +2,7 @@
 <resources>
 	<item name="poznan_centre_lat" type="string">52.406667</item>
 	<item name="poznan_centre_lon" type="string">16.923611</item>
-	<item name="base_url" type="string">http://www-bckp.city.poznan.pl/tilecache/tilecache.cgi?</item>
+	<item name="base_url" type="string">http://www.poznan.pl/tilecache/tilecache.cgi?</item>
 	<item name="base_layer_name" type="string">plan_2177</item>
 	<item name="graves_layer_name" type="string">poznan_cmentarze_2177</item>
 	<item name="tile_size" type="integer">256</item>
