@@ -214,12 +214,15 @@ public final class GraveFinderProvider extends ContentProvider implements
 		for (Departed d : data) {
 			ContentValues values = new ContentValues();
 			values.put(DepartedTableHelper.COLUMN_ID, d.getId());
-			values.put(DepartedTableHelper.COLUMN_DATE_BIRTH, d.getBirthDate()
-					.getTime());
+			values.put(DepartedTableHelper.COLUMN_DATE_BIRTH,
+					d.getBirthDate() != null ? d.getBirthDate().getTime()
+							: null);
 			values.put(DepartedTableHelper.COLUMN_DATE_BURIAL, d
-					.getBurialDate().getTime());
-			values.put(DepartedTableHelper.COLUMN_DATE_DEATH, d.getDeathDate()
-					.getTime());
+					.getBurialDate() != null ? d.getBurialDate().getTime()
+					: null);
+			values.put(DepartedTableHelper.COLUMN_DATE_DEATH,
+					d.getDeathDate() != null ? d.getDeathDate().getTime()
+							: null);
 			values.put(DepartedTableHelper.COLUMN_FAMILY, d.getFamily());
 			values.put(DepartedTableHelper.COLUMN_FIELD, d.getField());
 			values.put(DepartedTableHelper.COLUMN_LAT, d.getLocation()
