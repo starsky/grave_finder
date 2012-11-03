@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.itiner.grave"
-    android:versionCode="7" android:versionName="1.15"
-    android:installLocation="auto">
+    android:installLocation="auto"
+    android:versionCode="7"
+    android:versionName="1.15" >
 
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="8" />
+    <uses-sdk
+        android:minSdkVersion="7"
+        android:targetSdkVersion="8" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,53 +21,58 @@
 
         <activity android:name="pl.itiner.map.GraveMap" />
         <activity
-            android:label="@string/app_name"
-            android:name=".GForm" >
-            <intent-filter >
+            android:name=".GForm"
+            android:label="@string/app_name" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:configChanges="orientation|keyboardHidden"
-            android:icon="@drawable/icon"
-            android:label="@string/app_name"
             android:name=".GenericAbout"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-        
-        <activity
             android:configChanges="orientation|keyboardHidden"
             android:icon="@drawable/icon"
             android:label="@string/app_name"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
             android:name=".About"
+            android:configChanges="orientation|keyboardHidden"
+            android:icon="@drawable/icon"
+            android:label="@string/app_name"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
-            android:label="@string/app_name"
             android:name=".ResultList"
+            android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
         <activity
-            android:label="@string/app_name"
             android:name="pl.itiner.nutiteq.NutiteqMap"
+            android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
         <activity
+            android:name=".LibrariesView"
             android:configChanges="orientation|keyboardHidden"
             android:icon="@drawable/icon"
             android:label="@string/app_name"
-            android:name=".LibrariesView"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
+            android:name=".LicenseView"
             android:configChanges="orientation|keyboardHidden"
             android:icon="@drawable/icon"
             android:label="@string/app_name"
-            android:name=".LicenseView"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
+
+        <provider
+            android:name="pl.itiner.fetch.GraveFinderProvider"
+            android:authorities="pl.itiner.grave.GraveFinderProvider"
+            android:exported="false" >
+        </provider>
     </application>
 
 </manifest>

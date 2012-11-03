@@ -1,5 +1,11 @@
 package pl.itiner.fetch;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -7,10 +13,20 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 public final class GraveFinderProvider extends ContentProvider {
+
+	private static final String TAG = "GraveFinderProvider";
+	public static final String NAME_QUERY_PARAM = "name";
+	public static final String SURENAME_QUERY_PARAM = "surename";
+	public static final String CEMENTARY_ID_QUERY_PARAM = "cm_id";
+	public static final String BIRTH_DATE_QUERY_PARAM = "birth_date";
+	public static final String DEATH_DATE_QUERY_PARAM = "death_date";
+	public static final String BURIAL_DATE_QUERY_PARAM = "burial_date";
 
 	public static final String SIMPLE_AUTHORITY = "pl.itiner.grave.GraveFinderProvider";
 	public static final String BASE_PATH = "graves";
@@ -22,7 +38,7 @@ public final class GraveFinderProvider extends ContentProvider {
 	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
 			+ "/grave";
 
-	// Used for the UriMacher
+	// Used for the UriMacher"AA"
 	private static final int GRAVES_URI_ID = 1;
 	private static final int GRAVE_URI_ID = 2;
 
@@ -75,7 +91,7 @@ public final class GraveFinderProvider extends ContentProvider {
 			final SQLiteDatabase db = dbHelper.getWritableDatabase();
 			long id = db.insert(DepartedTableHelper.TABLE_NAME, null, values);
 			getContext().getContentResolver().notifyChange(uri, null);
-			return Uri.withAppendedPath(CONTENT_URI, "/" + id);
+			return Uri.withAppendedPath(CONTENT_URI, id + "");
 		} else {
 			throw new IllegalArgumentException("Unknown uri: " + uri);
 		}
@@ -95,8 +111,11 @@ public final class GraveFinderProvider extends ContentProvider {
 		Cursor c;
 		switch (match) {
 		case GRAVES_URI_ID:
-			c = db.query(DepartedTableHelper.TABLE_NAME, projection, selection,
-					selectionArgs, null, null, null);
+			SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+			builder.setTables(DepartedTableHelper.TABLE_NAME);
+			String[] whereArgs = createWhere(uri, builder);
+			c = builder.query(db, projection, null, whereArgs, null,
+					null, null);
 			c.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
 			return c;
 		case GRAVE_URI_ID:
@@ -114,6 +133,54 @@ public final class GraveFinderProvider extends ContentProvider {
 		default:
 			throw new IllegalArgumentException("unsupported uri: " + uri);
 		}
+	}
+
+	private static String[] createWhere(Uri uri, SQLiteQueryBuilder builder) {
+		ArrayList<String> whereArgs = new ArrayList<String>();
+		boolean delim = putDateToWhere(uri, builder, BIRTH_DATE_QUERY_PARAM,
+				DepartedTableHelper.COLUMN_DATE_BIRTH, false, whereArgs);
+		delim = putDateToWhere(uri, builder, BURIAL_DATE_QUERY_PARAM,
+				DepartedTableHelper.COLUMN_DATE_BURIAL, delim, whereArgs);
+		delim = putDateToWhere(uri, builder, DEATH_DATE_QUERY_PARAM,
+				DepartedTableHelper.COLUMN_DATE_DEATH, delim, whereArgs);
+		delim = putStringToWhere(uri, builder, SURENAME_QUERY_PARAM,
+				DepartedTableHelper.COLUMN_SURENAME, delim, whereArgs);
+		delim = putStringToWhere(uri, builder, NAME_QUERY_PARAM,
+				DepartedTableHelper.COLUMN_NAME, delim, whereArgs);
+		putStringToWhere(uri, builder, CEMENTARY_ID_QUERY_PARAM,
+				DepartedTableHelper.COLUMN_CEMENTERY_ID, delim, whereArgs);
+		return whereArgs.toArray(new String[whereArgs.size()]);
+	}
+
+	private static boolean putStringToWhere(Uri uri,
+			SQLiteQueryBuilder builder, String uriParam, String column,
+			boolean addDelim, List<String> whereArgs) {
+		if (uri.getQueryParameter(uriParam) != null) {
+			String delim = addDelim ? " AND " : "";
+			builder.appendWhere(delim + column + "=?");
+			whereArgs.add(uri.getQueryParameter(uriParam));
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean putDateToWhere(Uri uri, SQLiteQueryBuilder builder,
+			String uriParam, String column, boolean addDelim,
+			List<String> whereArgs) {
+		final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		String paramValue = uri.getQueryParameter(uriParam);
+		if (paramValue != null) {
+			try {
+				String delim = addDelim ? " AND " : "";
+				Date date = dateFormat.parse(paramValue);
+				builder.appendWhere(delim + column + "=?");
+				whereArgs.add(date.getTime() + "");
+				return true;
+			} catch (ParseException e) {
+				Log.e(TAG, "Could not parse date from uri.", e);
+			}
+		}
+		return false;
 	}
 
 	@Override

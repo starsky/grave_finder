@@ -21,24 +21,27 @@ public final class DepartedTableHelper {
 	public static final String COLUMN_FAMILY = "family";
 	public static final String COLUMN_FIELD = "field";
 	public static final String COLUMN_SIZE = "size";
+	public static final String COLUMN_FETCHED_TIME = "fetched_time";
+	
 
 	private static final String TABLE_CREATE = "create table "
 			+ TABLE_NAME + "("  
-			+ COLUMN_ID + " INTEGER primary key , " 
+			+ COLUMN_ID + " INTEGER PRIMARY KEY, " 
 			+ COLUMN_CEMENTERY_ID + " INTEGER NOT NULL, "
 			+ COLUMN_DATE_BIRTH  + " INTEGER NULL, "
 			+ COLUMN_DATE_BURIAL + " INTEGER NULL, "
 			+ COLUMN_DATE_DEATH  + " INTEGER NULL, "
-			+ COLUMN_FAMILY + "TEXT NULL, "
-			+ COLUMN_FIELD + "TEXT NULL, "
-			+ COLUMN_NAME + "TEXT NULL, "
-			+ COLUMN_PLACE + "TEXT NULL, "
-			+ COLUMN_QUARTER + "TEXT NULL, "
-			+ COLUMN_ROW + "TEXT NULL, "
-			+ COLUMN_SIZE + "TEXT NULL, "
-			+ COLUMN_SURENAME + "TEXT NULL, "
-			+ COLUMN_LAT + "DECIMAL(9,6) NOT NULL"
-			+ COLUMN_LON + "DECIMAL(9,6) NOT NULL"
+			+ COLUMN_FAMILY + " TEXT NULL, "
+			+ COLUMN_FIELD + " TEXT NULL, "
+			+ COLUMN_NAME + " TEXT NULL, "
+			+ COLUMN_PLACE + " TEXT NULL, "
+			+ COLUMN_QUARTER + " TEXT NULL, "
+			+ COLUMN_ROW + " TEXT NULL, "
+			+ COLUMN_SIZE + " TEXT NULL, "
+			+ COLUMN_SURENAME + " TEXT NULL, "
+			+ COLUMN_LAT + " DECIMAL(9,6) NOT NULL, "
+			+ COLUMN_LON + " DECIMAL(9,6) NOT NULL, "
+			+ COLUMN_FETCHED_TIME + " TIMESTAMP"
 			+ ");";
 	
 	public static void onCreate(SQLiteDatabase db) {
