@@ -201,7 +201,8 @@ public class GForm extends Activity {
 		case R.id.menuAbout:
 			Intent intentAboutView = new Intent(this.getApplicationContext(),
 					About.class);
-			intentAboutView.putExtra(GenericAbout.DESC_ID,R.string.description);
+			intentAboutView
+					.putExtra(GenericAbout.DESC_ID, R.string.description);
 			startActivity(intentAboutView);
 			break;
 		}
@@ -214,11 +215,7 @@ public class GForm extends Activity {
 		Date deathDate = null;
 		Date burialDate = null;
 		Date birthDate = null;
-
-		if (datePicker.isFocused()) {
-			datePicker.clearFocus();
-		}
-
+	
 		Date tmpDate = new GregorianCalendar(datePicker.getYear(),
 				datePicker.getMonth(), datePicker.getDayOfMonth()).getTime();
 		switch (whichDate) {
@@ -227,21 +224,19 @@ public class GForm extends Activity {
 			break;
 		case BIRTH_DATE:
 			birthDate = tmpDate;
+			break;
 		case BURIAL_DATE:
 			burialDate = tmpDate;
+			break;
 		}
 		try {
-			GeoJSON.executeQuery(tmpNecropolisId, cleanStr(editTextName.getText().toString())
-					.toString(), cleanStr(editTextSurname.getText().toString()),
+			GeoJSON.executeQuery(tmpNecropolisId, editTextName.getText()
+					.toString(), editTextSurname.getText().toString(),
 					deathDate, birthDate, burialDate);
 		} catch (IOException e) {
 			Toast.makeText(this, R.string.query_io_err, Toast.LENGTH_LONG);
 			Log.e("GForm", "IO Err", e);
 		}
-	}
-	
-	private static String cleanStr(String str) {
-		return str.toLowerCase().trim();
 	}
 
 	private boolean isOnline() {
@@ -265,6 +260,7 @@ public class GForm extends Activity {
 		find.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				editTextName.requestFocus();
 				cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 				if (isOnline()) {
 					new Thread(th_searchGraves).start();

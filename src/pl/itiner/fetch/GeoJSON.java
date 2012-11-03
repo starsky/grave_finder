@@ -44,6 +44,7 @@ import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 import android.os.Build;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -64,7 +65,7 @@ public class GeoJSON {
 	public static final String TAG = "GeoJSON";
 
 	private static final String USER_AGENT = "Grave-finder (www.itiner.pl)";
-	private static final int MAX_FETCH_SIZE = 200;
+	private static final int MAX_FETCH_SIZE = 5;
 	private static final Type COLLECTION_TYPE = new TypeToken<List<Departed>>() {
 	}.getType();
 
@@ -86,6 +87,8 @@ public class GeoJSON {
 
 	public static void executeQuery(Long cmId, String name, String surname,
 			Date deathDate, Date birthDate, Date burialDate) throws IOException {
+		name = cleanStr(name);
+		surname = cleanStr(surname);
 		Uri uri = prepeareURL(cmId, name, surname, deathDate, birthDate,
 				burialDate);
 		String resp = getResponse(uri);
@@ -108,6 +111,7 @@ public class GeoJSON {
 		if(queryableParam.length() > 0)
 			queryableParam.deleteCharAt(queryableParam.length() - 1);
 		b.appendQueryParameter("queryable", queryableParam.toString());
+		Log.v("AAA", b.build().toString());
 		return b.build();
 	}
 
@@ -178,5 +182,13 @@ public class GeoJSON {
 	private static boolean filledStr(String str) {
 		return str != null && !str.equals("");
 	}
+	
+	private static String cleanStr(String str) {
+		if(filledStr(str))
+			return str.toLowerCase().trim();
+		else
+			return str;
+	}
+
 
 }
