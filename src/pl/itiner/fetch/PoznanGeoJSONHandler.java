@@ -17,34 +17,19 @@
  */
 package pl.itiner.fetch;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
+import pl.itiner.grave.R;
 import pl.itiner.model.Departed;
 import pl.itiner.model.DepartedDeserializer;
 import pl.itiner.model.DepartedListDeserializer;
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.net.Uri;
-import android.net.http.AndroidHttpClient;
-import android.os.Build;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -58,14 +43,23 @@ import com.google.gson.reflect.TypeToken;
  * TODO złap gdzieś wyjątek parsowania
  * 
  */
-public final class PoznanGeoJSONHandler {
+public final class PoznanGeoJSONHandler implements DataHandler<List<Departed>> {
+
+	private static DataHandler<List<Departed>> prototype = new PoznanGeoJSONHandler();
+	
+	public synchronized static void setPrototype(DataHandler<List<Departed>> newPrototype) {
+		prototype = newPrototype;
+	}
+	
+	public synchronized static DataHandler<List<Departed>> createInstance(
+			QueryParams params, Context ctx) {
+		return prototype.clone(params, ctx);
+	}
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
-	private static List<Departed> dList = new ArrayList<Departed>();
 	public static final String TAG = "GeoJSON";
 
-	private static final String USER_AGENT = "Grave-finder (www.itiner.pl)";
-	private static final int MAX_FETCH_SIZE = 5;
+	static final int MAX_FETCH_SIZE = 5;
 	private static final Type COLLECTION_TYPE = new TypeToken<List<Departed>>() {
 	}.getType();
 
@@ -78,103 +72,51 @@ public final class PoznanGeoJSONHandler {
 		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());
 	}
 
-	public static List<Departed> getResults() {
-		return Collections.unmodifiableList(dList);
+	private QueryParams params;
+	private String serverUri;
+	private ResponseHandler<List<Departed>> responseHandler;
+
+	private PoznanGeoJSONHandler() {
+
 	}
 
-	public PoznanGeoJSONHandler() {
+	private PoznanGeoJSONHandler(QueryParams params, Context ctx) {
+		this.params = params;
+		serverUri = ctx.getResources().getString(
+				R.string.poznan_feature_server_uri);
 	}
 
-	public static void executeQuery(Long cmId, String name, String surname,
-			Date deathDate, Date birthDate, Date burialDate) throws IOException {
-		name = cleanStr(name);
-		surname = cleanStr(surname);
-		Uri uri = prepeareURL(cmId, name, surname, deathDate, birthDate,
-				burialDate);
-		String resp = getResponse(uri);
-		parseJSON(resp);
+	private List<Departed> executeQuery() throws IOException {
+		Uri uri = prepeareURL();
+		String resp = HttpDownloadTask.getResponse(uri);
+		return parseJSON(resp);
 	}
 
-	private static Uri prepeareURL(Long cmId, String name, String surname,
-			Date deathDate, Date birthDate, Date burialDate) {
-		Map<String, String> paramsMap = createQueryParamsMap(cmId, name,
-				surname, deathDate, birthDate, burialDate);
-		Uri.Builder b = Uri.parse(
-				"http://www.poznan.pl/featureserver/featureserver.cgi/groby")
-				.buildUpon();
-		b.appendQueryParameter("maxFeatures", MAX_FETCH_SIZE + "");
-		StringBuilder queryableParam = new StringBuilder();
-		for (String p : paramsMap.keySet()) {
-			queryableParam.append(p).append(",");
-			b.appendQueryParameter(p, paramsMap.get(p));
-		}
-		if(queryableParam.length() > 0)
-			queryableParam.deleteCharAt(queryableParam.length() - 1);
-		b.appendQueryParameter("queryable", queryableParam.toString());
-		Log.v("AAA", b.build().toString());
-		return b.build();
-	}
-
-	@SuppressLint("NewApi")
-	private static String getResponse(Uri uri) throws IOException {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-			AndroidHttpClient client = AndroidHttpClient
-					.newInstance(USER_AGENT);
-			HttpResponse resp = client.execute(new HttpGet(uri.toString()));
-			OutputStream os = new ByteArrayOutputStream();
-			resp.getEntity().writeTo(os);
-			client.close();
-			os.close();
-			return os.toString();
-		} else {
-			HttpClient client = new DefaultHttpClient();
-			HttpGet request = new HttpGet(uri.toString());
-			request.setHeader("User-Agent", USER_AGENT);
-			HttpResponse response = client.execute(request);
-			StatusLine status = response.getStatusLine();
-			if (status.getStatusCode() != 200) {
-				throw new IOException("Invalid response from server: "
-						+ status.toString());
-			}
-			HttpEntity entity = response.getEntity();
-			InputStream inputStream = entity.getContent();
-			ByteArrayOutputStream content = new ByteArrayOutputStream();
-			int readBytes = 0;
-			byte[] sBuffer = new byte[512];
-			while ((readBytes = inputStream.read(sBuffer)) != -1) {
-				content.write(sBuffer, 0, readBytes);
-			}
-			return new String(content.toByteArray());
-		}
-	}
-
-	private static void parseJSON(String JSON) {
+	private List<Departed> parseJSON(String JSON) {
 		Gson gson = g.create();
-		dList = gson.fromJson(JSON, COLLECTION_TYPE);
+		return gson.fromJson(JSON, COLLECTION_TYPE);
 	}
 
-	private static Map<String, String> createQueryParamsMap(Long cmId,
-			String name, String surname, Date deathDate, Date birthDate,
-			Date burialDate) {
+	private static Map<String, String> createQueryParamsMap(QueryParams params) {
 		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 		Map<String, String> map = new HashMap<String, String>();
-		if (cmId != null) {
-			map.put("cm_id", cmId.toString());
+		if (params.cmId != null) {
+			map.put("cm_id", params.cmId.toString());
 		}
-		if (filledStr(name)) {
-			map.put("g_name", name);
+		if (filledStr(params.name)) {
+			map.put("g_name", cleanStr(params.name));
 		}
-		if (filledStr(surname)) {
-			map.put("g_surname", surname);
+		if (filledStr(params.surename)) {
+			map.put("g_surname", cleanStr(params.surename));
 		}
-		if (deathDate != null) {
-			map.put("g_date_death", formatter.format(deathDate));
+		if (params.deathDate != null) {
+			map.put("g_date_death", formatter.format(params.deathDate));
 		}
-		if (burialDate != null) {
-			map.put("g_date_burial", formatter.format(burialDate));
+		if (params.burialDate != null) {
+			map.put("g_date_burial", formatter.format(params.burialDate));
 		}
-		if (birthDate != null) {
-			map.put("g_date_birth", formatter.format(birthDate));
+		if (params.birthDate != null) {
+			map.put("g_date_birth", formatter.format(params.birthDate));
 		}
 		return map;
 	}
@@ -182,13 +124,48 @@ public final class PoznanGeoJSONHandler {
 	private static boolean filledStr(String str) {
 		return str != null && !str.equals("");
 	}
-	
+
 	private static String cleanStr(String str) {
-		if(filledStr(str))
+		if (filledStr(str))
 			return str.toLowerCase().trim();
 		else
 			return str;
 	}
 
+	private Uri prepeareURL() {
+		Map<String, String> paramsMap = createQueryParamsMap(params);
+		Uri.Builder b = Uri.parse(serverUri).buildUpon();
+		b.appendQueryParameter("maxFeatures", MAX_FETCH_SIZE + "");
+		StringBuilder queryableParam = new StringBuilder();
+		for (String p : paramsMap.keySet()) {
+			queryableParam.append(p).append(",");
+			b.appendQueryParameter(p, paramsMap.get(p));
+		}
+		if (queryableParam.length() > 0)
+			queryableParam.deleteCharAt(queryableParam.length() - 1);
+		b.appendQueryParameter("queryable", queryableParam.toString());
+		return b.build();
+	}
+
+	@Override
+	public void run() {
+		try {
+			List<Departed> result = executeQuery();
+			if (responseHandler != null) {
+				responseHandler.handleResponse(result);
+			}
+		} catch (IOException e) {
+		}
+	}
+
+	@Override
+	public void setResponseHandler(ResponseHandler<List<Departed>> handler) {
+		responseHandler = handler;
+	}
+
+	@Override
+	public DataHandler<List<Departed>> clone(QueryParams params, Context ctx) {
+		return new PoznanGeoJSONHandler(params, ctx);
+	}
 
 }

@@ -17,7 +17,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.google.common.base.Strings;
 
 public final class GraveFinderProvider extends ContentProvider {
 
@@ -52,7 +51,7 @@ public final class GraveFinderProvider extends ContentProvider {
 	}
 
 	private DepartedDB dbHelper;
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
+	static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd-MM-yyyy");
 
 	@Override
@@ -202,43 +201,6 @@ public final class GraveFinderProvider extends ContentProvider {
 		} else {
 			throw new IllegalArgumentException("Unknown uri: " + uri);
 		}
-	}
-
-	private static final class QueryParams {
-		public final String name;
-		public final String surename;
-		public final Long cmId;
-		public final Date birthDate;
-		public final Date burialDate;
-		public final Date deathDate;
-
-		public QueryParams(Uri uri) throws ParseException,
-				NumberFormatException {
-			name = Strings.emptyToNull(cleanStr(uri
-					.getQueryParameter(NAME_QUERY_PARAM)));
-			surename = Strings.emptyToNull(cleanStr(uri
-					.getQueryParameter(SURENAME_QUERY_PARAM)));
-			cmId = uri.getQueryParameter(CEMENTARY_ID_QUERY_PARAM) == null ? null
-					: Long.valueOf(uri
-							.getQueryParameter(CEMENTARY_ID_QUERY_PARAM));
-			birthDate = uri.getQueryParameter(BIRTH_DATE_QUERY_PARAM) == null ? null
-					: dateFormat.parse(uri
-							.getQueryParameter(BIRTH_DATE_QUERY_PARAM));
-			burialDate = uri.getQueryParameter(BURIAL_DATE_QUERY_PARAM) == null ? null
-					: dateFormat.parse(uri
-							.getQueryParameter(BURIAL_DATE_QUERY_PARAM));
-			deathDate = uri.getQueryParameter(DEATH_DATE_QUERY_PARAM) == null ? null
-					: dateFormat.parse(uri
-							.getQueryParameter(DEATH_DATE_QUERY_PARAM));
-		}
-
-		private static String cleanStr(String str) {
-			if (!Strings.isNullOrEmpty(str))
-				return str.toLowerCase().trim();
-			else
-				return str;
-		}
-
 	}
 
 }

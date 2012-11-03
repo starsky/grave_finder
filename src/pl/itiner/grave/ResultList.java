@@ -48,7 +48,7 @@ public class ResultList extends ListActivity {
 		setContentView(R.layout.list);
 		cementeries = getResources().getStringArray(R.array.necropolises);
 		ListView lv = getListView();
-		setListAdapter(createAdapter());
+//		setListAdapter(createAdapter());
 
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -61,9 +61,9 @@ public class ResultList extends ListActivity {
 		});
 	}
 
-	public ListAdapter createAdapter() {
-		return new MyBaseAdapter(this, PoznanGeoJSONHandler.getResults());
-	}
+//	public ListAdapter createAdapter() {
+////		return new MyBaseAdapter(this, PoznanGeoJSONHandler.getResults());
+//	}
 
 	private static String getCmName(Long id) {
 		return cementeries[id.intValue()];

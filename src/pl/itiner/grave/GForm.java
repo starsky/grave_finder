@@ -174,15 +174,15 @@ public class GForm extends Activity {
 				dbmsg.what = PROGRESSBAR_GONE;
 				activityUIHandler.sendMessage(dbmsg);
 			}
-			if (PoznanGeoJSONHandler.getResults().size() != 0) {
-				Message dbmsg = Message.obtain();
-				dbmsg.what = RESULTS_RECEIVED;
-				activityUIHandler.sendMessage(dbmsg);
-			} else {
-				Message dbmsg = Message.obtain();
-				dbmsg.what = TOAST;
-				activityUIHandler.sendMessage(dbmsg);
-			}
+//			if (PoznanGeoJSONHandler.getResults().size() != 0) {
+//				Message dbmsg = Message.obtain();
+//				dbmsg.what = RESULTS_RECEIVED;
+//				activityUIHandler.sendMessage(dbmsg);
+//			} else {
+//				Message dbmsg = Message.obtain();
+//				dbmsg.what = TOAST;
+//				activityUIHandler.sendMessage(dbmsg);
+//			}
 
 		}
 	};
@@ -229,14 +229,14 @@ public class GForm extends Activity {
 			burialDate = tmpDate;
 			break;
 		}
-		try {
-			PoznanGeoJSONHandler.executeQuery(tmpNecropolisId, editTextName.getText()
-					.toString(), editTextSurname.getText().toString(),
-					deathDate, birthDate, burialDate);
-		} catch (IOException e) {
-			Toast.makeText(this, R.string.query_io_err, Toast.LENGTH_LONG);
-			Log.e("GForm", "IO Err", e);
-		}
+//		try {
+//			PoznanGeoJSONHandler.executeQuery(tmpNecropolisId, editTextName.getText()
+//					.toString(), editTextSurname.getText().toString(),
+//					deathDate, birthDate, burialDate);
+//		} catch (IOException e) {
+//			Toast.makeText(this, R.string.query_io_err, Toast.LENGTH_LONG);
+//			Log.e("GForm", "IO Err", e);
+//		}
 	}
 
 	private boolean isOnline() {

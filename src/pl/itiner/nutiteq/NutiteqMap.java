@@ -90,7 +90,7 @@ public class NutiteqMap extends Activity {
 				R.drawable.dot));
 		// Get death person data
 		int id = getIntent().getExtras().getInt("id");
-		departed = PoznanGeoJSONHandler.getResults().get(id);
+//		departed = PoznanGeoJSONHandler.getResults().get(id);
 		// fill data header
 		fillHeaderWithData();
 		// setup position listeners
