@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import pl.itiner.fetch.GeoJSON;
+import pl.itiner.fetch.PoznanGeoJSONHandler;
 
 import android.app.Activity;
 import android.content.Context;
@@ -174,7 +174,7 @@ public class GForm extends Activity {
 				dbmsg.what = PROGRESSBAR_GONE;
 				activityUIHandler.sendMessage(dbmsg);
 			}
-			if (GeoJSON.getResults().size() != 0) {
+			if (PoznanGeoJSONHandler.getResults().size() != 0) {
 				Message dbmsg = Message.obtain();
 				dbmsg.what = RESULTS_RECEIVED;
 				activityUIHandler.sendMessage(dbmsg);
@@ -230,7 +230,7 @@ public class GForm extends Activity {
 			break;
 		}
 		try {
-			GeoJSON.executeQuery(tmpNecropolisId, editTextName.getText()
+			PoznanGeoJSONHandler.executeQuery(tmpNecropolisId, editTextName.getText()
 					.toString(), editTextSurname.getText().toString(),
 					deathDate, birthDate, burialDate);
 		} catch (IOException e) {

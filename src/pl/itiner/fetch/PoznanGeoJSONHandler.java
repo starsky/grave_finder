@@ -58,7 +58,7 @@ import com.google.gson.reflect.TypeToken;
  * TODO złap gdzieś wyjątek parsowania
  * 
  */
-public class GeoJSON {
+public final class PoznanGeoJSONHandler {
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	private static List<Departed> dList = new ArrayList<Departed>();
@@ -82,7 +82,7 @@ public class GeoJSON {
 		return Collections.unmodifiableList(dList);
 	}
 
-	public GeoJSON() {
+	public PoznanGeoJSONHandler() {
 	}
 
 	public static void executeQuery(Long cmId, String name, String surname,

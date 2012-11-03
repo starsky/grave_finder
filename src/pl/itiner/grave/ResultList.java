@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import pl.itiner.fetch.GeoJSON;
+import pl.itiner.fetch.PoznanGeoJSONHandler;
 import pl.itiner.model.Departed;
 import pl.itiner.nutiteq.NutiteqMap;
 import android.app.ListActivity;
@@ -62,7 +62,7 @@ public class ResultList extends ListActivity {
 	}
 
 	public ListAdapter createAdapter() {
-		return new MyBaseAdapter(this, GeoJSON.getResults());
+		return new MyBaseAdapter(this, PoznanGeoJSONHandler.getResults());
 	}
 
 	private static String getCmName(Long id) {

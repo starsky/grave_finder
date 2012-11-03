@@ -21,7 +21,7 @@ package pl.itiner.nutiteq;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import pl.itiner.fetch.GeoJSON;
+import pl.itiner.fetch.PoznanGeoJSONHandler;
 import pl.itiner.grave.R;
 import pl.itiner.model.Departed;
 import android.app.Activity;
@@ -90,7 +90,7 @@ public class NutiteqMap extends Activity {
 				R.drawable.dot));
 		// Get death person data
 		int id = getIntent().getExtras().getInt("id");
-		departed = GeoJSON.getResults().get(id);
+		departed = PoznanGeoJSONHandler.getResults().get(id);
 		// fill data header
 		fillHeaderWithData();
 		// setup position listeners
