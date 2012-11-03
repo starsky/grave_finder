@@ -16,7 +16,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
+
+import com.google.common.base.Strings;
 
 public final class GraveFinderProvider extends ContentProvider {
 
@@ -51,6 +52,8 @@ public final class GraveFinderProvider extends ContentProvider {
 	}
 
 	private DepartedDB dbHelper;
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"dd-MM-yyyy");
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -111,13 +114,7 @@ public final class GraveFinderProvider extends ContentProvider {
 		Cursor c;
 		switch (match) {
 		case GRAVES_URI_ID:
-			SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-			builder.setTables(DepartedTableHelper.TABLE_NAME);
-			String[] whereArgs = createWhere(uri, builder);
-			c = builder.query(db, projection, null, whereArgs, null,
-					null, null);
-			c.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
-			return c;
+			return handleQuery(uri, projection, db);
 		case GRAVE_URI_ID:
 			long departedId = ContentUris.parseId(uri);
 			c = db.query(DepartedTableHelper.TABLE_NAME, projection,
@@ -135,50 +132,61 @@ public final class GraveFinderProvider extends ContentProvider {
 		}
 	}
 
-	private static String[] createWhere(Uri uri, SQLiteQueryBuilder builder) {
+	private Cursor handleQuery(Uri uri, String[] projection, SQLiteDatabase db) {
+		try {
+			QueryParams queryParams = new QueryParams(uri);
+			SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+			builder.setTables(DepartedTableHelper.TABLE_NAME);
+			String[] whereArgs = createWhere(uri, builder,queryParams);
+			Cursor c = builder.query(db, projection, null, whereArgs, null,
+					null, null);
+			c.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
+			return c;
+		} catch (NumberFormatException e) {
+		} catch (ParseException e) {
+		}
+		return null;
+	}
+
+	private static String[] createWhere(Uri uri, SQLiteQueryBuilder builder,
+			QueryParams params) {
 		ArrayList<String> whereArgs = new ArrayList<String>();
-		boolean delim = putDateToWhere(uri, builder, BIRTH_DATE_QUERY_PARAM,
-				DepartedTableHelper.COLUMN_DATE_BIRTH, false, whereArgs);
-		delim = putDateToWhere(uri, builder, BURIAL_DATE_QUERY_PARAM,
-				DepartedTableHelper.COLUMN_DATE_BURIAL, delim, whereArgs);
-		delim = putDateToWhere(uri, builder, DEATH_DATE_QUERY_PARAM,
-				DepartedTableHelper.COLUMN_DATE_DEATH, delim, whereArgs);
-		delim = putStringToWhere(uri, builder, SURENAME_QUERY_PARAM,
-				DepartedTableHelper.COLUMN_SURENAME, delim, whereArgs);
-		delim = putStringToWhere(uri, builder, NAME_QUERY_PARAM,
-				DepartedTableHelper.COLUMN_NAME, delim, whereArgs);
-		putStringToWhere(uri, builder, CEMENTARY_ID_QUERY_PARAM,
-				DepartedTableHelper.COLUMN_CEMENTERY_ID, delim, whereArgs);
+		boolean delim = putDateToWhere(builder,
+				DepartedTableHelper.COLUMN_DATE_BIRTH, false, whereArgs,
+				params.birthDate);
+		delim = putDateToWhere(builder, DepartedTableHelper.COLUMN_DATE_BURIAL,
+				delim, whereArgs, params.burialDate);
+		delim = putDateToWhere(builder, DepartedTableHelper.COLUMN_DATE_DEATH,
+				delim, whereArgs, params.deathDate);
+		delim = putStringToWhere(builder, DepartedTableHelper.COLUMN_SURENAME,
+				delim, whereArgs, params.surename);
+		delim = putStringToWhere(builder, DepartedTableHelper.COLUMN_NAME,
+				delim, whereArgs, params.name);
+		putStringToWhere(builder, DepartedTableHelper.COLUMN_CEMENTERY_ID,
+				delim, whereArgs, params.cmId);
 		return whereArgs.toArray(new String[whereArgs.size()]);
 	}
 
-	private static boolean putStringToWhere(Uri uri,
-			SQLiteQueryBuilder builder, String uriParam, String column,
-			boolean addDelim, List<String> whereArgs) {
-		if (uri.getQueryParameter(uriParam) != null) {
+	private static boolean putStringToWhere(SQLiteQueryBuilder builder,
+			String column, boolean addDelim, List<String> whereArgs,
+			Object paramValue) {
+		if (paramValue != null) {
 			String delim = addDelim ? " AND " : "";
 			builder.appendWhere(delim + column + "=?");
-			whereArgs.add(uri.getQueryParameter(uriParam));
+			whereArgs.add(paramValue.toString());
 			return true;
 		}
 		return false;
 	}
 
-	private static boolean putDateToWhere(Uri uri, SQLiteQueryBuilder builder,
-			String uriParam, String column, boolean addDelim,
-			List<String> whereArgs) {
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		String paramValue = uri.getQueryParameter(uriParam);
+	private static boolean putDateToWhere(SQLiteQueryBuilder builder,
+			String column, boolean addDelim, List<String> whereArgs,
+			Date paramValue) {
 		if (paramValue != null) {
-			try {
-				String delim = addDelim ? " AND " : "";
-				Date date = dateFormat.parse(paramValue);
-				builder.appendWhere(delim + column + "=?");
-				whereArgs.add(date.getTime() + "");
-				return true;
-			} catch (ParseException e) {
-				Log.e(TAG, "Could not parse date from uri.", e);
-			}
+			String delim = addDelim ? " AND " : "";
+			builder.appendWhere(delim + column + "=?");
+			whereArgs.add(paramValue.getTime() + "");
+			return true;
 		}
 		return false;
 	}
@@ -194,6 +202,43 @@ public final class GraveFinderProvider extends ContentProvider {
 		} else {
 			throw new IllegalArgumentException("Unknown uri: " + uri);
 		}
+	}
+
+	private static final class QueryParams {
+		public final String name;
+		public final String surename;
+		public final Long cmId;
+		public final Date birthDate;
+		public final Date burialDate;
+		public final Date deathDate;
+
+		public QueryParams(Uri uri) throws ParseException,
+				NumberFormatException {
+			name = Strings.emptyToNull(cleanStr(uri
+					.getQueryParameter(NAME_QUERY_PARAM)));
+			surename = Strings.emptyToNull(cleanStr(uri
+					.getQueryParameter(SURENAME_QUERY_PARAM)));
+			cmId = uri.getQueryParameter(CEMENTARY_ID_QUERY_PARAM) == null ? null
+					: Long.valueOf(uri
+							.getQueryParameter(CEMENTARY_ID_QUERY_PARAM));
+			birthDate = uri.getQueryParameter(BIRTH_DATE_QUERY_PARAM) == null ? null
+					: dateFormat.parse(uri
+							.getQueryParameter(BIRTH_DATE_QUERY_PARAM));
+			burialDate = uri.getQueryParameter(BURIAL_DATE_QUERY_PARAM) == null ? null
+					: dateFormat.parse(uri
+							.getQueryParameter(BURIAL_DATE_QUERY_PARAM));
+			deathDate = uri.getQueryParameter(DEATH_DATE_QUERY_PARAM) == null ? null
+					: dateFormat.parse(uri
+							.getQueryParameter(DEATH_DATE_QUERY_PARAM));
+		}
+
+		private static String cleanStr(String str) {
+			if (!Strings.isNullOrEmpty(str))
+				return str.toLowerCase().trim();
+			else
+				return str;
+		}
+
 	}
 
 }
