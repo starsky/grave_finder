@@ -44,13 +44,16 @@ public final class DepartedTableHelper {
 			+ COLUMN_FETCHED_TIME + " TIMESTAMP"
 			+ ");";
 	
+	private DepartedTableHelper() {
+	}
+	
 	public static void onCreate(SQLiteDatabase db) {
 		db.execSQL(TABLE_CREATE);
 	}
 
 	public static void onUpgrade(SQLiteDatabase db, int oldVersion,
 			int newVersion) {
-		db.execSQL("DROP TABLE " + TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 		db.execSQL(TABLE_CREATE);
 	}
 }

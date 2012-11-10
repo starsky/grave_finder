@@ -19,7 +19,7 @@ import android.os.Build;
 
 final class HttpDownloadTask  {
 
-	static final String USER_AGENT = "Grave-finder (www.itiner.pl)";
+	private static final String USER_AGENT = "Grave-finder (www.itiner.pl)";
 
 	
 	private HttpDownloadTask() {

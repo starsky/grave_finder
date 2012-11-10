@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/header" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/actionbar"
+        android:background="@drawable/background"
+        android:isScrollContainer="false" >
+
+        <LinearLayout
+            android:id="@+id/linear_main"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp" >
+
+            <LinearLayout
+                android:id="@+id/name_choose"
+                style="@style/group_separator_style"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/date_header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="1dp"
+                    android:text="@string/name_query_hint" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2" >
+
+                    <EditText
+                        android:id="@+id/name"
+                        style="@style/main_view_edit_text"
+                        android:hint="@string/name"
+                        android:imeOptions="actionNext"
+                        android:nextFocusDown="@+id/surname"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/surname"
+                        style="@style/main_view_edit_text"
+                        android:hint="@string/surname"
+                        android:imeOptions="actionDone"
+                        android:text="" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/necropolis_choose"
+                style="@style/group_separator_style" >
+
+                <TextView
+                    android:id="@+id/necropolis_header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="1dp"
+                    android:text="@string/necropolis" />
+
+                <Spinner
+                    android:id="@+id/necropolis_spinner"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:prompt="@string/necropolis_prompt" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/date_choose_header"
+                style="@style/group_separator_style" >
+
+                <LinearLayout
+                    android:id="@+id/date_picker_group"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <CheckBox
+                        android:id="@+id/checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="@string/additional_query_params" >
+                    </CheckBox>
+
+                    <RadioGroup
+                        android:id="@+id/dates_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkedButton="@+id/death_date"
+                        android:orientation="horizontal"
+                        android:visibility="gone" >
+
+                        <RadioButton
+                            android:id="@+id/birth_date"
+                            style="@style/date_option_btn"
+                            android:text="@string/birth_date" />
+
+                        <RadioButton
+                            android:id="@+id/death_date"
+                            style="@style/date_option_btn"
+                            android:text="@string/death_date" />
+
+                        <RadioButton
+                            android:id="@+id/burial_date"
+                            style="@style/date_option_btn"
+                            android:text="@string/burial_date" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <DatePicker
+                    android:id="@+id/datepicker"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/group_separator_style" >
+
+                <Button
+                    android:id="@+id/find_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@android:drawable/ic_search_category_default"
+                    android:text="@string/search"
+                    android:textSize="18dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/footer" />
+
+</RelativeLayout>

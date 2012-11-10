@@ -22,6 +22,7 @@ import android.text.TextUtils;
 public final class GraveFinderProvider extends ContentProvider implements
 		ResponseHandler<List<Departed>> {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = "GraveFinderProvider";
 	public static final String NAME_QUERY_PARAM = "name";
 	public static final String SURENAME_QUERY_PARAM = "surename";

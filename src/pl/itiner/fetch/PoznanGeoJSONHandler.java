@@ -89,12 +89,8 @@ public final class PoznanGeoJSONHandler implements DataHandler<List<Departed>> {
 	private List<Departed> executeQuery() throws IOException {
 		Uri uri = prepeareURL();
 		String resp = HttpDownloadTask.getResponse(uri);
-		return parseJSON(resp);
-	}
-
-	private List<Departed> parseJSON(String JSON) {
 		Gson gson = g.create();
-		return gson.fromJson(JSON, COLLECTION_TYPE);
+		return gson.fromJson(resp, COLLECTION_TYPE);
 	}
 
 	private static Map<String, String> createQueryParamsMap(QueryParams params) {
