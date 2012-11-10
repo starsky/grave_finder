@@ -18,109 +18,44 @@
 
 package pl.itiner.grave;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import pl.itiner.fetch.PoznanGeoJSONHandler;
-import pl.itiner.model.Departed;
 import pl.itiner.nutiteq.NutiteqMap;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-public class ResultList extends ListActivity {
+public class ResultList extends ListFragment {
 
 	private static String[] cementeries;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list);
 		cementeries = getResources().getStringArray(R.array.necropolises);
-		ListView lv = getListView();
-//		setListAdapter(createAdapter());
-
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		ListView lv = (ListView) inflater.inflate(R.layout.list, container,false);
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-				Intent i = new Intent(getApplicationContext(), NutiteqMap.class);
+				Intent i = new Intent(getActivity(), NutiteqMap.class);
 				i.putExtra("id", position);
 				startActivity(i);
 			}
 		});
+		return lv;
 	}
-
-//	public ListAdapter createAdapter() {
-////		return new MyBaseAdapter(this, PoznanGeoJSONHandler.getResults());
-//	}
 
 	private static String getCmName(Long id) {
 		return cementeries[id.intValue()];
-	}
-
-	public class MyBaseAdapter extends BaseAdapter {
-
-		private LayoutInflater mInflater;
-		private List<Departed> list;
-
-		public MyBaseAdapter(Context ctx, List<Departed> list) {
-			mInflater = LayoutInflater.from(ctx);
-			this.list = list;
-		}
-
-		@Override
-		public int getCount() {
-			return list.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return list.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			convertView = mInflater.inflate(R.layout.list_item, parent, false);
-			final Departed dt = (Departed) (getItem(position));
-
-			((TextView) convertView.findViewById(R.id.surname_name)).setText(dt
-					.getSurname() + " " + dt.getName());
-			((TextView) convertView.findViewById(R.id.list_cementry))
-					.setText(getCmName(dt.getCmId()));
-			((TextView) convertView.findViewById(R.id.list_value_dateBirth))
-					.setText(formatDate(dt.getBirthDate()));
-			((TextView) convertView.findViewById(R.id.list_value_dateDeath))
-					.setText(formatDate(dt.getDeathDate()));
-			((TextView) convertView.findViewById(R.id.list_value_dateBurial))
-					.setText(formatDate(dt.getBurialDate()));
-			return convertView;
-		}
-
-	}
-
-	private static final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-
-	private static String formatDate(Date d) {
-		if (d == null) {
-			return null;
-		}
-		return f.format(d);
 	}
 
 }
