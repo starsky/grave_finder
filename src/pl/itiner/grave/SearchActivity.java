@@ -18,7 +18,7 @@
 
 package pl.itiner.grave;
 
-import pl.itiner.fetch.GraveFinderProvider;
+import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.fetch.QueryParams;
 import android.content.Intent;
 import android.database.Cursor;

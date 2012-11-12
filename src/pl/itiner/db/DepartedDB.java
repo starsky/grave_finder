@@ -1,4 +1,4 @@
-package pl.itiner.fetch;
+package pl.itiner.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

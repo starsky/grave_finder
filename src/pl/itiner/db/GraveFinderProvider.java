@@ -1,10 +1,12 @@
-package pl.itiner.fetch;
+package pl.itiner.db;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import pl.itiner.fetch.QueryParams;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;

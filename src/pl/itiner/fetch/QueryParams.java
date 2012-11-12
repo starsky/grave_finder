@@ -3,6 +3,8 @@ package pl.itiner.fetch;
 import java.text.ParseException;
 import java.util.Date;
 
+import pl.itiner.db.GraveFinderProvider;
+
 import android.net.Uri;
 
 import com.google.common.base.Strings;

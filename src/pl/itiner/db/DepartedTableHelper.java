@@ -1,4 +1,4 @@
-package pl.itiner.fetch;
+package pl.itiner.db;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
