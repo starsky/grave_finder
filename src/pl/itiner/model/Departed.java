@@ -27,9 +27,9 @@ public class Departed {
 	private String id;
 	private DepartedProperties properties;
 
-	protected Departed(DepartedProperties properties, String id,
+	public Departed(DepartedProperties properties, String id,
 			Location location) {
-		this.properties = properties;
+		this.id = id;
 		this.location = location;
 		this.properties = properties;
 	}

@@ -28,13 +28,13 @@ public class DepartedProperties {
 			GregorianCalendar.JANUARY, 1).getTime().getTime(); // 0001-01-01
 
 	private static Date checkMissingValues(Date date) {
-		if (date.getTime() == missingDate) {
+		if (date ==null || date.getTime() == missingDate) {
 			return null;
 		}
 		return date;
 	}
 
-	protected DepartedProperties() {
+	public DepartedProperties() {
 	}
 
 	public String getSurname() {

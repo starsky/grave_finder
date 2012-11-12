@@ -36,10 +36,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 /**
- * 
- */
-
-/**
  * TODO złap gdzieś wyjątek parsowania
  * 
  */
@@ -64,11 +60,7 @@ public final class PoznanGeoJSONHandler {
 	private QueryParams params;
 	private String serverUri;
 
-	private PoznanGeoJSONHandler() {
-
-	}
-
-	private PoznanGeoJSONHandler(QueryParams params, Context ctx) {
+	public PoznanGeoJSONHandler(QueryParams params, Context ctx) {
 		this.params = params;
 		serverUri = ctx.getResources().getString(
 				R.string.poznan_feature_server_uri);

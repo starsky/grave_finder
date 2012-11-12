@@ -4,9 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <fragment
-        android:id="@+id/search_form_fragment"
-        android:name="pl.itiner.grave.GFormFragment"
+    <FrameLayout
+        android:id="@+id/content_fragment_placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

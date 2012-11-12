@@ -51,7 +51,7 @@ public final class GraveFinderProvider extends ContentProvider {
 	}
 
 	private DepartedDB dbHelper;
-	static final SimpleDateFormat dateFormat = new SimpleDateFormat(
+	public static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd-MM-yyyy");
 
 	@Override
@@ -92,8 +92,9 @@ public final class GraveFinderProvider extends ContentProvider {
 		if (sURIMatcher.match(uri) == GRAVES_URI_ID) {
 			final SQLiteDatabase db = dbHelper.getWritableDatabase();
 			long id = db.insert(DepartedTableHelper.TABLE_NAME, null, values);
-			getContext().getContentResolver().notifyChange(uri, null);
-			return Uri.withAppendedPath(CONTENT_URI, id + "");
+			Uri insertUri = ContentUris.withAppendedId(CONTENT_URI, id);
+			getContext().getContentResolver().notifyChange(insertUri, null);
+			return insertUri;
 		} else {
 			throw new IllegalArgumentException("Unknown uri: " + uri);
 		}
@@ -139,7 +140,7 @@ public final class GraveFinderProvider extends ContentProvider {
 			String[] whereArgs = createWhere(uri, builder, queryParams);
 			Cursor c = builder.query(db, projection, null, whereArgs, null,
 					null, null);
-			c.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
+			c.setNotificationUri(getContext().getContentResolver(), uri);
 			return c;
 		} catch (NumberFormatException e) {
 		} catch (ParseException e) {
@@ -232,5 +233,35 @@ public final class GraveFinderProvider extends ContentProvider {
 	// getContext().getContentResolver().insert(CONTENT_URI, values);
 	// }
 	// }
+
+	public static Uri createUri(QueryParams params) {
+		Uri.Builder builder = new Uri.Builder();
+		builder.scheme("content");
+		builder.authority(SIMPLE_AUTHORITY);
+		builder.appendPath(BASE_PATH);
+		if (params.name != null)
+			builder.appendQueryParameter(GraveFinderProvider.NAME_QUERY_PARAM,
+					params.name);
+		if (params.surename != null)
+			builder.appendQueryParameter(
+					GraveFinderProvider.SURENAME_QUERY_PARAM, params.surename);
+		if (params.cmId != null)
+			builder.appendQueryParameter(
+					GraveFinderProvider.CEMENTARY_ID_QUERY_PARAM, params.cmId
+							+ "");
+		if (params.birthDate != null)
+			builder.appendQueryParameter(
+					GraveFinderProvider.BIRTH_DATE_QUERY_PARAM,
+					dateFormat.format(params.birthDate));
+		if (params.burialDate != null)
+			builder.appendQueryParameter(
+					GraveFinderProvider.BURIAL_DATE_QUERY_PARAM,
+					dateFormat.format(params.burialDate));
+		if (params.deathDate != null)
+			builder.appendQueryParameter(
+					GraveFinderProvider.DEATH_DATE_QUERY_PARAM,
+					dateFormat.format(params.deathDate));
+		return builder.build();
+	}
 
 }

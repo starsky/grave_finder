@@ -1,5 +1,10 @@
 package pl.itiner.grave;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import pl.itiner.fetch.QueryParams;
+import android.app.Activity;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -20,6 +25,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 public class GFormFragment extends Fragment {
+	public static final String TAG = "GFormFragment";
 	/** Called when the activity is first created. */
 	private static final int PROGRESSBAR = 1;
 	private static final int PROGRESSBAR_GONE = 2;
@@ -41,6 +47,19 @@ public class GFormFragment extends Fragment {
 	private int whichDate = NONE_DATE;
 	private Button find;
 	private RadioGroup dateGroup;
+
+	private SearchActivity activity;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof SearchActivity) {
+			this.activity = (SearchActivity) activity;
+		} else {
+			throw new IllegalArgumentException("Activity is not instance of "
+					+ SearchActivity.class.getSimpleName());
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -119,17 +138,42 @@ public class GFormFragment extends Fragment {
 		find.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				editTextName.requestFocus();
-//				cm = (ConnectivityManager) getActivity().getSystemService(
-//						Context.CONNECTIVITY_SERVICE);
-//				if (isOnline()) {
-//					new Thread(th_searchGraves).start();
-//				}
-//				if (!isOnline()) {
-//					Toast.makeText(getApplicationContext(),
-//							R.string.check_conn, Toast.LENGTH_SHORT).show();
-//				}
-//
+				editTextName.requestFocus();
+				Long tmpNecropolisId = necropolis.getSelectedItemId() != 0 ? necropolis
+						.getSelectedItemId() : null;
+				Date deathDate = null;
+				Date burialDate = null;
+				Date birthDate = null;
+
+				Date tmpDate = new GregorianCalendar(datePicker.getYear(),
+						datePicker.getMonth(), datePicker.getDayOfMonth())
+						.getTime();
+				switch (whichDate) {
+				case DEATH_DATE:
+					deathDate = tmpDate;
+					break;
+				case BIRTH_DATE:
+					birthDate = tmpDate;
+					break;
+				case BURIAL_DATE:
+					burialDate = tmpDate;
+					break;
+				}
+				final QueryParams params = new QueryParams(editTextName
+						.getText().toString(), editTextSurname.getText()
+						.toString(), tmpNecropolisId, birthDate, burialDate,
+						deathDate);
+				activity.search(params);
+				// cm = (ConnectivityManager) getActivity().getSystemService(
+				// Context.CONNECTIVITY_SERVICE);
+				// if (isOnline()) {
+				// new Thread(th_searchGraves).start();
+				// }
+				// if (!isOnline()) {
+				// Toast.makeText(getApplicationContext(),
+				// R.string.check_conn, Toast.LENGTH_SHORT).show();
+				// }
+				//
 			}
 		});
 	}
