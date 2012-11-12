@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import pl.itiner.model.Departed;
-
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -19,8 +17,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-public final class GraveFinderProvider extends ContentProvider implements
-		ResponseHandler<List<Departed>> {
+public final class GraveFinderProvider extends ContentProvider {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "GraveFinderProvider";
@@ -140,10 +137,6 @@ public final class GraveFinderProvider extends ContentProvider implements
 			SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
 			builder.setTables(DepartedTableHelper.TABLE_NAME);
 			String[] whereArgs = createWhere(uri, builder, queryParams);
-			DataHandler<List<Departed>> remoteDataHandler = PoznanGeoJSONHandler
-					.createInstance(queryParams, getContext());
-			remoteDataHandler.setResponseHandler(this);
-			new Thread(remoteDataHandler).start();
 			Cursor c = builder.query(db, projection, null, whereArgs, null,
 					null, null);
 			c.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
@@ -210,34 +203,34 @@ public final class GraveFinderProvider extends ContentProvider implements
 		}
 	}
 
-	@Override
-	public synchronized void handleResponse(List<Departed> data) {
-		for (Departed d : data) {
-			ContentValues values = new ContentValues();
-			values.put(DepartedTableHelper.COLUMN_ID, d.getId());
-			values.put(DepartedTableHelper.COLUMN_DATE_BIRTH,
-					d.getBirthDate() != null ? d.getBirthDate().getTime()
-							: null);
-			values.put(DepartedTableHelper.COLUMN_DATE_BURIAL, d
-					.getBurialDate() != null ? d.getBurialDate().getTime()
-					: null);
-			values.put(DepartedTableHelper.COLUMN_DATE_DEATH,
-					d.getDeathDate() != null ? d.getDeathDate().getTime()
-							: null);
-			values.put(DepartedTableHelper.COLUMN_FAMILY, d.getFamily());
-			values.put(DepartedTableHelper.COLUMN_FIELD, d.getField());
-			values.put(DepartedTableHelper.COLUMN_LAT, d.getLocation()
-					.getLatitude());
-			values.put(DepartedTableHelper.COLUMN_LON, d.getLocation()
-					.getLongitude());
-			values.put(DepartedTableHelper.COLUMN_NAME, d.getName());
-			values.put(DepartedTableHelper.COLUMN_PLACE, d.getPlace());
-			values.put(DepartedTableHelper.COLUMN_QUARTER, d.getQuater());
-			values.put(DepartedTableHelper.COLUMN_ROW, d.getRow());
-			values.put(DepartedTableHelper.COLUMN_SIZE, d.getSize());
-			values.put(DepartedTableHelper.COLUMN_SURENAME, d.getSurname());
-			getContext().getContentResolver().insert(CONTENT_URI, values);
-		}
-	}
+	// @Override
+	// public synchronized void handleResponse(List<Departed> data) {
+	// for (Departed d : data) {
+	// ContentValues values = new ContentValues();
+	// values.put(DepartedTableHelper.COLUMN_ID, d.getId());
+	// values.put(DepartedTableHelper.COLUMN_DATE_BIRTH,
+	// d.getBirthDate() != null ? d.getBirthDate().getTime()
+	// : null);
+	// values.put(DepartedTableHelper.COLUMN_DATE_BURIAL, d
+	// .getBurialDate() != null ? d.getBurialDate().getTime()
+	// : null);
+	// values.put(DepartedTableHelper.COLUMN_DATE_DEATH,
+	// d.getDeathDate() != null ? d.getDeathDate().getTime()
+	// : null);
+	// values.put(DepartedTableHelper.COLUMN_FAMILY, d.getFamily());
+	// values.put(DepartedTableHelper.COLUMN_FIELD, d.getField());
+	// values.put(DepartedTableHelper.COLUMN_LAT, d.getLocation()
+	// .getLatitude());
+	// values.put(DepartedTableHelper.COLUMN_LON, d.getLocation()
+	// .getLongitude());
+	// values.put(DepartedTableHelper.COLUMN_NAME, d.getName());
+	// values.put(DepartedTableHelper.COLUMN_PLACE, d.getPlace());
+	// values.put(DepartedTableHelper.COLUMN_QUARTER, d.getQuater());
+	// values.put(DepartedTableHelper.COLUMN_ROW, d.getRow());
+	// values.put(DepartedTableHelper.COLUMN_SIZE, d.getSize());
+	// values.put(DepartedTableHelper.COLUMN_SURENAME, d.getSurname());
+	// getContext().getContentResolver().insert(CONTENT_URI, values);
+	// }
+	// }
 
 }

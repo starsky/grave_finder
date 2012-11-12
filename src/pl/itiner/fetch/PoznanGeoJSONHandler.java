@@ -43,18 +43,7 @@ import com.google.gson.reflect.TypeToken;
  * TODO złap gdzieś wyjątek parsowania
  * 
  */
-public final class PoznanGeoJSONHandler implements DataHandler<List<Departed>> {
-
-	private static DataHandler<List<Departed>> prototype = new PoznanGeoJSONHandler();
-	
-	public synchronized static void setPrototype(DataHandler<List<Departed>> newPrototype) {
-		prototype = newPrototype;
-	}
-	
-	public synchronized static DataHandler<List<Departed>> createInstance(
-			QueryParams params, Context ctx) {
-		return prototype.clone(params, ctx);
-	}
+public final class PoznanGeoJSONHandler {
 
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static final String TAG = "GeoJSON";
@@ -74,7 +63,6 @@ public final class PoznanGeoJSONHandler implements DataHandler<List<Departed>> {
 
 	private QueryParams params;
 	private String serverUri;
-	private ResponseHandler<List<Departed>> responseHandler;
 
 	private PoznanGeoJSONHandler() {
 
@@ -86,7 +74,7 @@ public final class PoznanGeoJSONHandler implements DataHandler<List<Departed>> {
 				R.string.poznan_feature_server_uri);
 	}
 
-	private List<Departed> executeQuery() throws IOException {
+	public List<Departed> executeQuery() throws IOException {
 		Uri uri = prepeareURL();
 		String resp = HttpDownloadTask.getResponse(uri);
 		Gson gson = g.create();
@@ -141,27 +129,6 @@ public final class PoznanGeoJSONHandler implements DataHandler<List<Departed>> {
 			queryableParam.deleteCharAt(queryableParam.length() - 1);
 		b.appendQueryParameter("queryable", queryableParam.toString());
 		return b.build();
-	}
-
-	@Override
-	public void run() {
-		try {
-			List<Departed> result = executeQuery();
-			if (responseHandler != null) {
-				responseHandler.handleResponse(result);
-			}
-		} catch (IOException e) {
-		}
-	}
-
-	@Override
-	public void setResponseHandler(ResponseHandler<List<Departed>> handler) {
-		responseHandler = handler;
-	}
-
-	@Override
-	public DataHandler<List<Departed>> clone(QueryParams params, Context ctx) {
-		return new PoznanGeoJSONHandler(params, ctx);
 	}
 
 }
