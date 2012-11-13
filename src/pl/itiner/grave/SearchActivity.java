@@ -61,13 +61,14 @@ public class SearchActivity extends FragmentActivity implements
 		transation.commit();
 		adapter = new SimpleCursorAdapter(this, R.layout.list_item, null,
 				new String[] { DepartedTableHelper.COLUMN_NAME,
+						DepartedTableHelper.COLUMN_SURENAME,
 						DepartedTableHelper.COLUMN_CEMENTERY_ID,
 						DepartedTableHelper.COLUMN_DATE_BIRTH,
 						DepartedTableHelper.COLUMN_DATE_DEATH,
 						DepartedTableHelper.COLUMN_DATE_BURIAL }, new int[] {
-						R.id.surname_name, R.id.list_cementry,
+						R.id.list_value_name,R.id.list_value_surname, R.id.list_value_cementry,
 						R.id.list_value_dateBirth, R.id.list_value_dateDeath,
-						R.id.burial_date }, SimpleCursorAdapter.NO_SELECTION);
+						R.id.list_value_dateBurial }, SimpleCursorAdapter.NO_SELECTION);
 		adapter.setViewBinder(new ResultList.ResultListViewBinder());
 		listFragment.setListAdapter(adapter);
 	}

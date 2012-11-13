@@ -44,7 +44,7 @@ public final class PoznanGeoJSONHandler {
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static final String TAG = "GeoJSON";
 
-	static final int MAX_FETCH_SIZE = 5;
+	static final int MAX_FETCH_SIZE = 25;
 	private static final Type COLLECTION_TYPE = new TypeToken<List<Departed>>() {
 	}.getType();
 
