@@ -18,6 +18,7 @@
 
 package pl.itiner.grave;
 
+import pl.itiner.db.DepartedTableHelper;
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.fetch.JsonFetchService;
 import pl.itiner.fetch.QueryParams;
@@ -31,6 +32,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,16 +42,34 @@ public class SearchActivity extends FragmentActivity implements
 
 	private static final String CONTENT_PROVIDER_URI = "CONTENT_PROVIDER_URI";
 	private FragmentManager fragmentMgr;
-
+	private SimpleCursorAdapter adapter;
+	
+	private GFormFragment formFragment;
+	private ResultList listFragment;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		formFragment = new GFormFragment();
+		listFragment = new ResultList();
+		
 		fragmentMgr = getSupportFragmentManager();
 		FragmentTransaction transation = fragmentMgr.beginTransaction();
-		transation.add(R.id.content_fragment_placeholder, new GFormFragment(),
+		transation.add(R.id.content_fragment_placeholder, formFragment,
 				"CONTENT_FRAGMENT");
 		transation.commit();
+		adapter = new SimpleCursorAdapter(this, R.layout.list_item, null,
+				new String[] { DepartedTableHelper.COLUMN_NAME,
+						DepartedTableHelper.COLUMN_CEMENTERY_ID,
+						DepartedTableHelper.COLUMN_DATE_BIRTH,
+						DepartedTableHelper.COLUMN_DATE_DEATH,
+						DepartedTableHelper.COLUMN_DATE_BURIAL }, new int[] {
+						R.id.surname_name, R.id.list_cementry,
+						R.id.list_value_dateBirth, R.id.list_value_dateDeath,
+						R.id.burial_date }, SimpleCursorAdapter.NO_SELECTION);
+		adapter.setViewBinder(new ResultList.ResultListViewBinder());
+		listFragment.setListAdapter(adapter);
 	}
 
 	public void search(QueryParams params) {
@@ -177,6 +197,7 @@ public class SearchActivity extends FragmentActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
+		adapter.swapCursor(c);
 		goToList(c);
 
 	}
@@ -188,7 +209,7 @@ public class SearchActivity extends FragmentActivity implements
 				&& fragmentMgr.findFragmentByTag(CONTENT_FRAGMENT_TAG) instanceof GFormFragment) {
 			FragmentTransaction transaction = fragmentMgr.beginTransaction();
 			transaction.replace(R.id.content_fragment_placeholder,
-					new ResultList(), CONTENT_FRAGMENT_TAG);
+					listFragment, CONTENT_FRAGMENT_TAG);
 			transaction.addToBackStack(null);
 			transaction.commitAllowingStateLoss();
 		}
@@ -196,6 +217,6 @@ public class SearchActivity extends FragmentActivity implements
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
-
+		adapter.swapCursor(null);
 	}
 }

@@ -18,16 +18,20 @@
 
 package pl.itiner.grave;
 
+import pl.itiner.db.DepartedTableHelper;
 import pl.itiner.nutiteq.NutiteqMap;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ResultList extends ListFragment {
 
@@ -45,7 +49,6 @@ public class ResultList extends ListFragment {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-
 				Intent i = new Intent(getActivity(), NutiteqMap.class);
 				i.putExtra("id", position);
 				startActivity(i);
@@ -56,6 +59,20 @@ public class ResultList extends ListFragment {
 
 	private static String getCmName(Long id) {
 		return cementeries[id.intValue()];
+	}
+	
+	final static class ResultListViewBinder implements SimpleCursorAdapter.ViewBinder {
+
+		@Override
+		public boolean setViewValue(View view, Cursor c, int columnIndex) {
+			if(c.getColumnName(columnIndex).equals(DepartedTableHelper.COLUMN_CEMENTERY_ID)) {
+				TextView textView = (TextView) view;
+				textView.setText(getCmName(c.getLong(columnIndex)));
+				return true;
+			}
+			return false;
+		}
+		
 	}
 
 }
