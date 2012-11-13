@@ -57,8 +57,8 @@ public final class PoznanGeoJSONHandler {
 		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());
 	}
 
-	private QueryParams params;
-	private String serverUri;
+	private final QueryParams params;
+	private final String serverUri;
 
 	public PoznanGeoJSONHandler(QueryParams params, Context ctx) {
 		this.params = params;
@@ -76,23 +76,23 @@ public final class PoznanGeoJSONHandler {
 	private static Map<String, String> createQueryParamsMap(QueryParams params) {
 		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 		Map<String, String> map = new HashMap<String, String>();
-		if (params.cmId != null) {
-			map.put("cm_id", params.cmId.toString());
+		if (params.isFilledCmId()) {
+			map.put("cm_id", params.getCmId()+"");
 		}
-		if (filledStr(params.name)) {
-			map.put("g_name", cleanStr(params.name));
+		if (params.isFilledName()) {
+			map.put("g_name", cleanStr(params.getName()));
 		}
-		if (filledStr(params.surename)) {
-			map.put("g_surname", cleanStr(params.surename));
+		if (params.isFilledSurename()) {
+			map.put("g_surname", cleanStr(params.getSurename()));
 		}
-		if (params.deathDate != null) {
-			map.put("g_date_death", formatter.format(params.deathDate));
+		if (params.isFilledDeathDate()) {
+			map.put("g_date_death", formatter.format(params.getDeathDate()));
 		}
-		if (params.burialDate != null) {
-			map.put("g_date_burial", formatter.format(params.burialDate));
+		if (params.isFilledBurialDate()) {
+			map.put("g_date_burial", formatter.format(params.getBurialDate()));
 		}
-		if (params.birthDate != null) {
-			map.put("g_date_birth", formatter.format(params.birthDate));
+		if (params.isFilledBirthDate()) {
+			map.put("g_date_birth", formatter.format(params.getBirthDate()));
 		}
 		return map;
 	}

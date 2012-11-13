@@ -73,6 +73,8 @@
             android:authorities="pl.itiner.grave.GraveFinderProvider"
             android:exported="false" >
         </provider>
+
+        <service android:name="pl.itiner.fetch.JsonFetchService" />
     </application>
 
 </manifest>

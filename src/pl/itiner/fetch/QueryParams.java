@@ -1,58 +1,148 @@
 package pl.itiner.fetch;
 
-import java.text.ParseException;
 import java.util.Date;
 
-import pl.itiner.db.GraveFinderProvider;
-
-import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.common.base.Strings;
 
-public final class QueryParams {
-	public final String name;
-	public final String surename;
-	public final Long cmId;
-	public final Date birthDate;
-	public final Date burialDate;
-	public final Date deathDate;
+public final class QueryParams implements Parcelable {
+	private final String name;
+	private final String surename;
+	private final long cmId;
+	private final long birthDateTime;
+	private final long burialDateTime;
+	private final long deathDateTime;
+
+	private QueryParams(Parcel in) {
+		name = in.readString();
+		surename = in.readString();
+		cmId = in.readLong();
+		burialDateTime = in.readLong();
+		birthDateTime = in.readLong();
+		deathDateTime = in.readLong();
+	}
+
+	public static final Parcelable.Creator<QueryParams> CREATOR = new Parcelable.Creator<QueryParams>() {
+		public QueryParams createFromParcel(Parcel in) {
+			return new QueryParams(in);
+		}
+
+		public QueryParams[] newArray(int size) {
+			return new QueryParams[size];
+		}
+	};
 
 	public QueryParams(String name, String surename, Long cmId, Date birthDate,
 			Date burialDate, Date deathDate) {
-		super();
-		this.name = Strings.emptyToNull(cleanStr(name));
-		this.surename = Strings.emptyToNull(cleanStr(surename));
-		this.cmId = cmId;
-		this.birthDate = birthDate;
-		this.burialDate = burialDate;
-		this.deathDate = deathDate;
+		this.name = cleanStr(Strings.nullToEmpty(name));
+		this.surename = cleanStr(Strings.nullToEmpty(surename));
+		this.cmId = cmId == null ? Long.MIN_VALUE : cmId;
+		this.birthDateTime = birthDate == null ? Long.MIN_VALUE : birthDate
+				.getTime();
+		this.burialDateTime = burialDate == null ? Long.MIN_VALUE : burialDate
+				.getTime();
+		this.deathDateTime = deathDate == null ? Long.MIN_VALUE : deathDate
+				.getTime();
 	}
 
-	public QueryParams(Uri uri) throws ParseException, NumberFormatException {
-		name = Strings.emptyToNull(cleanStr(uri
-				.getQueryParameter(GraveFinderProvider.NAME_QUERY_PARAM)));
-		surename = Strings.emptyToNull(cleanStr(uri
-				.getQueryParameter(GraveFinderProvider.SURENAME_QUERY_PARAM)));
-		cmId = uri
-				.getQueryParameter(GraveFinderProvider.CEMENTARY_ID_QUERY_PARAM) == null ? null
-				: Long.valueOf(uri
-						.getQueryParameter(GraveFinderProvider.CEMENTARY_ID_QUERY_PARAM));
-		birthDate = uri
-				.getQueryParameter(GraveFinderProvider.BIRTH_DATE_QUERY_PARAM) == null ? null
-				: GraveFinderProvider.dateFormat
-						.parse(uri
-								.getQueryParameter(GraveFinderProvider.BIRTH_DATE_QUERY_PARAM));
-		burialDate = uri
-				.getQueryParameter(GraveFinderProvider.BURIAL_DATE_QUERY_PARAM) == null ? null
-				: GraveFinderProvider.dateFormat
-						.parse(uri
-								.getQueryParameter(GraveFinderProvider.BURIAL_DATE_QUERY_PARAM));
-		deathDate = uri
-				.getQueryParameter(GraveFinderProvider.DEATH_DATE_QUERY_PARAM) == null ? null
-				: GraveFinderProvider.dateFormat
-						.parse(uri
-								.getQueryParameter(GraveFinderProvider.DEATH_DATE_QUERY_PARAM));
+	public String getName() {
+		if (!isFilledName()) {
+			throw new IllegalStateException("Name is not filled.");
+		}
+		return name;
 	}
+
+	public String getSurename() {
+		if (!isFilledSurename()) {
+			throw new IllegalStateException("Surename is not filled.");
+		}
+		return surename;
+	}
+
+	public long getCmId() {
+		if (!isFilledCmId()) {
+			throw new IllegalStateException("Cmid is not filled.");
+		}
+		return cmId;
+	}
+
+	public Date getBirthDate() {
+		if (!isFilledBirthDate()) {
+			throw new IllegalStateException("Birthday date is not filled.");
+		}
+		return new Date(birthDateTime);
+	}
+
+	public Date getBurialDate() {
+		if (!isFilledBurialDate()) {
+			throw new IllegalStateException("Burial date is not filled.");
+		}
+		return new Date(burialDateTime);
+	}
+
+	public Date getDeathDate() {
+		if (!isFilledDeathDate()) {
+			throw new IllegalStateException("Death date is not filled.");
+		}
+		return new Date(deathDateTime);
+	}
+
+	public boolean isFilledName() {
+		return !Strings.isNullOrEmpty(name);
+	}
+
+	public boolean isFilledSurename() {
+		return !Strings.isNullOrEmpty(surename);
+	}
+
+	public boolean isFilledCmId() {
+		return cmId != Long.MIN_VALUE;
+	}
+
+	public boolean isFilledBirthDate() {
+		return birthDateTime != Long.MIN_VALUE;
+	}
+
+	public boolean isFilledBurialDate() {
+		return burialDateTime != Long.MIN_VALUE;
+	}
+
+	public boolean isFilledDeathDate() {
+		return deathDateTime != Long.MIN_VALUE;
+	}
+
+	// public QueryParams(Uri uri) throws ParseException, NumberFormatException
+	// {
+	// name = Strings.emptyToNull(cleanStr(uri
+	// .getQueryParameter(GraveFinderProvider.NAME_QUERY_PARAM)));
+	// surename = Strings.emptyToNull(cleanStr(uri
+	// .getQueryParameter(GraveFinderProvider.SURENAME_QUERY_PARAM)));
+	// cmId = uri
+	// .getQueryParameter(GraveFinderProvider.CEMENTARY_ID_QUERY_PARAM) == null
+	// ? null
+	// : Long.valueOf(uri
+	// .getQueryParameter(GraveFinderProvider.CEMENTARY_ID_QUERY_PARAM));
+	// birthDate = uri
+	// .getQueryParameter(GraveFinderProvider.BIRTH_DATE_QUERY_PARAM) == null ?
+	// null
+	// : GraveFinderProvider.dateFormat
+	// .parse(uri
+	// .getQueryParameter(GraveFinderProvider.BIRTH_DATE_QUERY_PARAM));
+	// burialDate = uri
+	// .getQueryParameter(GraveFinderProvider.BURIAL_DATE_QUERY_PARAM) == null ?
+	// null
+	// : GraveFinderProvider.dateFormat
+	// .parse(uri
+	// .getQueryParameter(GraveFinderProvider.BURIAL_DATE_QUERY_PARAM));
+	// deathDate = uri
+	// .getQueryParameter(GraveFinderProvider.DEATH_DATE_QUERY_PARAM) == null ?
+	// null
+	// : GraveFinderProvider.dateFormat
+	// .parse(uri
+	// .getQueryParameter(GraveFinderProvider.DEATH_DATE_QUERY_PARAM));
+	// }
 
 	private static String cleanStr(String str) {
 		if (!Strings.isNullOrEmpty(str))
@@ -62,72 +152,18 @@ public final class QueryParams {
 	}
 
 	@Override
-	/*
-	 * Generated (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((birthDate == null) ? 0 : birthDate.hashCode());
-		result = prime * result
-				+ ((burialDate == null) ? 0 : burialDate.hashCode());
-		result = prime * result + ((cmId == null) ? 0 : cmId.hashCode());
-		result = prime * result
-				+ ((deathDate == null) ? 0 : deathDate.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result
-				+ ((surename == null) ? 0 : surename.hashCode());
-		return result;
+	public int describeContents() {
+		return 0;
 	}
 
-	/*
-	 * Generated (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		QueryParams other = (QueryParams) obj;
-		if (birthDate == null) {
-			if (other.birthDate != null)
-				return false;
-		} else if (!birthDate.equals(other.birthDate))
-			return false;
-		if (burialDate == null) {
-			if (other.burialDate != null)
-				return false;
-		} else if (!burialDate.equals(other.burialDate))
-			return false;
-		if (cmId == null) {
-			if (other.cmId != null)
-				return false;
-		} else if (!cmId.equals(other.cmId))
-			return false;
-		if (deathDate == null) {
-			if (other.deathDate != null)
-				return false;
-		} else if (!deathDate.equals(other.deathDate))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (surename == null) {
-			if (other.surename != null)
-				return false;
-		} else if (!surename.equals(other.surename))
-			return false;
-		return true;
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(name);
+		dest.writeString(surename);
+		dest.writeLong(cmId);
+		dest.writeLong(burialDateTime);
+		dest.writeLong(birthDateTime);
+		dest.writeLong(deathDateTime);
 	}
 
 }

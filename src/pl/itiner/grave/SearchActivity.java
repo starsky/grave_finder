@@ -19,10 +19,10 @@
 package pl.itiner.grave;
 
 import pl.itiner.db.GraveFinderProvider;
+import pl.itiner.fetch.JsonFetchService;
 import pl.itiner.fetch.QueryParams;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -40,8 +40,7 @@ public class SearchActivity extends FragmentActivity implements
 
 	private static final String CONTENT_PROVIDER_URI = "CONTENT_PROVIDER_URI";
 	private FragmentManager fragmentMgr;
-	private Cursor cursor;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,9 +54,13 @@ public class SearchActivity extends FragmentActivity implements
 
 	public void search(QueryParams params) {
 		Bundle b = new Bundle();
-		b.putString(CONTENT_PROVIDER_URI,
-				GraveFinderProvider.createUri(params).toString());
+		b.putString(CONTENT_PROVIDER_URI, GraveFinderProvider.createUri(params)
+				.toString());
+		b.putParcelable(JsonFetchService.QUERY_PARAMS_BUNDLE, params);
 		getSupportLoaderManager().initLoader(0, b, this);
+		Intent i = new Intent(this, JsonFetchService.class);
+		i.putExtras(b);
+		startService(i);
 	}
 
 	// private Handler activityUIHandler = new Handler() {
@@ -174,18 +177,20 @@ public class SearchActivity extends FragmentActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
-		cursor = c;
-		goToList();
+		goToList(c);
 
 	}
 
-	private void goToList() {
-		if (null != cursor && cursor.getCount() > 0) {
+	private void goToList(Cursor cursor) {
+		final String CONTENT_FRAGMENT_TAG = "CONTENT_FRAGMENT";
+		if (null != cursor
+				&& cursor.getCount() > 0
+				&& fragmentMgr.findFragmentByTag(CONTENT_FRAGMENT_TAG) instanceof GFormFragment) {
 			FragmentTransaction transaction = fragmentMgr.beginTransaction();
 			transaction.replace(R.id.content_fragment_placeholder,
-					new ResultList(), "CONTENT_FRAGMENT");
+					new ResultList(), CONTENT_FRAGMENT_TAG);
 			transaction.addToBackStack(null);
-			transaction.commit();
+			transaction.commitAllowingStateLoss();
 		}
 	}
 

@@ -20,6 +20,8 @@ package pl.itiner.model;
 
 import java.util.Date;
 
+import pl.itiner.db.DepartedTableHelper;
+import android.content.ContentValues;
 import android.location.Location;
 
 public class Departed {
@@ -27,8 +29,7 @@ public class Departed {
 	private String id;
 	private DepartedProperties properties;
 
-	public Departed(DepartedProperties properties, String id,
-			Location location) {
+	public Departed(DepartedProperties properties, String id, Location location) {
 		this.id = id;
 		this.location = location;
 		this.properties = properties;
@@ -88,6 +89,29 @@ public class Departed {
 
 	public String getId() {
 		return id;
+	}
+
+	public ContentValues asContentValues() {
+		ContentValues values = new ContentValues();
+		values.put(DepartedTableHelper.COLUMN_ID, getId());
+		values.put(DepartedTableHelper.COLUMN_DATE_BIRTH,
+				getBirthDate() != null ? getBirthDate().getTime() : null);
+		values.put(DepartedTableHelper.COLUMN_DATE_BURIAL,
+				getBurialDate() != null ? getBurialDate().getTime() : null);
+		values.put(DepartedTableHelper.COLUMN_DATE_DEATH,
+				getDeathDate() != null ? getDeathDate().getTime() : null);
+		values.put(DepartedTableHelper.COLUMN_FAMILY, getFamily());
+		values.put(DepartedTableHelper.COLUMN_FIELD, getField());
+		values.put(DepartedTableHelper.COLUMN_LAT, getLocation().getLatitude());
+		values.put(DepartedTableHelper.COLUMN_LON, getLocation().getLongitude());
+		values.put(DepartedTableHelper.COLUMN_NAME, getName());
+		values.put(DepartedTableHelper.COLUMN_PLACE, getPlace());
+		values.put(DepartedTableHelper.COLUMN_QUARTER, getQuater());
+		values.put(DepartedTableHelper.COLUMN_ROW, getRow());
+		values.put(DepartedTableHelper.COLUMN_SIZE, getSize());
+		values.put(DepartedTableHelper.COLUMN_SURENAME, getSurname());
+		values.put(DepartedTableHelper.COLUMN_CEMENTERY_ID, getCmId());
+		return values;
 	}
 
 }
