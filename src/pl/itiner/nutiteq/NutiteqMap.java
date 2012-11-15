@@ -20,17 +20,27 @@ package pl.itiner.nutiteq;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
+import static pl.itiner.db.DepartedTableHelper.*;
+import pl.itiner.db.DepartedCursor;
+import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.grave.R;
 import pl.itiner.model.Departed;
-import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ZoomControls;
@@ -49,7 +59,9 @@ import com.nutiteq.ui.ThreadDrivenPanning;
 import com.nutiteq.wrappers.AppContext;
 import com.nutiteq.wrappers.Image;
 
-public class NutiteqMap extends Activity {
+public class NutiteqMap extends FragmentActivity implements
+		LoaderCallbacks<Cursor> {
+	public static final String DEPARTED_ID_BUND = "DEPARTED_ID_BUND";
 	private BasicMapComponent mapComponent;
 	private GeoMap map;
 	private boolean onRetainCalled;
@@ -58,7 +70,6 @@ public class NutiteqMap extends Activity {
 	private Place userPlace;
 	private LocationManager locManager;
 	private LocationListener locListener;
-	private Departed departed;
 	private OnMapElementListener elemListener = new OnMapElementListener() {
 
 		@Override
@@ -88,10 +99,7 @@ public class NutiteqMap extends Activity {
 		gps = new Image(BitmapFactory.decodeResource(getResources(),
 				R.drawable.dot));
 		// Get death person data
-		int id = getIntent().getExtras().getInt("id");
-		// departed = PoznanGeoJSONHandler.getResults().get(id);
-		// fill data header
-		fillHeaderWithData();
+		getSupportLoaderManager().initLoader(0, getIntent().getExtras(), this);
 		// setup position listeners
 		locListener = new NutiteqLocationListener();
 		locManager = (LocationManager) this
@@ -99,7 +107,7 @@ public class NutiteqMap extends Activity {
 		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
 				locListener);
 		// setup map
-		mapComponent = (BasicMapComponent) getLastNonConfigurationInstance();
+		mapComponent = (BasicMapComponent) getLastCustomNonConfigurationInstance();
 		if (mapComponent == null) {
 			createMapComponent();
 		}
@@ -115,16 +123,8 @@ public class NutiteqMap extends Activity {
 		final WgsPoint center = new WgsPoint(Double.parseDouble(res
 				.getString(R.string.poznan_centre_lon)), Double.parseDouble(res
 				.getString(R.string.poznan_centre_lat)));
-		final Image graveImg = new Image(BitmapFactory.decodeResource(
-				getResources(), R.drawable.graveloc));
-		final BalloonLabel graveLocationLabel = new BalloonLabel(
-				res.getString(R.string.grave), res.getString(R.string.zoom_map));
 		final BalloonLabel userLocationLabel = new BalloonLabel(
 				res.getString(R.string.your_location), "");
-		final WgsPoint graveLoc = new WgsPoint(departed.getLocation()
-				.getLongitude(), departed.getLocation().getLatitude());
-		final Place gravePlace = new Place(0, graveLocationLabel, graveImg,
-				graveLoc);
 
 		mapComponent = new BasicMapComponent(mapKey, new AppContext(this), 1,
 				1, center, initialZoom);
@@ -133,8 +133,6 @@ public class NutiteqMap extends Activity {
 		mapComponent.setSmoothZoom(true);
 		mapComponent.setPanningStrategy(new ThreadDrivenPanning());
 		mapComponent.startMapping();
-
-		mapComponent.addPlace(gravePlace);
 
 		userPlace = new Place(0, userLocationLabel, gps, userLocation);
 		mapComponent.setOnMapElementListener(elemListener);
@@ -153,7 +151,20 @@ public class NutiteqMap extends Activity {
 				locListener);
 	}
 
-	private void fillHeaderWithData() {
+	private void placeGravePin(Departed d) {
+		final Resources res = getResources();
+		final Image graveImg = new Image(BitmapFactory.decodeResource(
+				getResources(), R.drawable.graveloc));
+		final BalloonLabel graveLocationLabel = new BalloonLabel(
+				res.getString(R.string.grave), res.getString(R.string.zoom_map));
+		final WgsPoint graveLoc = new WgsPoint(d.getLocation().getLongitude(),
+				d.getLocation().getLatitude());
+		final Place gravePlace = new Place(0, graveLocationLabel, graveImg,
+				graveLoc);
+		mapComponent.addPlace(gravePlace);
+	}
+
+	private void fillHeaderWithData(Departed departed) {
 		final TextView mapSurnameName;
 		final TextView mapBirthDate;
 		final TextView mapDeathDate;
@@ -192,7 +203,8 @@ public class NutiteqMap extends Activity {
 		mapCementry.setText(cm_name);
 	}
 
-	private static final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+	private static final SimpleDateFormat f = new SimpleDateFormat(
+			"dd.MM.yyyy", Locale.getDefault());
 
 	private static String formatDate(Date d) {
 		if (d == null) {
@@ -256,7 +268,7 @@ public class NutiteqMap extends Activity {
 	}
 
 	@Override
-	public Object onRetainNonConfigurationInstance() {
+	public Object onRetainCustomNonConfigurationInstance() {
 		onRetainCalled = true;
 		return mapComponent;
 	}
@@ -297,6 +309,33 @@ public class NutiteqMap extends Activity {
 		@Override
 		public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
 		}
+
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int loaderId, Bundle b) {
+		long id = b.getLong(DEPARTED_ID_BUND);
+		final Uri uri = ContentUris.withAppendedId(
+				GraveFinderProvider.CONTENT_URI, id);
+		return new CursorLoader(this, uri,
+				new String[] { COLUMN_CEMENTERY_ID, COLUMN_DATE_BIRTH,
+						COLUMN_DATE_BURIAL, COLUMN_DATE_DEATH, COLUMN_NAME,
+						COLUMN_SURENAME, COLUMN_FIELD, COLUMN_LAT, COLUMN_LON,
+						COLUMN_ID, COLUMN_PLACE, COLUMN_QUARTER, COLUMN_ROW },
+				null, null, null);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		Departed d = new DepartedCursor(cursor);
+		cursor.moveToFirst();
+		fillHeaderWithData(d);
+		placeGravePin(d);
+
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
 
 	}
 }

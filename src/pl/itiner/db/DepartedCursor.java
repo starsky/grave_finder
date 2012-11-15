@@ -23,7 +23,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.location.Location;
 
-final class DepartedCursor extends CursorWrapper implements Departed {
+public final class DepartedCursor extends CursorWrapper implements Departed {
 
 	public DepartedCursor(Cursor cursor) {
 		super(cursor);
