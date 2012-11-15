@@ -3,7 +3,7 @@ package pl.itiner.model;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class DepartedProperties {
+class DepartedProperties {
 
 	private String g_surname;
 	private String g_name;

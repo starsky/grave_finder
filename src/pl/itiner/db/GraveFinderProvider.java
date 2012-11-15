@@ -130,7 +130,7 @@ public final class GraveFinderProvider extends ContentProvider {
 					null, null, sortOrder);
 
 			c.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
-			return c;
+			return new DepartedCursor(c);
 		default:
 			throw new IllegalArgumentException("unsupported uri: " + uri);
 		}
