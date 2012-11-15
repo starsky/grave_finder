@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import pl.itiner.fetch.QueryParams;
+import android.annotation.SuppressLint;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -51,6 +52,7 @@ public final class GraveFinderProvider extends ContentProvider {
 	}
 
 	private DepartedDB dbHelper;
+	@SuppressLint("SimpleDateFormat")
 	public static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd-MM-yyyy");
 
@@ -144,51 +146,49 @@ public final class GraveFinderProvider extends ContentProvider {
 	}
 
 	private static String[] createWhere(Uri uri, StringBuilder builder) {
+		StringBuilder delim = new StringBuilder();
 		ArrayList<String> whereArgs = new ArrayList<String>();
-		boolean delim = putDateToWhere(builder,
-				DepartedTableHelper.COLUMN_DATE_BIRTH, false, whereArgs,
-				uri.getQueryParameter(BIRTH_DATE_QUERY_PARAM));
-		delim = putDateToWhere(builder, DepartedTableHelper.COLUMN_DATE_BURIAL,
-				delim, whereArgs,
-				uri.getQueryParameter(BURIAL_DATE_QUERY_PARAM));
-		delim = putDateToWhere(builder, DepartedTableHelper.COLUMN_DATE_DEATH,
-				delim, whereArgs, uri.getQueryParameter(DEATH_DATE_QUERY_PARAM));
-		delim = putStringToWhere(builder, DepartedTableHelper.COLUMN_SURENAME,
-				delim, whereArgs, uri.getQueryParameter(SURENAME_QUERY_PARAM));
-		delim = putStringToWhere(builder, DepartedTableHelper.COLUMN_NAME,
-				delim, whereArgs, uri.getQueryParameter(NAME_QUERY_PARAM));
+		putDateToWhere(builder, DepartedTableHelper.COLUMN_DATE_BIRTH, delim,
+				whereArgs, uri.getQueryParameter(BIRTH_DATE_QUERY_PARAM));
+		putDateToWhere(builder, DepartedTableHelper.COLUMN_DATE_BURIAL, delim,
+				whereArgs, uri.getQueryParameter(BURIAL_DATE_QUERY_PARAM));
+		putDateToWhere(builder, DepartedTableHelper.COLUMN_DATE_DEATH, delim,
+				whereArgs, uri.getQueryParameter(DEATH_DATE_QUERY_PARAM));
+		putStringToWhere(builder, DepartedTableHelper.COLUMN_SURENAME, delim,
+				whereArgs, uri.getQueryParameter(SURENAME_QUERY_PARAM));
+		putStringToWhere(builder, DepartedTableHelper.COLUMN_NAME, delim,
+				whereArgs, uri.getQueryParameter(NAME_QUERY_PARAM));
 		putStringToWhere(builder, DepartedTableHelper.COLUMN_CEMENTERY_ID,
 				delim, whereArgs,
 				uri.getQueryParameter(CEMENTARY_ID_QUERY_PARAM));
 		return whereArgs.toArray(new String[whereArgs.size()]);
 	}
 
-	private static boolean putStringToWhere(StringBuilder builder,
-			String column, boolean addDelim, List<String> whereArgs,
-			Object paramValue) {
+	private static void putStringToWhere(StringBuilder builder, String column,
+			StringBuilder delim, List<String> whereArgs, Object paramValue) {
+		final String AND_DELIM = " AND ";
 		if (paramValue != null) {
-			String delim = addDelim ? " AND " : "";
-			builder.append(delim + column + "=?");
+			builder.append(delim.toString()).append(column).append("=?");
+			delim.delete(0, delim.length());
+			delim.append(AND_DELIM);
 			whereArgs.add(paramValue.toString());
-			return true;
 		}
-		return false;
 	}
 
-	private static boolean putDateToWhere(StringBuilder builder, String column,
-			boolean addDelim, List<String> whereArgs, String paramValue) {
+	private static void putDateToWhere(StringBuilder builder, String column,
+			StringBuilder delim, List<String> whereArgs, String paramValue) {
+		final String AND_DELIM = " AND ";
 		Date date;
 		try {
 			if (paramValue != null) {
 				date = dateFormat.parse(paramValue);
-				String delim = addDelim ? " AND " : "";
-				builder.append(delim + column + "=?");
+				builder.append(delim.toString()).append(column).append("=?");
 				whereArgs.add(date.getTime() + "");
-				return true;
+				delim.delete(0, delim.length());
+				delim.append(AND_DELIM);
 			}
 		} catch (ParseException e) {
 		}
-		return false;
 	}
 
 	@Override
