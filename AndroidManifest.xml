@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.itiner.grave"
     android:installLocation="auto"
-    android:versionCode="7"
-    android:versionName="1.15" >
+    android:versionCode="8"
+    android:versionName="2.1" >
 
     <uses-sdk
         android:minSdkVersion="7"
-        android:targetSdkVersion="8" />
+        android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,7 +16,9 @@
     <application
         android:icon="@drawable/icon"
         android:label="@string/app_name"
+        android:allowBackup="false"
         android:theme="@android:style/Theme.Light.NoTitleBar" >
+        
         <uses-library android:name="com.google.android.maps" />
 
         <activity android:name="pl.itiner.map.GraveMap" />
@@ -52,20 +54,6 @@
             android:name="pl.itiner.nutiteq.NutiteqMap"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
-        </activity>
-        <activity
-            android:name=".LibrariesView"
-            android:configChanges="orientation|keyboardHidden"
-            android:icon="@drawable/icon"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-        <activity
-            android:name=".LicenseView"
-            android:configChanges="orientation|keyboardHidden"
-            android:icon="@drawable/icon"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Dialog" >
         </activity>
 
         <provider
