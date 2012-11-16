@@ -5,18 +5,28 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <pl.itiner.view.TextView
-        android:id="@+id/surname_name"
-        style="@style/list_text"
-        itiner:default_text="@string/no_data"
-        android:padding="3dp"
-        android:textSize="18sp" />
+    <LinearLayout style="@style/list_grp" >
+
+        <pl.itiner.view.TextView
+            android:id="@+id/list_value_name"
+            style="@style/list_text"
+            android:padding="3dp"
+            android:textSize="18sp"
+            itiner:default_text="@string/no_data" />
+
+        <pl.itiner.view.TextView
+            android:id="@+id/list_value_surname"
+            style="@style/list_text"
+            android:padding="3dp"
+            android:textSize="18sp"
+            itiner:default_text="@string/no_data" />
+    </LinearLayout>
 
     <pl.itiner.view.TextView
-        android:id="@+id/list_cementry"
+        android:id="@+id/list_value_cementry"
         style="@style/list_text_highlighted"
-        itiner:default_text="@string/no_data"
-        android:padding="3dp" />
+        android:padding="3dp"
+        itiner:default_text="@string/no_data" />
 
     <LinearLayout style="@style/list_grp" >
 
@@ -26,8 +36,8 @@
 
         <pl.itiner.view.TextView
             android:id="@+id/list_value_dateBirth"
-            itiner:default_text="@string/no_data"
-            style="@style/list_text_highlighted" />
+            style="@style/list_text_highlighted"
+            itiner:default_text="@string/no_data" />
     </LinearLayout>
 
     <LinearLayout style="@style/list_grp" >
@@ -38,8 +48,8 @@
 
         <pl.itiner.view.TextView
             android:id="@+id/list_value_dateDeath"
-            itiner:default_text="@string/no_data"
-            style="@style/list_text_highlighted" />
+            style="@style/list_text_highlighted"
+            itiner:default_text="@string/no_data" />
     </LinearLayout>
 
     <LinearLayout style="@style/list_grp" >
@@ -50,8 +60,8 @@
 
         <pl.itiner.view.TextView
             android:id="@+id/list_value_dateBurial"
-            itiner:default_text="@string/no_data"
-            style="@style/list_text_highlighted" />
+            style="@style/list_text_highlighted"
+            itiner:default_text="@string/no_data" />
     </LinearLayout>
 
 </LinearLayout>

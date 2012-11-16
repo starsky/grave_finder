@@ -5,6 +5,7 @@ import java.util.List;
 
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.model.Departed;
+import pl.itiner.model.DepartedFactory;
 import android.app.IntentService;
 import android.content.Intent;
 
@@ -21,12 +22,14 @@ public final class JsonFetchService extends IntentService {
 		QueryParams params = (QueryParams) intent.getExtras().get(
 				QUERY_PARAMS_BUNDLE);
 		try {
-			final List<Departed> results = new PoznanGeoJSONHandler(params,
-					getApplicationContext()).executeQuery();
-			getApplicationContext().getContentResolver().delete(GraveFinderProvider.createUri(params), null, null);
+			final List<? extends Departed> results = new PoznanGeoJSONHandler(
+					params, getApplicationContext()).executeQuery();
+			getApplicationContext().getContentResolver().delete(
+					GraveFinderProvider.createUri(params), null, null);
 			for (Departed d : results) {
 				getApplicationContext().getContentResolver().insert(
-						GraveFinderProvider.CONTENT_URI, d.asContentValues());
+						GraveFinderProvider.CONTENT_URI,
+						DepartedFactory.asContentValues(d));
 			}
 		} catch (IOException e) {
 		}

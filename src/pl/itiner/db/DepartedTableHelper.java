@@ -1,32 +1,14 @@
 package pl.itiner.db;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
+import static pl.itiner.db.GraveFinderProvider.Columns.*;
 
-public final class DepartedTableHelper {
+final class DepartedTableHelper {
 	public static final String TABLE_NAME = "departeds";
-
-	public static final String COLUMN_ID = BaseColumns._ID;
-	public static final String COLUMN_LAT = "lat";
-	public static final String COLUMN_LON = "lon";
-	public static final String COLUMN_SURENAME = "surename";
-	public static final String COLUMN_NAME = "name";
-	public static final String COLUMN_DATE_BURIAL = "date_burial";
-	public static final String COLUMN_DATE_DEATH = "date_death";
-	public static final String COLUMN_DATE_BIRTH = "date_birth";
-	public static final String COLUMN_CEMENTERY_ID = "cm_id";
-	public static final String COLUMN_QUARTER = "quarter";
-	public static final String COLUMN_PLACE = "palce";
-	public static final String COLUMN_ROW = "row";
-	public static final String COLUMN_FAMILY = "family";
-	public static final String COLUMN_FIELD = "field";
-	public static final String COLUMN_SIZE = "size";
-	public static final String COLUMN_FETCHED_TIME = "fetched_time";
-	
 
 	private static final String TABLE_CREATE = "create table "
 			+ TABLE_NAME + "("  
-			+ COLUMN_ID + " INTEGER PRIMARY KEY, " 
+			+ _ID + " INTEGER PRIMARY KEY, " 
 			+ COLUMN_CEMENTERY_ID + " INTEGER NOT NULL, "
 			+ COLUMN_DATE_BIRTH  + " INTEGER NULL, "
 			+ COLUMN_DATE_BURIAL + " INTEGER NULL, "

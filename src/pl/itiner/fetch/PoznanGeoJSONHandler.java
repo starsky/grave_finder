@@ -18,7 +18,6 @@
 package pl.itiner.fetch;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -26,14 +25,10 @@ import java.util.Map;
 
 import pl.itiner.grave.R;
 import pl.itiner.model.Departed;
-import pl.itiner.model.DepartedDeserializer;
-import pl.itiner.model.DepartedListDeserializer;
+import pl.itiner.model.DepartedFactory;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 /**
  * TODO złap gdzieś wyjątek parsowania
@@ -41,21 +36,10 @@ import com.google.gson.reflect.TypeToken;
  */
 public final class PoznanGeoJSONHandler {
 
-	private static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static final String TAG = "GeoJSON";
+	private static final String DATE_FORMAT = "yyyy-MM-dd";
 
-	static final int MAX_FETCH_SIZE = 5;
-	private static final Type COLLECTION_TYPE = new TypeToken<List<Departed>>() {
-	}.getType();
-
-	private static GsonBuilder g;
-
-	static {
-		g = new GsonBuilder();
-		g.setDateFormat(DATE_FORMAT);
-		g.registerTypeAdapter(Departed.class, new DepartedDeserializer());
-		g.registerTypeAdapter(COLLECTION_TYPE, new DepartedListDeserializer());
-	}
+	static final int MAX_FETCH_SIZE = 25;
 
 	private final QueryParams params;
 	private final String serverUri;
@@ -66,18 +50,18 @@ public final class PoznanGeoJSONHandler {
 				R.string.poznan_feature_server_uri);
 	}
 
-	public List<Departed> executeQuery() throws IOException {
+	public List<? extends Departed> executeQuery() throws IOException {
 		Uri uri = prepeareURL();
 		String resp = HttpDownloadTask.getResponse(uri);
-		Gson gson = g.create();
-		return gson.fromJson(resp, COLLECTION_TYPE);
+		return DepartedFactory.parseJson(resp);
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	private static Map<String, String> createQueryParamsMap(QueryParams params) {
 		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
 		Map<String, String> map = new HashMap<String, String>();
 		if (params.isFilledCmId()) {
-			map.put("cm_id", params.getCmId()+"");
+			map.put("cm_id", params.getCmId() + "");
 		}
 		if (params.isFilledName()) {
 			map.put("g_name", cleanStr(params.getName()));
@@ -101,6 +85,7 @@ public final class PoznanGeoJSONHandler {
 		return str != null && !str.equals("");
 	}
 
+	@SuppressLint("DefaultLocale")
 	private static String cleanStr(String str) {
 		if (filledStr(str))
 			return str.toLowerCase().trim();
