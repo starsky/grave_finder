@@ -1,20 +1,6 @@
 package pl.itiner.db;
 
-import static pl.itiner.db.DepartedTableHelper.COLUMN_CEMENTERY_ID;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_DATE_BIRTH;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_DATE_BURIAL;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_DATE_DEATH;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_FAMILY;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_FIELD;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_ID;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_LAT;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_LON;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_NAME;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_PLACE;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_QUARTER;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_ROW;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_SIZE;
-import static pl.itiner.db.DepartedTableHelper.COLUMN_SURENAME;
+import static pl.itiner.db.GraveFinderProvider.Columns.*;
 
 import java.util.Date;
 
@@ -116,7 +102,7 @@ public final class DepartedCursor extends CursorWrapper implements Departed {
 
 	@Override
 	public long getId() {
-		int idx = getColumnIndexOrThrow(COLUMN_ID);
+		int idx = getColumnIndexOrThrow(_ID);
 		return getLong(idx);
 	}
 

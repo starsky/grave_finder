@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public final class DepartedDB extends SQLiteOpenHelper {
+final class DepartedDB extends SQLiteOpenHelper {
 
 	public static final String DATABASE_NAME = "departed_db";
 	public static final Integer DATABASE_VERSION = 1;

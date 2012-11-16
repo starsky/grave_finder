@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static pl.itiner.db.GraveFinderProvider.Columns.*;
+
 import pl.itiner.fetch.QueryParams;
 import android.annotation.SuppressLint;
 import android.content.ContentProvider;
@@ -16,6 +18,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 public final class GraveFinderProvider extends ContentProvider {
@@ -71,8 +74,8 @@ public final class GraveFinderProvider extends ContentProvider {
 			break;
 		case GRAVE_URI_ID:
 			long departedId = ContentUris.parseId(uri);
-			count = db.delete(DepartedTableHelper.TABLE_NAME,
-					DepartedTableHelper.COLUMN_ID + " = " + departedId, null);
+			count = db.delete(DepartedTableHelper.TABLE_NAME, _ID + " = "
+					+ departedId, null);
 			getContext().getContentResolver().notifyChange(uri, null);
 			break;
 		}
@@ -121,16 +124,14 @@ public final class GraveFinderProvider extends ContentProvider {
 			return handleQuery(uri, projection, db);
 		case GRAVE_URI_ID:
 			long departedId = ContentUris.parseId(uri);
-			c = db.query(DepartedTableHelper.TABLE_NAME, projection,
-					DepartedTableHelper.COLUMN_ID
-							+ " = "
-							+ departedId
-							+ (!TextUtils.isEmpty(selection) ? " AND ("
-									+ selection + ')' : ""), selectionArgs,
-					null, null, sortOrder);
+			c = db.query(DepartedTableHelper.TABLE_NAME, projection, _ID
+					+ " = "
+					+ departedId
+					+ (!TextUtils.isEmpty(selection) ? " AND (" + selection
+							+ ')' : ""), selectionArgs, null, null, sortOrder);
 
 			c.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
-			return new DepartedCursor(c);
+			return c;
 		default:
 			throw new IllegalArgumentException("unsupported uri: " + uri);
 		}
@@ -148,18 +149,17 @@ public final class GraveFinderProvider extends ContentProvider {
 	private static String[] createWhere(Uri uri, StringBuilder builder) {
 		StringBuilder delim = new StringBuilder();
 		ArrayList<String> whereArgs = new ArrayList<String>();
-		putDateToWhere(builder, DepartedTableHelper.COLUMN_DATE_BIRTH, delim,
-				whereArgs, uri.getQueryParameter(BIRTH_DATE_QUERY_PARAM));
-		putDateToWhere(builder, DepartedTableHelper.COLUMN_DATE_BURIAL, delim,
-				whereArgs, uri.getQueryParameter(BURIAL_DATE_QUERY_PARAM));
-		putDateToWhere(builder, DepartedTableHelper.COLUMN_DATE_DEATH, delim,
-				whereArgs, uri.getQueryParameter(DEATH_DATE_QUERY_PARAM));
-		putStringToWhere(builder, DepartedTableHelper.COLUMN_SURENAME, delim,
-				whereArgs, uri.getQueryParameter(SURENAME_QUERY_PARAM));
-		putStringToWhere(builder, DepartedTableHelper.COLUMN_NAME, delim,
-				whereArgs, uri.getQueryParameter(NAME_QUERY_PARAM));
-		putStringToWhere(builder, DepartedTableHelper.COLUMN_CEMENTERY_ID,
-				delim, whereArgs,
+		putDateToWhere(builder, COLUMN_DATE_BIRTH, delim, whereArgs,
+				uri.getQueryParameter(BIRTH_DATE_QUERY_PARAM));
+		putDateToWhere(builder, COLUMN_DATE_BURIAL, delim, whereArgs,
+				uri.getQueryParameter(BURIAL_DATE_QUERY_PARAM));
+		putDateToWhere(builder, COLUMN_DATE_DEATH, delim, whereArgs,
+				uri.getQueryParameter(DEATH_DATE_QUERY_PARAM));
+		putStringToWhere(builder, COLUMN_SURENAME, delim, whereArgs,
+				uri.getQueryParameter(SURENAME_QUERY_PARAM));
+		putStringToWhere(builder, COLUMN_NAME, delim, whereArgs,
+				uri.getQueryParameter(NAME_QUERY_PARAM));
+		putStringToWhere(builder, COLUMN_CEMENTERY_ID, delim, whereArgs,
 				uri.getQueryParameter(CEMENTARY_ID_QUERY_PARAM));
 		return whereArgs.toArray(new String[whereArgs.size()]);
 	}
@@ -237,6 +237,24 @@ public final class GraveFinderProvider extends ContentProvider {
 					GraveFinderProvider.DEATH_DATE_QUERY_PARAM,
 					dateFormat.format(params.getDeathDate()));
 		return builder.build();
+	}
+
+	public static class Columns implements BaseColumns {
+		public static final String COLUMN_LAT = "lat";
+		public static final String COLUMN_LON = "lon";
+		public static final String COLUMN_SURENAME = "surename";
+		public static final String COLUMN_NAME = "name";
+		public static final String COLUMN_DATE_BURIAL = "date_burial";
+		public static final String COLUMN_DATE_DEATH = "date_death";
+		public static final String COLUMN_DATE_BIRTH = "date_birth";
+		public static final String COLUMN_CEMENTERY_ID = "cm_id";
+		public static final String COLUMN_QUARTER = "quarter";
+		public static final String COLUMN_PLACE = "palce";
+		public static final String COLUMN_ROW = "row";
+		public static final String COLUMN_FAMILY = "family";
+		public static final String COLUMN_FIELD = "field";
+		public static final String COLUMN_SIZE = "size";
+		public static final String COLUMN_FETCHED_TIME = "fetched_time";
 	}
 
 }

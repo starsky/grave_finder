@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import pl.itiner.commons.Commons;
-import pl.itiner.db.DepartedTableHelper;
+import static pl.itiner.db.GraveFinderProvider.Columns.*;
 import pl.itiner.nutiteq.NutiteqMap;
 import android.content.Intent;
 import android.database.Cursor;
@@ -71,15 +71,14 @@ public class ResultList extends ListFragment {
 		@Override
 		public boolean setViewValue(View view, Cursor c, int columnIndex) {
 			final String columnName = c.getColumnName(columnIndex);
-			if (columnName.equals(DepartedTableHelper.COLUMN_CEMENTERY_ID)) {
+			if (columnName.equals(COLUMN_CEMENTERY_ID)) {
 				TextView textView = (TextView) view;
 				textView.setText(getCmName(c.getLong(columnIndex)));
 				return true;
 			}
-			if (columnName.equals(DepartedTableHelper.COLUMN_DATE_BIRTH)
-					|| columnName
-							.equals(DepartedTableHelper.COLUMN_DATE_BURIAL)
-					|| columnName.equals(DepartedTableHelper.COLUMN_DATE_DEATH)) {
+			if (columnName.equals(COLUMN_DATE_BIRTH)
+					|| columnName.equals(COLUMN_DATE_BURIAL)
+					|| columnName.equals(COLUMN_DATE_DEATH)) {
 				TextView textView = (TextView) view;
 				if (!c.isNull(columnIndex))
 					textView.setText(dateFormat.format(new Date((c
@@ -88,8 +87,8 @@ public class ResultList extends ListFragment {
 					textView.setText(R.string.no_data);
 				return true;
 			}
-			if (columnName.equals(DepartedTableHelper.COLUMN_NAME)
-					|| columnName.equals(DepartedTableHelper.COLUMN_SURENAME)) {
+			if (columnName.equals(COLUMN_NAME)
+					|| columnName.equals(COLUMN_SURENAME)) {
 				TextView textView = (TextView) view;
 				textView.setText(Commons.capitalizeFirstLetter(c
 						.getString(columnIndex)));

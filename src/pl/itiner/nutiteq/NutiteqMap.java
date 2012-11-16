@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static pl.itiner.db.DepartedTableHelper.*;
+import static pl.itiner.db.GraveFinderProvider.Columns.*;
 import pl.itiner.db.DepartedCursor;
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.grave.R;
@@ -321,7 +321,7 @@ public class NutiteqMap extends FragmentActivity implements
 				new String[] { COLUMN_CEMENTERY_ID, COLUMN_DATE_BIRTH,
 						COLUMN_DATE_BURIAL, COLUMN_DATE_DEATH, COLUMN_NAME,
 						COLUMN_SURENAME, COLUMN_FIELD, COLUMN_LAT, COLUMN_LON,
-						COLUMN_ID, COLUMN_PLACE, COLUMN_QUARTER, COLUMN_ROW },
+						_ID, COLUMN_PLACE, COLUMN_QUARTER, COLUMN_ROW },
 				null, null, null);
 	}
 

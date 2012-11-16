@@ -3,7 +3,7 @@ package pl.itiner.model;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import pl.itiner.db.DepartedTableHelper;
+import static pl.itiner.db.GraveFinderProvider.Columns.*;
 
 import android.content.ContentValues;
 
@@ -36,29 +36,27 @@ public final class DepartedFactory {
 
 	public static ContentValues asContentValues(Departed departed) {
 		ContentValues values = new ContentValues();
-		values.put(DepartedTableHelper.COLUMN_ID, departed.getId());
-		values.put(DepartedTableHelper.COLUMN_DATE_BIRTH, departed
-				.getBirthDate() != null ? departed.getBirthDate().getTime()
-				: null);
-		values.put(DepartedTableHelper.COLUMN_DATE_BURIAL, departed
-				.getBurialDate() != null ? departed.getBurialDate().getTime()
-				: null);
-		values.put(DepartedTableHelper.COLUMN_DATE_DEATH, departed
-				.getDeathDate() != null ? departed.getDeathDate().getTime()
-				: null);
-		values.put(DepartedTableHelper.COLUMN_FAMILY, departed.getFamily());
-		values.put(DepartedTableHelper.COLUMN_FIELD, departed.getField());
-		values.put(DepartedTableHelper.COLUMN_LAT, departed.getLocation()
-				.getLatitude());
-		values.put(DepartedTableHelper.COLUMN_LON, departed.getLocation()
-				.getLongitude());
-		values.put(DepartedTableHelper.COLUMN_NAME, departed.getName());
-		values.put(DepartedTableHelper.COLUMN_PLACE, departed.getPlace());
-		values.put(DepartedTableHelper.COLUMN_QUARTER, departed.getQuater());
-		values.put(DepartedTableHelper.COLUMN_ROW, departed.getRow());
-		values.put(DepartedTableHelper.COLUMN_SIZE, departed.getSize());
-		values.put(DepartedTableHelper.COLUMN_SURENAME, departed.getSurname());
-		values.put(DepartedTableHelper.COLUMN_CEMENTERY_ID, departed.getCmId());
+		values.put(_ID, departed.getId());
+		values.put(COLUMN_DATE_BIRTH,
+				departed.getBirthDate() != null ? departed.getBirthDate()
+						.getTime() : null);
+		values.put(COLUMN_DATE_BURIAL,
+				departed.getBurialDate() != null ? departed.getBurialDate()
+						.getTime() : null);
+		values.put(COLUMN_DATE_DEATH,
+				departed.getDeathDate() != null ? departed.getDeathDate()
+						.getTime() : null);
+		values.put(COLUMN_FAMILY, departed.getFamily());
+		values.put(COLUMN_FIELD, departed.getField());
+		values.put(COLUMN_LAT, departed.getLocation().getLatitude());
+		values.put(COLUMN_LON, departed.getLocation().getLongitude());
+		values.put(COLUMN_NAME, departed.getName());
+		values.put(COLUMN_PLACE, departed.getPlace());
+		values.put(COLUMN_QUARTER, departed.getQuater());
+		values.put(COLUMN_ROW, departed.getRow());
+		values.put(COLUMN_SIZE, departed.getSize());
+		values.put(COLUMN_SURENAME, departed.getSurname());
+		values.put(COLUMN_CEMENTERY_ID, departed.getCmId());
 		return values;
 
 	}
