@@ -27,10 +27,12 @@ import com.nutiteq.maps.UnstreamedMap;
 import com.nutiteq.utils.Utils;
 
 public class PoznanAPIMap extends EPSG2177 implements GeoMap, UnstreamedMap {
+
 	private final String baseurl;
 	private final String format;
 	private final String style;
 	private final String request;
+
 	/**
 	 * Constructor for the simple WMS implementation
 	 * 
@@ -64,7 +66,7 @@ public class PoznanAPIMap extends EPSG2177 implements GeoMap, UnstreamedMap {
 		this.format = format;
 		this.request = request;
 		this.style = style;
-		
+
 		final String epsgCode = "EPSG%3A2177";
 		final StringBuffer base = new StringBuffer(
 				Utils.prepareForParameters(baseurl));
@@ -104,8 +106,8 @@ public class PoznanAPIMap extends EPSG2177 implements GeoMap, UnstreamedMap {
 				.append(getTileSize());
 		return result.toString();
 	}
-	
-	public String createBaseUrl(String baseUrl,String layer) {
+
+	public String createBaseUrl(String baseUrl, String layer) {
 		final String epsgCode = "EPSG%3A2177";
 		final StringBuffer base = new StringBuffer(
 				Utils.prepareForParameters(baseUrl));

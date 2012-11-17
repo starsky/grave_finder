@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources><string name="poznan_feature_server_uri">http://www.poznan.pl/featureserver/featureserver.cgi/groby</string>
+    
+</resources>

@@ -3,7 +3,7 @@ package pl.itiner.model;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class DepartedProperties {
+class DepartedProperties {
 
 	private String g_surname;
 	private String g_name;
@@ -19,22 +19,22 @@ public class DepartedProperties {
 	private Date g_date_birth;
 
 	private static String capitalizeFirstLetter(String str) {
-		if (str != null && str.length() > 1)
-			return str.substring(0, 1).toUpperCase() + str.substring(1);
-		return null;
+		// if (str != null && str.length() > 1)
+		// return str.substring(0, 1).toUpperCase() + str.substring(1);
+		return str;
 	}
 
 	private static final long missingDate = new GregorianCalendar(1,
 			GregorianCalendar.JANUARY, 1).getTime().getTime(); // 0001-01-01
 
 	private static Date checkMissingValues(Date date) {
-		if (date.getTime() == missingDate) {
+		if (date == null || date.getTime() == missingDate) {
 			return null;
 		}
 		return date;
 	}
 
-	protected DepartedProperties() {
+	public DepartedProperties() {
 	}
 
 	public String getSurname() {
