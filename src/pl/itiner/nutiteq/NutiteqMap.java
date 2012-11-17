@@ -18,11 +18,24 @@
 
 package pl.itiner.nutiteq;
 
+import static android.provider.BaseColumns._ID;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_CEMENTERY_ID;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_BIRTH;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_BURIAL;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_DEATH;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_FIELD;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_LAT;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_LON;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_NAME;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_PLACE;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_QUARTER;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_ROW;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SURENAME;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static pl.itiner.db.GraveFinderProvider.Columns.*;
 import pl.itiner.db.DepartedCursor;
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.grave.R;
@@ -31,7 +44,13 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -246,6 +265,8 @@ public class NutiteqMap extends FragmentActivity implements
 		PoznanAPIMap mainMap = new PoznanAPIMap(baseUrl, tileSize, minZoom,
 				maxZoom, layerName, imageType, "", getString, copyrightTxt,
 				resolutions, minEpsgX, minEpsgY);
+		mainMap.setMissingTileImage(Image.createImage(createMissingTileBitmap(
+				mainMap.getTileSize(), getString(R.string.map_no_connection))));
 		mainMap.addTileOverlay(new MapTileOverlay() {
 			@Override
 			public String getOverlayTileUrl(MapTile tile) {
@@ -317,11 +338,10 @@ public class NutiteqMap extends FragmentActivity implements
 		long id = b.getLong(DEPARTED_ID_BUND);
 		final Uri uri = ContentUris.withAppendedId(
 				GraveFinderProvider.CONTENT_URI, id);
-		return new CursorLoader(this, uri,
-				new String[] { COLUMN_CEMENTERY_ID, COLUMN_DATE_BIRTH,
-						COLUMN_DATE_BURIAL, COLUMN_DATE_DEATH, COLUMN_NAME,
-						COLUMN_SURENAME, COLUMN_FIELD, COLUMN_LAT, COLUMN_LON,
-						_ID, COLUMN_PLACE, COLUMN_QUARTER, COLUMN_ROW },
+		return new CursorLoader(this, uri, new String[] { COLUMN_CEMENTERY_ID,
+				COLUMN_DATE_BIRTH, COLUMN_DATE_BURIAL, COLUMN_DATE_DEATH,
+				COLUMN_NAME, COLUMN_SURENAME, COLUMN_FIELD, COLUMN_LAT,
+				COLUMN_LON, _ID, COLUMN_PLACE, COLUMN_QUARTER, COLUMN_ROW },
 				null, null, null);
 	}
 
@@ -338,4 +358,26 @@ public class NutiteqMap extends FragmentActivity implements
 	public void onLoaderReset(Loader<Cursor> arg0) {
 
 	}
+
+	public static Bitmap createMissingTileBitmap(final int tileSize,
+			final String bitmapText) {
+		Bitmap canvasBitmap = Bitmap.createBitmap(tileSize, tileSize,
+				Bitmap.Config.RGB_565);
+		Canvas imageCanvas = new Canvas(canvasBitmap);
+
+		Paint textPaint = new Paint();
+		textPaint.setTextAlign(Align.CENTER);
+		textPaint.setTextSize(16f);
+
+		Paint backgroundPaint = new Paint();
+		backgroundPaint.setColor(Color.WHITE);
+		backgroundPaint.setStrokeWidth(3);
+		imageCanvas.drawRect(0, 0, tileSize, tileSize, backgroundPaint);
+
+		imageCanvas.drawText(bitmapText, tileSize / 2, tileSize / 2, textPaint);
+
+		BitmapDrawable finalImage = new BitmapDrawable(canvasBitmap);
+		return finalImage.getBitmap();
+	}
+
 }
