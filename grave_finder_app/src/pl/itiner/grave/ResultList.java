@@ -18,17 +18,22 @@
 
 package pl.itiner.grave;
 
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_CEMENTERY_ID;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_BIRTH;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_BURIAL;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_DEATH;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_NAME;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SURENAME;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import pl.itiner.commons.Commons;
-import static pl.itiner.db.GraveFinderProvider.Columns.*;
 import pl.itiner.nutiteq.NutiteqMap;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +41,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ResultList extends ListFragment {
+import com.actionbarsherlock.app.SherlockListFragment;
+
+public class ResultList extends SherlockListFragment {
 
 	private static String[] cementeries;
 

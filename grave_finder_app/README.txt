@@ -8,3 +8,4 @@ To do it you NEED TO CREATE file in res/values/nutiteq_api_key.xml with content:
 
 2. CONTACT
 If you have any question write to grave.finder.app(at)gmail.com
+ 

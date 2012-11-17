@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +23,9 @@ import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
-public class GFormFragment extends Fragment {
+import com.actionbarsherlock.app.SherlockFragment;
+
+public class GFormFragment extends SherlockFragment {
 	public static final String TAG = "GFormFragment";
 	/** Called when the activity is first created. */
 	private static final int PROGRESSBAR = 1;

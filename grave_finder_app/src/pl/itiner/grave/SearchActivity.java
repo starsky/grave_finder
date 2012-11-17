@@ -18,7 +18,12 @@
 
 package pl.itiner.grave;
 
-import static pl.itiner.db.GraveFinderProvider.Columns.*;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_CEMENTERY_ID;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_BIRTH;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_BURIAL;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_DEATH;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_NAME;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SURENAME;
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.fetch.JsonFetchService;
 import pl.itiner.fetch.QueryParams;
@@ -26,18 +31,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
-public class SearchActivity extends FragmentActivity implements
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
+public class SearchActivity extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
 
 	private static final String CONTENT_PROVIDER_URI = "CONTENT_PROVIDER_URI";
@@ -141,7 +147,7 @@ public class SearchActivity extends FragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.menu, menu);
 		return true;
 	}

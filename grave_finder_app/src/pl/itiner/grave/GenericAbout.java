@@ -1,11 +1,12 @@
 package pl.itiner.grave;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.TextView;
 
-public class GenericAbout extends Activity {
+import com.actionbarsherlock.app.SherlockActivity;
+
+public class GenericAbout extends SherlockActivity {
 
 	public static final String DESC_ID = "DESC_ID";
 

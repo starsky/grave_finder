@@ -56,7 +56,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -64,6 +63,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.ZoomControls;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.mgmaps.utils.Tools;
 import com.nutiteq.BasicMapComponent;
 import com.nutiteq.android.MapView;
@@ -78,7 +78,7 @@ import com.nutiteq.ui.ThreadDrivenPanning;
 import com.nutiteq.wrappers.AppContext;
 import com.nutiteq.wrappers.Image;
 
-public class NutiteqMap extends FragmentActivity implements
+public class NutiteqMap extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
 	public static final String DEPARTED_ID_BUND = "DEPARTED_ID_BUND";
 	private BasicMapComponent mapComponent;
