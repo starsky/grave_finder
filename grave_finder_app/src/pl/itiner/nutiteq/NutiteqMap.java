@@ -266,7 +266,8 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 				maxZoom, layerName, imageType, "", getString, copyrightTxt,
 				resolutions, minEpsgX, minEpsgY);
 		mainMap.setMissingTileImage(Image.createImage(createMissingTileBitmap(
-				mainMap.getTileSize(), getString(R.string.map_no_connection))));
+				mainMap.getTileSize(), getString(R.string.map_no_connection),
+				getResources())));
 		mainMap.addTileOverlay(new MapTileOverlay() {
 			@Override
 			public String getOverlayTileUrl(MapTile tile) {
@@ -360,7 +361,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 	}
 
 	public static Bitmap createMissingTileBitmap(final int tileSize,
-			final String bitmapText) {
+			final String bitmapText, Resources res) {
 		Bitmap canvasBitmap = Bitmap.createBitmap(tileSize, tileSize,
 				Bitmap.Config.RGB_565);
 		Canvas imageCanvas = new Canvas(canvasBitmap);
@@ -376,7 +377,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 		imageCanvas.drawText(bitmapText, tileSize / 2, tileSize / 2, textPaint);
 
-		BitmapDrawable finalImage = new BitmapDrawable(canvasBitmap);
+		BitmapDrawable finalImage = new BitmapDrawable(res, canvasBitmap);
 		return finalImage.getBitmap();
 	}
 
