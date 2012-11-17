@@ -79,6 +79,7 @@ public class SearchActivity extends FragmentActivity implements
 		b.putString(CONTENT_PROVIDER_URI, GraveFinderProvider.createUri(params)
 				.toString());
 		b.putParcelable(JsonFetchService.QUERY_PARAMS_BUNDLE, params);
+		getSupportLoaderManager().destroyLoader(0);
 		getSupportLoaderManager().initLoader(0, b, this);
 		Intent i = new Intent(this, JsonFetchService.class);
 		i.putExtras(b);
