@@ -184,6 +184,7 @@ public class SearchActivity extends SherlockFragmentActivity implements
 
 	private void goToList() {
 		if (fragmentMgr.findFragmentByTag(CONTENT_FRAGMENT_TAG) instanceof GFormFragment
+				&& dialogFragment.getDialog() != null
 				&& dialogFragment.getDialog().isShowing()) {
 			dialogFragment.dismiss();
 			FragmentTransaction transaction = fragmentMgr.beginTransaction();
