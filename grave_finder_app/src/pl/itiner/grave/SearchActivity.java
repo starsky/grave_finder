@@ -24,13 +24,19 @@ import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_BURIAL;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_DEATH;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_NAME;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SURENAME;
+
+import java.lang.ref.WeakReference;
+
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.fetch.JsonFetchService;
 import pl.itiner.fetch.QueryParams;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -39,6 +45,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -53,6 +60,17 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	private FragmentManager fragmentMgr;
 	private SimpleCursorAdapter adapter;
 
+	private SherlockDialogFragment dialogFragment = new SherlockDialogFragment() {
+		public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
+			ProgressDialog dialog = new ProgressDialog(getActivity());
+			dialog.setIndeterminate(true);
+			dialog.setTitle(R.string.downloading_data);
+			dialog.setCancelable(true);
+			return dialog;
+		};
+	};
+
+	private Handler handler = new SearchActivityHandler(this);
 	private ListFragment listFragment;
 
 	@Override
@@ -93,6 +111,7 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	}
 
 	public void search(QueryParams params) {
+		dialogFragment.show(fragmentMgr, "DIALOG_FRAGMENT");
 		Bundle b = new Bundle();
 		String queryUriStr = GraveFinderProvider.createUri(params).toString();
 		b.putString(CONTENT_PROVIDER_URI, queryUriStr);
@@ -220,24 +239,48 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
 		adapter.swapCursor(c);
-		goToList(c);
+		if (null != c && c.getCount() > 0) {
+			handler.sendEmptyMessage(0);
+		}
 
 	}
 
-	private void goToList(Cursor cursor) {
-		if (null != cursor
-				&& cursor.getCount() > 0
-				&& fragmentMgr.findFragmentByTag(CONTENT_FRAGMENT_TAG) instanceof GFormFragment) {
+	private void goToList() {
+		if (fragmentMgr.findFragmentByTag(CONTENT_FRAGMENT_TAG) instanceof GFormFragment
+				&& dialogFragment.getDialog().isShowing()) {
+			dialogFragment.dismiss();
 			FragmentTransaction transaction = fragmentMgr.beginTransaction();
 			transaction.replace(R.id.content_fragment_placeholder,
 					listFragment, CONTENT_FRAGMENT_TAG);
 			transaction.addToBackStack(null);
-			transaction.commitAllowingStateLoss();
+			transaction.commit();
 		}
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
 		adapter.swapCursor(null);
+	}
+
+	public static class SearchActivityHandler extends Handler {
+		public static final int LOCAL_DATA_AVAILABLE = 0;
+
+		private WeakReference<SearchActivity> activityRef;
+
+		public SearchActivityHandler(SearchActivity activity) {
+			this.activityRef = new WeakReference<SearchActivity>(activity);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			SearchActivity activity = activityRef.get();
+			if (activity != null) {
+				switch (msg.what) {
+				case LOCAL_DATA_AVAILABLE:
+					activity.goToList();
+					break;
+				}
+			}
+		}
 	}
 }
