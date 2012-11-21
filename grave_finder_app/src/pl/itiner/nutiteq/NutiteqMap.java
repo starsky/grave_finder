@@ -56,7 +56,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -64,6 +63,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.ZoomControls;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.mgmaps.utils.Tools;
 import com.nutiteq.BasicMapComponent;
 import com.nutiteq.android.MapView;
@@ -78,7 +78,7 @@ import com.nutiteq.ui.ThreadDrivenPanning;
 import com.nutiteq.wrappers.AppContext;
 import com.nutiteq.wrappers.Image;
 
-public class NutiteqMap extends FragmentActivity implements
+public class NutiteqMap extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
 	public static final String DEPARTED_ID_BUND = "DEPARTED_ID_BUND";
 	private BasicMapComponent mapComponent;
@@ -266,7 +266,8 @@ public class NutiteqMap extends FragmentActivity implements
 				maxZoom, layerName, imageType, "", getString, copyrightTxt,
 				resolutions, minEpsgX, minEpsgY);
 		mainMap.setMissingTileImage(Image.createImage(createMissingTileBitmap(
-				mainMap.getTileSize(), getString(R.string.map_no_connection))));
+				mainMap.getTileSize(), getString(R.string.map_no_connection),
+				getResources())));
 		mainMap.addTileOverlay(new MapTileOverlay() {
 			@Override
 			public String getOverlayTileUrl(MapTile tile) {
@@ -360,7 +361,7 @@ public class NutiteqMap extends FragmentActivity implements
 	}
 
 	public static Bitmap createMissingTileBitmap(final int tileSize,
-			final String bitmapText) {
+			final String bitmapText, Resources res) {
 		Bitmap canvasBitmap = Bitmap.createBitmap(tileSize, tileSize,
 				Bitmap.Config.RGB_565);
 		Canvas imageCanvas = new Canvas(canvasBitmap);
@@ -376,7 +377,7 @@ public class NutiteqMap extends FragmentActivity implements
 
 		imageCanvas.drawText(bitmapText, tileSize / 2, tileSize / 2, textPaint);
 
-		BitmapDrawable finalImage = new BitmapDrawable(canvasBitmap);
+		BitmapDrawable finalImage = new BitmapDrawable(res, canvasBitmap);
 		return finalImage.getBitmap();
 	}
 
