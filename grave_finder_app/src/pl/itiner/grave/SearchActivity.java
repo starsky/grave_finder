@@ -30,13 +30,19 @@ import java.lang.ref.WeakReference;
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.fetch.JsonFetchService;
 import pl.itiner.fetch.QueryParams;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Messenger;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -54,6 +60,7 @@ import com.actionbarsherlock.view.MenuItem;
 public class SearchActivity extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
 
+	private static final String DIALOG_FRAGMENT = "DIALOG_FRAGMENT";
 	private static final int GRAVE_DATA_LOADER_ID = 0;
 	private static final String CONTENT_FRAGMENT_TAG = "CONTENT_FRAGMENT";
 	private static final String CONTENT_PROVIDER_URI = "CONTENT_PROVIDER_URI";
@@ -111,16 +118,19 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	}
 
 	public void search(QueryParams params) {
-		dialogFragment.show(fragmentMgr, "DIALOG_FRAGMENT");
+		dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
 		Bundle b = new Bundle();
 		String queryUriStr = GraveFinderProvider.createUri(params).toString();
 		b.putString(CONTENT_PROVIDER_URI, queryUriStr);
 		b.putParcelable(JsonFetchService.QUERY_PARAMS_BUNDLE, params);
 		getSupportLoaderManager().destroyLoader(GRAVE_DATA_LOADER_ID);
 		getSupportLoaderManager().initLoader(GRAVE_DATA_LOADER_ID, b, this);
-		Intent i = new Intent(this, JsonFetchService.class);
-		i.putExtras(b);
-		startService(i);
+		if(isConnectionAvailable()) {
+			Intent i = new Intent(this, JsonFetchService.class);
+			i.putExtra(JsonFetchService.MESSENGER_BUNDLE, new Messenger(handler));
+			i.putExtras(b);
+			startService(i);
+		}
 	}
 
 	// private Handler activityUIHandler = new Handler() {
@@ -240,9 +250,19 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
 		adapter.swapCursor(c);
 		if (null != c && c.getCount() > 0) {
-			handler.sendEmptyMessage(0);
+			handler.sendEmptyMessage(SearchActivityHandler.LOCAL_DATA_AVAILABLE);
+		} else {
+			if (!isConnectionAvailable()) {
+				handler.sendEmptyMessage(SearchActivityHandler.NO_CONNECTION);
+			}
 		}
 
+	}
+
+	private boolean isConnectionAvailable() {
+		ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo i = conMgr.getActiveNetworkInfo();
+		return i != null && i.isConnected();
 	}
 
 	private void goToList() {
@@ -263,6 +283,9 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	}
 
 	public static class SearchActivityHandler extends Handler {
+
+		public static final int DOWNLOAD_FAILED = 2;
+		public static final int NO_CONNECTION = 1;
 		public static final int LOCAL_DATA_AVAILABLE = 0;
 
 		private WeakReference<SearchActivity> activityRef;
@@ -273,11 +296,37 @@ public class SearchActivity extends SherlockFragmentActivity implements
 
 		@Override
 		public void handleMessage(Message msg) {
-			SearchActivity activity = activityRef.get();
+			final SearchActivity activity = activityRef.get();
 			if (activity != null) {
 				switch (msg.what) {
 				case LOCAL_DATA_AVAILABLE:
 					activity.goToList();
+					break;
+				case NO_CONNECTION:
+					activity.dialogFragment.dismiss();
+					new SherlockDialogFragment() {
+						public Dialog onCreateDialog(Bundle savedInstanceState) {
+							AlertDialog.Builder b = new AlertDialog.Builder(
+									activity);
+							b.setTitle(R.string.no_conn);
+							b.setMessage(R.string.turn_on_conn);
+							b.setPositiveButton(R.string.ok, null);
+							return b.create();
+						};
+					}.show(activity.fragmentMgr, DIALOG_FRAGMENT);
+					break;
+				case DOWNLOAD_FAILED:
+					activity.dialogFragment.dismiss();
+					new SherlockDialogFragment() {
+						public Dialog onCreateDialog(Bundle savedInstanceState) {
+							AlertDialog.Builder b = new AlertDialog.Builder(
+									activity);
+							b.setTitle(R.string.no_conn);
+							b.setMessage(R.string.check_conn);
+							b.setPositiveButton(R.string.ok, null);
+							return b.create();
+						};
+					}.show(activity.fragmentMgr, DIALOG_FRAGMENT);
 					break;
 				}
 			}
