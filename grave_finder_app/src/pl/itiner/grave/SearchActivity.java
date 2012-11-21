@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -46,25 +47,18 @@ import com.actionbarsherlock.view.MenuItem;
 public class SearchActivity extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
 
+	private static final int GRAVE_DATA_LOADER_ID = 0;
+	private static final String CONTENT_FRAGMENT_TAG = "CONTENT_FRAGMENT";
 	private static final String CONTENT_PROVIDER_URI = "CONTENT_PROVIDER_URI";
 	private FragmentManager fragmentMgr;
 	private SimpleCursorAdapter adapter;
 
-	private GFormFragment formFragment;
-	private ResultList listFragment;
+	private ListFragment listFragment;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		formFragment = new GFormFragment();
-		listFragment = new ResultList();
-
-		fragmentMgr = getSupportFragmentManager();
-		FragmentTransaction transation = fragmentMgr.beginTransaction();
-		transation.add(R.id.content_fragment_placeholder, formFragment,
-				"CONTENT_FRAGMENT");
-		transation.commit();
 		adapter = new SimpleCursorAdapter(
 				this,
 				R.layout.list_item,
@@ -77,16 +71,34 @@ public class SearchActivity extends SherlockFragmentActivity implements
 						R.id.list_value_dateDeath, R.id.list_value_dateBurial },
 				SimpleCursorAdapter.NO_SELECTION);
 		adapter.setViewBinder(new ResultList.ResultListViewBinder());
+
+		fragmentMgr = getSupportFragmentManager();
+		if (savedInstanceState == null) {
+			FragmentTransaction transation = fragmentMgr.beginTransaction();
+			transation.add(R.id.content_fragment_placeholder,
+					new GFormFragment(), CONTENT_FRAGMENT_TAG);
+			transation.commit();
+			listFragment = new ResultList();
+		} else {
+			if (fragmentMgr.findFragmentByTag(CONTENT_FRAGMENT_TAG) instanceof ListFragment) {
+				listFragment = (ListFragment) fragmentMgr
+						.findFragmentByTag(CONTENT_FRAGMENT_TAG);
+				getSupportLoaderManager().initLoader(GRAVE_DATA_LOADER_ID,
+						null, this);
+			} else {
+				listFragment = new ResultList();
+			}
+		}
 		listFragment.setListAdapter(adapter);
 	}
 
 	public void search(QueryParams params) {
 		Bundle b = new Bundle();
-		b.putString(CONTENT_PROVIDER_URI, GraveFinderProvider.createUri(params)
-				.toString());
+		String queryUriStr = GraveFinderProvider.createUri(params).toString();
+		b.putString(CONTENT_PROVIDER_URI, queryUriStr);
 		b.putParcelable(JsonFetchService.QUERY_PARAMS_BUNDLE, params);
-		getSupportLoaderManager().destroyLoader(0);
-		getSupportLoaderManager().initLoader(0, b, this);
+		getSupportLoaderManager().destroyLoader(GRAVE_DATA_LOADER_ID);
+		getSupportLoaderManager().initLoader(GRAVE_DATA_LOADER_ID, b, this);
 		Intent i = new Intent(this, JsonFetchService.class);
 		i.putExtras(b);
 		startService(i);
@@ -200,7 +212,8 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
 		CursorLoader loader = new CursorLoader(this);
-		loader.setUri(Uri.parse(bundle.getString(CONTENT_PROVIDER_URI)));
+		if (bundle != null)
+			loader.setUri(Uri.parse(bundle.getString(CONTENT_PROVIDER_URI)));
 		return loader;
 	}
 
@@ -212,7 +225,6 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	}
 
 	private void goToList(Cursor cursor) {
-		final String CONTENT_FRAGMENT_TAG = "CONTENT_FRAGMENT";
 		if (null != cursor
 				&& cursor.getCount() > 0
 				&& fragmentMgr.findFragmentByTag(CONTENT_FRAGMENT_TAG) instanceof GFormFragment) {
