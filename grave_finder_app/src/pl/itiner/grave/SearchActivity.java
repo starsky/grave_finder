@@ -24,13 +24,25 @@ import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_BURIAL;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_DEATH;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_NAME;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SURENAME;
+
+import java.lang.ref.WeakReference;
+
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.fetch.JsonFetchService;
 import pl.itiner.fetch.QueryParams;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -39,6 +51,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -47,12 +60,24 @@ import com.actionbarsherlock.view.MenuItem;
 public class SearchActivity extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
 
+	private static final String DIALOG_FRAGMENT = "DIALOG_FRAGMENT";
 	private static final int GRAVE_DATA_LOADER_ID = 0;
 	private static final String CONTENT_FRAGMENT_TAG = "CONTENT_FRAGMENT";
 	private static final String CONTENT_PROVIDER_URI = "CONTENT_PROVIDER_URI";
 	private FragmentManager fragmentMgr;
 	private SimpleCursorAdapter adapter;
 
+	private SherlockDialogFragment dialogFragment = new SherlockDialogFragment() {
+		public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
+			ProgressDialog dialog = new ProgressDialog(getActivity());
+			dialog.setIndeterminate(true);
+			dialog.setTitle(R.string.downloading_data);
+			dialog.setCancelable(true);
+			return dialog;
+		};
+	};
+
+	private Handler handler = new SearchActivityHandler(this);
 	private ListFragment listFragment;
 
 	@Override
@@ -93,68 +118,20 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	}
 
 	public void search(QueryParams params) {
+		dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
 		Bundle b = new Bundle();
 		String queryUriStr = GraveFinderProvider.createUri(params).toString();
 		b.putString(CONTENT_PROVIDER_URI, queryUriStr);
 		b.putParcelable(JsonFetchService.QUERY_PARAMS_BUNDLE, params);
 		getSupportLoaderManager().destroyLoader(GRAVE_DATA_LOADER_ID);
 		getSupportLoaderManager().initLoader(GRAVE_DATA_LOADER_ID, b, this);
-		Intent i = new Intent(this, JsonFetchService.class);
-		i.putExtras(b);
-		startService(i);
+		if(isConnectionAvailable()) {
+			Intent i = new Intent(this, JsonFetchService.class);
+			i.putExtra(JsonFetchService.MESSENGER_BUNDLE, new Messenger(handler));
+			i.putExtras(b);
+			startService(i);
+		}
 	}
-
-	// private Handler activityUIHandler = new Handler() {
-	// public void handleMessage(Message msg) {
-	// switch (msg.what) {
-	//
-	// case RESULTS_RECEIVED:
-	// Intent i;
-	// i = new Intent(SearchActivity.this, ResultList.class);
-	// startActivity(i);
-	// break;
-	// case PROGRESSBAR:
-	// progressBar.setVisibility(View.VISIBLE);
-	// break;
-	// case PROGRESSBAR_GONE:
-	// progressBar.setVisibility(View.GONE);
-	// break;
-	// case TOAST:
-	// Toast.makeText(getApplicationContext(), "\nBrak wyników\n",
-	// Toast.LENGTH_SHORT).show();
-	// break;
-	// }
-	// }
-	//
-	// };
-
-	// private Runnable th_searchGraves = new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// {
-	// Message dbmsg = Message.obtain();
-	// dbmsg.what = PROGRESSBAR;
-	// activityUIHandler.sendMessage(dbmsg);
-	// }
-	// runQuery();
-	// {
-	// Message dbmsg = Message.obtain();
-	// dbmsg.what = PROGRESSBAR_GONE;
-	// activityUIHandler.sendMessage(dbmsg);
-	// }
-	// // if (PoznanGeoJSONHandler.getResults().size() != 0) {
-	// // Message dbmsg = Message.obtain();
-	// // dbmsg.what = RESULTS_RECEIVED;
-	// // activityUIHandler.sendMessage(dbmsg);
-	// // } else {
-	// // Message dbmsg = Message.obtain();
-	// // dbmsg.what = TOAST;
-	// // activityUIHandler.sendMessage(dbmsg);
-	// // }
-	//
-	// }
-	// };
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -178,37 +155,6 @@ public class SearchActivity extends SherlockFragmentActivity implements
 		return true;
 	}
 
-	// private void runQuery() {
-	// Long tmpNecropolisId = necropolis.getSelectedItemId() != 0 ? necropolis
-	// .getSelectedItemId() : null;
-	// Date deathDate = null;
-	// Date burialDate = null;
-	// Date birthDate = null;
-	//
-	// Date tmpDate = new GregorianCalendar(datePicker.getYear(),
-	// datePicker.getMonth(), datePicker.getDayOfMonth()).getTime();
-	// switch (whichDate) {
-	// case DEATH_DATE:
-	// deathDate = tmpDate;
-	// break;
-	// case BIRTH_DATE:
-	// birthDate = tmpDate;
-	// break;
-	// case BURIAL_DATE:
-	// burialDate = tmpDate;
-	// break;
-	// }
-	// // try {
-	// // PoznanGeoJSONHandler.executeQuery(tmpNecropolisId,
-	// editTextName.getText()
-	// // .toString(), editTextSurname.getText().toString(),
-	// // deathDate, birthDate, burialDate);
-	// // } catch (IOException e) {
-	// // Toast.makeText(this, R.string.query_io_err, Toast.LENGTH_LONG);
-	// // Log.e("GForm", "IO Err", e);
-	// // }
-	// }
-
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
 		CursorLoader loader = new CursorLoader(this);
@@ -220,24 +166,88 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
 		adapter.swapCursor(c);
-		goToList(c);
+		if (null != c && c.getCount() > 0) {
+			handler.sendEmptyMessage(SearchActivityHandler.LOCAL_DATA_AVAILABLE);
+		} else {
+			if (!isConnectionAvailable()) {
+				handler.sendEmptyMessage(SearchActivityHandler.NO_CONNECTION);
+			}
+		}
 
 	}
 
-	private void goToList(Cursor cursor) {
-		if (null != cursor
-				&& cursor.getCount() > 0
-				&& fragmentMgr.findFragmentByTag(CONTENT_FRAGMENT_TAG) instanceof GFormFragment) {
+	private boolean isConnectionAvailable() {
+		ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo i = conMgr.getActiveNetworkInfo();
+		return i != null && i.isConnected();
+	}
+
+	private void goToList() {
+		if (fragmentMgr.findFragmentByTag(CONTENT_FRAGMENT_TAG) instanceof GFormFragment
+				&& dialogFragment.getDialog() != null
+				&& dialogFragment.getDialog().isShowing()) {
+			dialogFragment.dismiss();
 			FragmentTransaction transaction = fragmentMgr.beginTransaction();
 			transaction.replace(R.id.content_fragment_placeholder,
 					listFragment, CONTENT_FRAGMENT_TAG);
 			transaction.addToBackStack(null);
-			transaction.commitAllowingStateLoss();
+			transaction.commit();
 		}
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
 		adapter.swapCursor(null);
+	}
+
+	public static class SearchActivityHandler extends Handler {
+
+		public static final int DOWNLOAD_FAILED = 2;
+		public static final int NO_CONNECTION = 1;
+		public static final int LOCAL_DATA_AVAILABLE = 0;
+
+		private WeakReference<SearchActivity> activityRef;
+
+		public SearchActivityHandler(SearchActivity activity) {
+			this.activityRef = new WeakReference<SearchActivity>(activity);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+			final SearchActivity activity = activityRef.get();
+			if (activity != null) {
+				switch (msg.what) {
+				case LOCAL_DATA_AVAILABLE:
+					activity.goToList();
+					break;
+				case NO_CONNECTION:
+					activity.dialogFragment.dismiss();
+					new SherlockDialogFragment() {
+						public Dialog onCreateDialog(Bundle savedInstanceState) {
+							AlertDialog.Builder b = new AlertDialog.Builder(
+									activity);
+							b.setTitle(R.string.no_conn);
+							b.setMessage(R.string.turn_on_conn);
+							b.setPositiveButton(R.string.ok, null);
+							return b.create();
+						};
+					}.show(activity.fragmentMgr, DIALOG_FRAGMENT);
+					break;
+				case DOWNLOAD_FAILED:
+					activity.dialogFragment.dismiss();
+					new SherlockDialogFragment() {
+						public Dialog onCreateDialog(Bundle savedInstanceState) {
+							AlertDialog.Builder b = new AlertDialog.Builder(
+									activity);
+							b.setTitle(R.string.no_conn);
+							b.setMessage(R.string.check_conn);
+							b.setPositiveButton(R.string.ok, null);
+							return b.create();
+						};
+					}.show(activity.fragmentMgr, DIALOG_FRAGMENT);
+					break;
+				}
+			}
+		}
 	}
 }

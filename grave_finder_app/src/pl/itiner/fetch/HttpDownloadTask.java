@@ -17,25 +17,27 @@ import android.net.Uri;
 import android.net.http.AndroidHttpClient;
 import android.os.Build;
 
-final class HttpDownloadTask  {
+final class HttpDownloadTask {
 
 	private static final String USER_AGENT = "Grave-finder (www.itiner.pl)";
 
-	
 	private HttpDownloadTask() {
-		
+
 	}
-	
+
 	@SuppressLint("NewApi")
 	static String getResponse(Uri uri) throws IOException {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
 			AndroidHttpClient client = AndroidHttpClient
 					.newInstance(USER_AGENT);
-			HttpResponse resp = client.execute(new HttpGet(uri.toString()));
 			OutputStream os = new ByteArrayOutputStream();
-			resp.getEntity().writeTo(os);
-			client.close();
-			os.close();
+			try {
+				HttpResponse resp = client.execute(new HttpGet(uri.toString()));
+				resp.getEntity().writeTo(os);
+			} finally {
+				client.close();
+				os.close();
+			}
 			return os.toString();
 		} else {
 			HttpClient client = new DefaultHttpClient();

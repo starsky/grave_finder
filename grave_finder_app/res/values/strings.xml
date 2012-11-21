@@ -16,7 +16,9 @@
     <string name="death_date">śmierci</string>
     <string name="burial_date">pogrzebu</string>
     <string name="search">Szukaj</string>
-    <string name="check_conn">Brak dostępu do Internetu\nSprawdź swoje połączenie</string>
+    <string name="no_conn">Brak dostępu do Internetu.</string>
+    <string name="turn_on_conn">Włącz połączenie internetowe.</string>
+    <string name="check_conn">Sprawdź swoje połączenie.</string>
     <string name="data_api_poznan">Dane: API poznan.pl</string>
     <string name="born_abv">ur.</string>
     <string name="died_abv">zm.</string>
@@ -32,4 +34,6 @@
     <string name="itiner_logo_desc">Itiner-logo</string>
     <string name="no_data">Brak danych</string>
     <string name="map_no_connection">Brak połączenia</string>
+    <string name="downloading_data">Pobieranie danych</string>
+    <string name="ok">OK</string>
 </resources>
