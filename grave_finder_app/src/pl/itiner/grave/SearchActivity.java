@@ -133,58 +133,6 @@ public class SearchActivity extends SherlockFragmentActivity implements
 		}
 	}
 
-	// private Handler activityUIHandler = new Handler() {
-	// public void handleMessage(Message msg) {
-	// switch (msg.what) {
-	//
-	// case RESULTS_RECEIVED:
-	// Intent i;
-	// i = new Intent(SearchActivity.this, ResultList.class);
-	// startActivity(i);
-	// break;
-	// case PROGRESSBAR:
-	// progressBar.setVisibility(View.VISIBLE);
-	// break;
-	// case PROGRESSBAR_GONE:
-	// progressBar.setVisibility(View.GONE);
-	// break;
-	// case TOAST:
-	// Toast.makeText(getApplicationContext(), "\nBrak wyników\n",
-	// Toast.LENGTH_SHORT).show();
-	// break;
-	// }
-	// }
-	//
-	// };
-
-	// private Runnable th_searchGraves = new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// {
-	// Message dbmsg = Message.obtain();
-	// dbmsg.what = PROGRESSBAR;
-	// activityUIHandler.sendMessage(dbmsg);
-	// }
-	// runQuery();
-	// {
-	// Message dbmsg = Message.obtain();
-	// dbmsg.what = PROGRESSBAR_GONE;
-	// activityUIHandler.sendMessage(dbmsg);
-	// }
-	// // if (PoznanGeoJSONHandler.getResults().size() != 0) {
-	// // Message dbmsg = Message.obtain();
-	// // dbmsg.what = RESULTS_RECEIVED;
-	// // activityUIHandler.sendMessage(dbmsg);
-	// // } else {
-	// // Message dbmsg = Message.obtain();
-	// // dbmsg.what = TOAST;
-	// // activityUIHandler.sendMessage(dbmsg);
-	// // }
-	//
-	// }
-	// };
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -206,37 +154,6 @@ public class SearchActivity extends SherlockFragmentActivity implements
 		}
 		return true;
 	}
-
-	// private void runQuery() {
-	// Long tmpNecropolisId = necropolis.getSelectedItemId() != 0 ? necropolis
-	// .getSelectedItemId() : null;
-	// Date deathDate = null;
-	// Date burialDate = null;
-	// Date birthDate = null;
-	//
-	// Date tmpDate = new GregorianCalendar(datePicker.getYear(),
-	// datePicker.getMonth(), datePicker.getDayOfMonth()).getTime();
-	// switch (whichDate) {
-	// case DEATH_DATE:
-	// deathDate = tmpDate;
-	// break;
-	// case BIRTH_DATE:
-	// birthDate = tmpDate;
-	// break;
-	// case BURIAL_DATE:
-	// burialDate = tmpDate;
-	// break;
-	// }
-	// // try {
-	// // PoznanGeoJSONHandler.executeQuery(tmpNecropolisId,
-	// editTextName.getText()
-	// // .toString(), editTextSurname.getText().toString(),
-	// // deathDate, birthDate, burialDate);
-	// // } catch (IOException e) {
-	// // Toast.makeText(this, R.string.query_io_err, Toast.LENGTH_LONG);
-	// // Log.e("GForm", "IO Err", e);
-	// // }
-	// }
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
