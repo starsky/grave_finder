@@ -7,31 +7,49 @@ import static pl.itiner.grave.SearchActivity.SearchActivityHandler.NO_CONNECTION
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import pl.itiner.commons.Commons;
+import pl.itiner.db.NameHintProvider;
+import pl.itiner.db.NameHintProvider.Columns;
+import pl.itiner.db.NameHintProvider.QUERY_TYPES;
 import pl.itiner.fetch.QueryParams;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter;
+import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.google.common.base.Strings;
 
 public class GFormFragment extends SherlockFragment implements
 		SearchActivityFragment {
@@ -46,8 +64,8 @@ public class GFormFragment extends SherlockFragment implements
 	private Spinner necropolis;
 	private DatePicker datePicker;
 	private CheckBox checkBoxDate;
-	private EditText editTextSurname;
-	private EditText editTextName;
+	private AutoCompleteTextView editTextSurname;
+	private AutoCompleteTextView editTextName;
 
 	private int whichDate = NONE_DATE;
 
@@ -106,15 +124,78 @@ public class GFormFragment extends SherlockFragment implements
 		checkBoxDate = (CheckBox) root.findViewById(R.id.checkbox);
 		checkBoxDate.setOnCheckedChangeListener(onCheckedDateVisiable);
 
-		editTextSurname = (EditText) root.findViewById(R.id.surname);
+		editTextSurname = (AutoCompleteTextView) root
+				.findViewById(R.id.surname);
 		editTextSurname.setSelected(false);
-		editTextName = (EditText) root.findViewById(R.id.name);
+		editTextSurname.setAdapter(createAdapter(QUERY_TYPES.SURNAME));
+		editTextSurname.setOnEditorActionListener(new OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+					search();
+					InputMethodManager imm = (InputMethodManager) activity
+							.getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+					return true;
+				}
+				return false;
+			}
+		});
+
+		editTextName = (AutoCompleteTextView) root.findViewById(R.id.name);
 		editTextName.setSelected(false);
+		editTextName.setAdapter(createAdapter(QUERY_TYPES.NAME));
 
 		dateGroup = (RadioGroup) root.findViewById(R.id.dates_group);
 		dateGroup.setOnCheckedChangeListener(onCheckDateType);
 		return root;
 
+	}
+
+	@SuppressLint("DefaultLocale")
+	private SimpleCursorAdapter createAdapter(
+			final NameHintProvider.QUERY_TYPES type) {
+		final int[] to = { android.R.id.text1 };
+		final String[] from = { Columns.COLUMN_VALUE };
+		final SimpleCursorAdapter adapter = new SimpleCursorAdapter(activity,
+				android.R.layout.simple_list_item_1, null, from, to,
+				SimpleCursorAdapter.NO_SELECTION);
+
+		adapter.setCursorToStringConverter(new CursorToStringConverter() {
+			@Override
+			public CharSequence convertToString(Cursor c) {
+				return Commons.capitalizeFirstLetter(c.getString(c
+						.getColumnIndex(Columns.COLUMN_VALUE)));
+			}
+		});
+
+		adapter.setFilterQueryProvider(new FilterQueryProvider() {
+
+			@Override
+			public Cursor runQuery(CharSequence constraint) {
+				final String[] projection = { Columns._ID, Columns.COLUMN_VALUE };
+				final String whereStatement = Columns.COLUMN_HINT_TYPE
+						+ "=? AND " + Columns.COLUMN_VALUE + " LIKE ?";
+				final String[] selectionArgs = { type.toString(),
+						constraint.toString().toLowerCase().trim() + "%" };
+				return activity.getContentResolver().query(
+						NameHintProvider.CONTENT_URI, projection,
+						whereStatement, selectionArgs, null);
+			}
+		});
+
+		adapter.setViewBinder(new ViewBinder() {
+
+			@Override
+			public boolean setViewValue(View view, Cursor c, int columnIndex) {
+				String value = c.getString(columnIndex);
+				((TextView) view).setText(Commons.capitalizeFirstLetter(value));
+				return true;
+			}
+		});
+		return adapter;
 	}
 
 	private OnCheckedChangeListener onCheckedDateVisiable = new OnCheckedChangeListener() {
@@ -165,35 +246,57 @@ public class GFormFragment extends SherlockFragment implements
 		find.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				editTextName.requestFocus();
-				Long tmpNecropolisId = necropolis.getSelectedItemId() != 0 ? necropolis
-						.getSelectedItemId() : null;
-				Date deathDate = null;
-				Date burialDate = null;
-				Date birthDate = null;
-
-				Date tmpDate = new GregorianCalendar(datePicker.getYear(),
-						datePicker.getMonth(), datePicker.getDayOfMonth())
-						.getTime();
-				switch (whichDate) {
-				case DEATH_DATE:
-					deathDate = tmpDate;
-					break;
-				case BIRTH_DATE:
-					birthDate = tmpDate;
-					break;
-				case BURIAL_DATE:
-					burialDate = tmpDate;
-					break;
-				}
-				final QueryParams params = new QueryParams(editTextName
-						.getText().toString(), editTextSurname.getText()
-						.toString(), tmpNecropolisId, birthDate, burialDate,
-						deathDate);
-				dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
-				activity.search(params);
+				search();
 			}
 		});
+	}
+
+	private void search() {
+		editTextName.requestFocus();
+		Long tmpNecropolisId = necropolis.getSelectedItemId() != 0 ? necropolis
+				.getSelectedItemId() : null;
+		Date deathDate = null;
+		Date burialDate = null;
+		Date birthDate = null;
+
+		Date tmpDate = new GregorianCalendar(datePicker.getYear(),
+				datePicker.getMonth(), datePicker.getDayOfMonth()).getTime();
+		switch (whichDate) {
+		case DEATH_DATE:
+			deathDate = tmpDate;
+			break;
+		case BIRTH_DATE:
+			birthDate = tmpDate;
+			break;
+		case BURIAL_DATE:
+			burialDate = tmpDate;
+			break;
+		}
+		final QueryParams params = new QueryParams(editTextName.getText()
+				.toString(), editTextSurname.getText().toString(),
+				tmpNecropolisId, birthDate, burialDate, deathDate);
+		addQueryToCache(NameHintProvider.QUERY_TYPES.SURNAME, editTextSurname
+				.getText().toString());
+		addQueryToCache(NameHintProvider.QUERY_TYPES.NAME, editTextName
+				.getText().toString());
+		dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
+		activity.search(params);
+	}
+
+	@SuppressLint("DefaultLocale")
+	private void addQueryToCache(NameHintProvider.QUERY_TYPES type, String query) {
+		if (!Strings.isNullOrEmpty(query)) {
+			final String whereStatement = Columns.COLUMN_HINT_TYPE + "=? AND "
+					+ Columns.COLUMN_VALUE + "=?";
+			query = query.trim().toLowerCase();
+			activity.getContentResolver().delete(NameHintProvider.CONTENT_URI,
+					whereStatement, new String[] { type + "", query });
+			ContentValues values = new ContentValues();
+			values.put(Columns.COLUMN_HINT_TYPE, type + "");
+			values.put(Columns.COLUMN_VALUE, query);
+			activity.getContentResolver().insert(NameHintProvider.CONTENT_URI,
+					values);
+		}
 	}
 
 	private void goToList() {
