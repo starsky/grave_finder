@@ -18,6 +18,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Message;
@@ -26,21 +27,25 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter;
 import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.FilterQueryProvider;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -123,6 +128,21 @@ public class GFormFragment extends SherlockFragment implements
 				.findViewById(R.id.surname);
 		editTextSurname.setSelected(false);
 		editTextSurname.setAdapter(createAdapter(QUERY_TYPES.SURNAME));
+		editTextSurname.setOnEditorActionListener(new OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+					search();
+					InputMethodManager imm = (InputMethodManager) activity
+							.getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+					return true;
+				}
+				return false;
+			}
+		});
 
 		editTextName = (AutoCompleteTextView) root.findViewById(R.id.name);
 		editTextName.setSelected(false);
@@ -165,9 +185,9 @@ public class GFormFragment extends SherlockFragment implements
 						whereStatement, selectionArgs, null);
 			}
 		});
-		
+
 		adapter.setViewBinder(new ViewBinder() {
-			
+
 			@Override
 			public boolean setViewValue(View view, Cursor c, int columnIndex) {
 				String value = c.getString(columnIndex);
@@ -226,39 +246,41 @@ public class GFormFragment extends SherlockFragment implements
 		find.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				editTextName.requestFocus();
-				Long tmpNecropolisId = necropolis.getSelectedItemId() != 0 ? necropolis
-						.getSelectedItemId() : null;
-				Date deathDate = null;
-				Date burialDate = null;
-				Date birthDate = null;
-
-				Date tmpDate = new GregorianCalendar(datePicker.getYear(),
-						datePicker.getMonth(), datePicker.getDayOfMonth())
-						.getTime();
-				switch (whichDate) {
-				case DEATH_DATE:
-					deathDate = tmpDate;
-					break;
-				case BIRTH_DATE:
-					birthDate = tmpDate;
-					break;
-				case BURIAL_DATE:
-					burialDate = tmpDate;
-					break;
-				}
-				final QueryParams params = new QueryParams(editTextName
-						.getText().toString(), editTextSurname.getText()
-						.toString(), tmpNecropolisId, birthDate, burialDate,
-						deathDate);
-				addQueryToCache(NameHintProvider.QUERY_TYPES.SURNAME,
-						editTextSurname.getText().toString());
-				addQueryToCache(NameHintProvider.QUERY_TYPES.NAME, editTextName
-						.getText().toString());
-				dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
-				activity.search(params);
+				search();
 			}
 		});
+	}
+
+	private void search() {
+		editTextName.requestFocus();
+		Long tmpNecropolisId = necropolis.getSelectedItemId() != 0 ? necropolis
+				.getSelectedItemId() : null;
+		Date deathDate = null;
+		Date burialDate = null;
+		Date birthDate = null;
+
+		Date tmpDate = new GregorianCalendar(datePicker.getYear(),
+				datePicker.getMonth(), datePicker.getDayOfMonth()).getTime();
+		switch (whichDate) {
+		case DEATH_DATE:
+			deathDate = tmpDate;
+			break;
+		case BIRTH_DATE:
+			birthDate = tmpDate;
+			break;
+		case BURIAL_DATE:
+			burialDate = tmpDate;
+			break;
+		}
+		final QueryParams params = new QueryParams(editTextName.getText()
+				.toString(), editTextSurname.getText().toString(),
+				tmpNecropolisId, birthDate, burialDate, deathDate);
+		addQueryToCache(NameHintProvider.QUERY_TYPES.SURNAME, editTextSurname
+				.getText().toString());
+		addQueryToCache(NameHintProvider.QUERY_TYPES.NAME, editTextName
+				.getText().toString());
+		dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
+		activity.search(params);
 	}
 
 	@SuppressLint("DefaultLocale")
