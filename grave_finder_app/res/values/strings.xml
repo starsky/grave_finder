@@ -37,4 +37,7 @@
     <string name="downloading_data">Pobieranie danych</string>
     <string name="ok">OK</string>
     <string name="list_offline_warning">Brak połączenia z internetem. Lista wyników pochodzi z pamięci podręcznej i może być nie pełna.</string>
+    <string name="clear_hints">Wyczyść podpowiedzi</string>
+    <string name="clear_cache">Wyczyść pamięć podręczną</string>
+    <string name="about_app">O programie</string>
 </resources>
