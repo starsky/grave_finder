@@ -25,6 +25,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter;
+import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +35,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.FilterQueryProvider;
@@ -161,6 +163,16 @@ public class GFormFragment extends SherlockFragment implements
 				return activity.getContentResolver().query(
 						NameHintProvider.CONTENT_URI, projection,
 						whereStatement, selectionArgs, null);
+			}
+		});
+		
+		adapter.setViewBinder(new ViewBinder() {
+			
+			@Override
+			public boolean setViewValue(View view, Cursor c, int columnIndex) {
+				String value = c.getString(columnIndex);
+				((TextView) view).setText(Commons.capitalizeFirstLetter(value));
+				return true;
 			}
 		});
 		return adapter;
