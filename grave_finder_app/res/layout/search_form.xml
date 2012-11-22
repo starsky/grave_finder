@@ -44,7 +44,8 @@
                         android:inputType="textPersonName"
                         android:nextFocusDown="@+id/surname" />
 
-                    <EditText
+                    <AutoCompleteTextView
+                        android:completionThreshold="1"
                         android:id="@+id/surname"
                         style="@style/main_view_edit_text"
                         android:hint="@string/surname"

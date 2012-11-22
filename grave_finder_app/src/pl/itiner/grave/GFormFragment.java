@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -46,7 +47,7 @@ public class GFormFragment extends SherlockFragment implements
 	private Spinner necropolis;
 	private DatePicker datePicker;
 	private CheckBox checkBoxDate;
-	private EditText editTextSurname;
+	private AutoCompleteTextView editTextSurname;
 	private EditText editTextName;
 
 	private int whichDate = NONE_DATE;
@@ -106,8 +107,13 @@ public class GFormFragment extends SherlockFragment implements
 		checkBoxDate = (CheckBox) root.findViewById(R.id.checkbox);
 		checkBoxDate.setOnCheckedChangeListener(onCheckedDateVisiable);
 
-		editTextSurname = (EditText) root.findViewById(R.id.surname);
+		editTextSurname = (AutoCompleteTextView) root
+				.findViewById(R.id.surname);
 		editTextSurname.setSelected(false);
+		String[] suggestions = { "Nowak", "Kowalski" };
+		editTextSurname.setAdapter(new ArrayAdapter<String>(activity,
+				android.R.layout.simple_dropdown_item_1line, suggestions));
+
 		editTextName = (EditText) root.findViewById(R.id.name);
 		editTextName.setSelected(false);
 
