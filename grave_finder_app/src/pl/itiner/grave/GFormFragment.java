@@ -7,6 +7,7 @@ import static pl.itiner.grave.SearchActivity.SearchActivityHandler.NO_CONNECTION
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import pl.itiner.commons.Commons;
 import pl.itiner.db.NameHintProvider;
 import pl.itiner.db.NameHintProvider.Columns;
 import pl.itiner.db.NameHintProvider.QUERY_TYPES;
@@ -35,7 +36,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.FilterQueryProvider;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -58,7 +58,7 @@ public class GFormFragment extends SherlockFragment implements
 	private DatePicker datePicker;
 	private CheckBox checkBoxDate;
 	private AutoCompleteTextView editTextSurname;
-	private EditText editTextName;
+	private AutoCompleteTextView editTextName;
 
 	private int whichDate = NONE_DATE;
 
@@ -122,8 +122,9 @@ public class GFormFragment extends SherlockFragment implements
 		editTextSurname.setSelected(false);
 		editTextSurname.setAdapter(createAdapter(QUERY_TYPES.SURNAME));
 
-		editTextName = (EditText) root.findViewById(R.id.name);
+		editTextName = (AutoCompleteTextView) root.findViewById(R.id.name);
 		editTextName.setSelected(false);
+		editTextName.setAdapter(createAdapter(QUERY_TYPES.NAME));
 
 		dateGroup = (RadioGroup) root.findViewById(R.id.dates_group);
 		dateGroup.setOnCheckedChangeListener(onCheckDateType);
@@ -143,7 +144,8 @@ public class GFormFragment extends SherlockFragment implements
 		adapter.setCursorToStringConverter(new CursorToStringConverter() {
 			@Override
 			public CharSequence convertToString(Cursor c) {
-				return c.getString(c.getColumnIndex(Columns.COLUMN_VALUE));
+				return Commons.capitalizeFirstLetter(c.getString(c
+						.getColumnIndex(Columns.COLUMN_VALUE)));
 			}
 		});
 
@@ -239,6 +241,8 @@ public class GFormFragment extends SherlockFragment implements
 						deathDate);
 				addQueryToCache(NameHintProvider.QUERY_TYPES.SURNAME,
 						editTextSurname.getText().toString());
+				addQueryToCache(NameHintProvider.QUERY_TYPES.NAME, editTextName
+						.getText().toString());
 				dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
 				activity.search(params);
 			}
