@@ -30,9 +30,6 @@ import java.lang.ref.WeakReference;
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.fetch.JsonFetchService;
 import pl.itiner.fetch.QueryParams;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -51,7 +48,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -60,22 +56,11 @@ import com.actionbarsherlock.view.MenuItem;
 public class SearchActivity extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
 
-	private static final String DIALOG_FRAGMENT = "DIALOG_FRAGMENT";
 	private static final int GRAVE_DATA_LOADER_ID = 0;
-	private static final String CONTENT_FRAGMENT_TAG = "CONTENT_FRAGMENT";
+	public static final String CONTENT_FRAGMENT_TAG = "CONTENT_FRAGMENT";
 	private static final String CONTENT_PROVIDER_URI = "CONTENT_PROVIDER_URI";
 	private FragmentManager fragmentMgr;
 	private SimpleCursorAdapter adapter;
-
-	private SherlockDialogFragment dialogFragment = new SherlockDialogFragment() {
-		public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
-			ProgressDialog dialog = new ProgressDialog(getActivity());
-			dialog.setIndeterminate(true);
-			dialog.setTitle(R.string.downloading_data);
-			dialog.setCancelable(true);
-			return dialog;
-		};
-	};
 
 	private Handler handler = new SearchActivityHandler(this);
 	private ListFragment listFragment;
@@ -116,9 +101,12 @@ public class SearchActivity extends SherlockFragmentActivity implements
 		}
 		listFragment.setListAdapter(adapter);
 	}
+	
+	public ListFragment getListFragment() {
+		return listFragment;
+	}
 
 	public void search(QueryParams params) {
-		dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
 		Bundle b = new Bundle();
 		String queryUriStr = GraveFinderProvider.createUri(params).toString();
 		b.putString(CONTENT_PROVIDER_URI, queryUriStr);
@@ -182,19 +170,6 @@ public class SearchActivity extends SherlockFragmentActivity implements
 		return i != null && i.isConnected();
 	}
 
-	private void goToList() {
-		if (fragmentMgr.findFragmentByTag(CONTENT_FRAGMENT_TAG) instanceof GFormFragment
-				&& dialogFragment.getDialog() != null
-				&& dialogFragment.getDialog().isShowing()) {
-			dialogFragment.dismiss();
-			FragmentTransaction transaction = fragmentMgr.beginTransaction();
-			transaction.replace(R.id.content_fragment_placeholder,
-					listFragment, CONTENT_FRAGMENT_TAG);
-			transaction.addToBackStack(null);
-			transaction.commit();
-		}
-	}
-
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0) {
 		adapter.swapCursor(null);
@@ -216,37 +191,9 @@ public class SearchActivity extends SherlockFragmentActivity implements
 		public void handleMessage(Message msg) {
 			final SearchActivity activity = activityRef.get();
 			if (activity != null) {
-				switch (msg.what) {
-				case LOCAL_DATA_AVAILABLE:
-					activity.goToList();
-					break;
-				case NO_CONNECTION:
-					activity.dialogFragment.dismiss();
-					new SherlockDialogFragment() {
-						public Dialog onCreateDialog(Bundle savedInstanceState) {
-							AlertDialog.Builder b = new AlertDialog.Builder(
-									activity);
-							b.setTitle(R.string.no_conn);
-							b.setMessage(R.string.turn_on_conn);
-							b.setPositiveButton(R.string.ok, null);
-							return b.create();
-						};
-					}.show(activity.fragmentMgr, DIALOG_FRAGMENT);
-					break;
-				case DOWNLOAD_FAILED:
-					activity.dialogFragment.dismiss();
-					new SherlockDialogFragment() {
-						public Dialog onCreateDialog(Bundle savedInstanceState) {
-							AlertDialog.Builder b = new AlertDialog.Builder(
-									activity);
-							b.setTitle(R.string.no_conn);
-							b.setMessage(R.string.check_conn);
-							b.setPositiveButton(R.string.ok, null);
-							return b.create();
-						};
-					}.show(activity.fragmentMgr, DIALOG_FRAGMENT);
-					break;
-				}
+				SearchActivityFragment fragment = (SearchActivityFragment) activity.fragmentMgr
+						.findFragmentByTag(CONTENT_FRAGMENT_TAG);
+				fragment.handleMessage(msg);
 			}
 		}
 	}

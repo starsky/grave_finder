@@ -1,13 +1,21 @@
 package pl.itiner.grave;
 
+import static pl.itiner.grave.SearchActivity.SearchActivityHandler.DOWNLOAD_FAILED;
+import static pl.itiner.grave.SearchActivity.SearchActivityHandler.LOCAL_DATA_AVAILABLE;
+import static pl.itiner.grave.SearchActivity.SearchActivityHandler.NO_CONNECTION;
+
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import pl.itiner.fetch.QueryParams;
 import android.app.Activity;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Message;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,19 +27,16 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragment;
 
-public class GFormFragment extends SherlockFragment {
+public class GFormFragment extends SherlockFragment implements
+		SearchActivityFragment {
 	public static final String TAG = "GFormFragment";
-	/** Called when the activity is first created. */
-	private static final int PROGRESSBAR = 1;
-	private static final int PROGRESSBAR_GONE = 2;
-	private static final int TOAST = 3;
-	private static final int RESULTS_RECEIVED = 0;
+	private static final String DIALOG_FRAGMENT = "DIALOG_FRAGMENT";
 
 	private static final int NONE_DATE = 3;
 	private static final int BURIAL_DATE = 1;
@@ -39,17 +44,28 @@ public class GFormFragment extends SherlockFragment {
 	private static final int DEATH_DATE = 0;
 
 	private Spinner necropolis;
-	private ConnectivityManager cm;
-	private ProgressBar progressBar;
 	private DatePicker datePicker;
 	private CheckBox checkBoxDate;
 	private EditText editTextSurname;
 	private EditText editTextName;
+
 	private int whichDate = NONE_DATE;
+
 	private Button find;
 	private RadioGroup dateGroup;
 
 	private SearchActivity activity;
+	private FragmentManager fragmentMgr;
+
+	private SherlockDialogFragment dialogFragment = new SherlockDialogFragment() {
+		public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
+			ProgressDialog dialog = new ProgressDialog(getActivity());
+			dialog.setIndeterminate(true);
+			dialog.setTitle(R.string.downloading_data);
+			dialog.setCancelable(true);
+			return dialog;
+		};
+	};
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -63,11 +79,21 @@ public class GFormFragment extends SherlockFragment {
 	}
 
 	@Override
+	public void onDetach() {
+		super.onDetach();
+		this.activity = null;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		fragmentMgr = getFragmentManager();
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View root = inflater.inflate(R.layout.search_form, container, false);
-		progressBar = (ProgressBar) root
-				.findViewById(R.id.progressbar_titlebar);
 
 		find = (Button) root.findViewById(R.id.find_btn);
 		setSearchClickListener();
@@ -164,28 +190,60 @@ public class GFormFragment extends SherlockFragment {
 						.getText().toString(), editTextSurname.getText()
 						.toString(), tmpNecropolisId, birthDate, burialDate,
 						deathDate);
+				dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
 				activity.search(params);
-				// cm = (ConnectivityManager) getActivity().getSystemService(
-				// Context.CONNECTIVITY_SERVICE);
-				// if (isOnline()) {
-				// new Thread(th_searchGraves).start();
-				// }
-				// if (!isOnline()) {
-				// Toast.makeText(getApplicationContext(),
-				// R.string.check_conn, Toast.LENGTH_SHORT).show();
-				// }
-				//
 			}
 		});
 	}
 
-	private boolean isOnline() {
-
-		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-			return true;
+	private void goToList() {
+		if (dialogFragment.getDialog() != null
+				&& dialogFragment.getDialog().isShowing()) {
+			dialogFragment.dismiss();
+			FragmentTransaction transaction = fragmentMgr.beginTransaction();
+			transaction.replace(R.id.content_fragment_placeholder,
+					activity.getListFragment(),
+					SearchActivity.CONTENT_FRAGMENT_TAG);
+			transaction.addToBackStack(null);
+			transaction.commit();
 		}
-		return false;
+	}
+
+	@Override
+	public void handleMessage(Message msg) {
+		if (activity != null) {
+			switch (msg.what) {
+			case LOCAL_DATA_AVAILABLE:
+				goToList();
+				break;
+			case NO_CONNECTION:
+				dialogFragment.dismiss();
+				new SherlockDialogFragment() {
+					public Dialog onCreateDialog(Bundle savedInstanceState) {
+						AlertDialog.Builder b = new AlertDialog.Builder(
+								activity);
+						b.setTitle(R.string.no_conn);
+						b.setMessage(R.string.turn_on_conn);
+						b.setPositiveButton(R.string.ok, null);
+						return b.create();
+					};
+				}.show(fragmentMgr, DIALOG_FRAGMENT);
+				break;
+			case DOWNLOAD_FAILED:
+				dialogFragment.dismiss();
+				new SherlockDialogFragment() {
+					public Dialog onCreateDialog(Bundle savedInstanceState) {
+						AlertDialog.Builder b = new AlertDialog.Builder(
+								activity);
+						b.setTitle(R.string.no_conn);
+						b.setMessage(R.string.check_conn);
+						b.setPositiveButton(R.string.ok, null);
+						return b.create();
+					};
+				}.show(fragmentMgr, DIALOG_FRAGMENT);
+				break;
+			}
+		}
 	}
 
 }

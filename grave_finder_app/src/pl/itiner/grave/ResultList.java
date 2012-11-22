@@ -34,6 +34,7 @@ import pl.itiner.nutiteq.NutiteqMap;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,8 +44,10 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 
-public class ResultList extends SherlockListFragment {
+public class ResultList extends SherlockListFragment implements
+		SearchActivityFragment {
 
+	public static final String TAG = "ResultList";
 	private static String[] cementeries;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,11 @@ public class ResultList extends SherlockListFragment {
 			}
 			return false;
 		}
+	}
+
+	@Override
+	public void handleMessage(Message msg) {
+		
 	}
 
 }
