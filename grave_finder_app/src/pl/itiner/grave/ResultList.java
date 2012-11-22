@@ -24,6 +24,7 @@ import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_BURIAL;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_DATE_DEATH;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_NAME;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SURENAME;
+import static pl.itiner.grave.SearchActivity.SearchActivityHandler.DOWNLOAD_FAILED;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -133,7 +134,14 @@ public class ResultList extends SherlockListFragment implements
 
 	@Override
 	public void handleMessage(Message msg) {
-
+		if (activity != null) {
+			switch (msg.what) {
+			case DOWNLOAD_FAILED:
+				getView().findViewById(R.id.list_offline_warninig_view)
+						.setVisibility(View.VISIBLE);
+				break;
+			}
+		}
 	}
 
 }
