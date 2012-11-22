@@ -52,6 +52,12 @@
             android:authorities="pl.itiner.grave.GraveFinderProvider"
             android:exported="false" >
         </provider>
+        
+        <provider
+            android:name="pl.itiner.db.NameHintProvider"
+            android:authorities="pl.itiner.grave.NameHintProvider"
+            android:exported="false" >
+        </provider>
 
         <service android:name="pl.itiner.fetch.JsonFetchService" />
     </application>
