@@ -137,8 +137,6 @@ public class SearchActivity extends SherlockFragmentActivity implements
 		case R.id.menu_about:
 			Intent intentAboutView = new Intent(this.getApplicationContext(),
 					About.class);
-			intentAboutView
-					.putExtra(GenericAbout.DESC_ID, R.string.description);
 			startActivity(intentAboutView);
 			return true;
 		case R.id.menu_clear_cache:

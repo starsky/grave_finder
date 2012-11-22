@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp" >
 
     <LinearLayout
         android:id="@+id/mainL"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:background="@color/white"
-        android:gravity="left" >
+        android:gravity="left"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" >
 
         <ImageView
             android:layout_width="wrap_content"
@@ -20,26 +23,52 @@
     </LinearLayout>
 
     <ScrollView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/mainL"
+        android:background="@android:color/white"
         android:scrollbarStyle="insideInset" >
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp" >
+            android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/about_description"
-                android:layout_width="fill_parent"
+                style="@style/list_text_highlighted"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:textColor="@color/white"
-                android:textColorHighlight="@color/green"
-                android:textSize="12sp" />
-        </RelativeLayout>
+                android:text="@string/about_app" />
+
+            <TextView
+                style="@style/list_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:text="@string/description" />
+
+            <TextView
+                style="@style/list_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:paddingTop="10dp"
+                android:text="@string/license_txt" />
+
+            <TextView
+                style="@style/list_text_highlighted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="@string/libraries" />
+
+            <TextView
+                style="@style/list_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:text="@string/libraries_txt" />
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>

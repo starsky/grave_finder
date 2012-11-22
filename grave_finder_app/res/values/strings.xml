@@ -3,7 +3,7 @@
 
     <string name="app_name">Lokalizator grobów</string>
     <string name="description">Lokalizator grobów to aplikacja mobilna ułatwiająca odnalezienie grobu na poznańskich cmentarzach.\nPo wprowadzeniu imienia i nazwiska i/lub daty urodzenia, śmierci lub pogrzebu osoby zmarłej, lokalizacja mogiły wyświetlana jest na mapie.\nAplikacja, opracowana przez firmę Itiner (http://itiner.pl), opiera się na bazie danych Geopozu, która udostępniana jest w ramach API poznan.pl. Kod aplikacji jest dostępny pod adresem: (https://github.com/starsky/grave_finder/).</string>
-    <string name="license_txt">Aplikacja jest wydawana na licencji GNU GPLv3 (http://www.gnu.org/copyleft/gpl.html)\nWięcej informacji na stronie: https://bitbucket.org/itiner/lokalizator_grobow/wiki</string>
+    <string name="license_txt">Aplikacja jest wydawana na licencji GNU GPLv3 (http://www.gnu.org/copyleft/gpl.html).</string>
     <string name="libraries_txt">Nutiteq Map SDK (http://www.nutiteq.com/)\nJava Map Projection Library (http://www.jhlabs.com/java/maps/proj/)</string>
     <string name="query_io_err">Nastąpił błąd podczas próby połączenia. Spróbuj ponownie później.</string>
     <string name="name">Imię</string>
@@ -40,4 +40,6 @@
     <string name="clear_hints">Wyczyść podpowiedzi</string>
     <string name="clear_cache">Wyczyść pamięć podręczną</string>
     <string name="about_app">O programie</string>
+    <string name="libraries">Biblioteki:</string>
+
 </resources>
