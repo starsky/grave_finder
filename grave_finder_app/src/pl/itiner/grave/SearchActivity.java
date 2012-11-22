@@ -101,7 +101,7 @@ public class SearchActivity extends SherlockFragmentActivity implements
 		}
 		listFragment.setListAdapter(adapter);
 	}
-	
+
 	public ListFragment getListFragment() {
 		return listFragment;
 	}
@@ -113,9 +113,10 @@ public class SearchActivity extends SherlockFragmentActivity implements
 		b.putParcelable(JsonFetchService.QUERY_PARAMS_BUNDLE, params);
 		getSupportLoaderManager().destroyLoader(GRAVE_DATA_LOADER_ID);
 		getSupportLoaderManager().initLoader(GRAVE_DATA_LOADER_ID, b, this);
-		if(isConnectionAvailable()) {
+		if (isConnectionAvailable()) {
 			Intent i = new Intent(this, JsonFetchService.class);
-			i.putExtra(JsonFetchService.MESSENGER_BUNDLE, new Messenger(handler));
+			i.putExtra(JsonFetchService.MESSENGER_BUNDLE,
+					new Messenger(handler));
 			i.putExtras(b);
 			startService(i);
 		}
@@ -132,15 +133,15 @@ public class SearchActivity extends SherlockFragmentActivity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menuAbout:
+		case R.id.menu_about:
 			Intent intentAboutView = new Intent(this.getApplicationContext(),
 					About.class);
 			intentAboutView
 					.putExtra(GenericAbout.DESC_ID, R.string.description);
 			startActivity(intentAboutView);
-			break;
+			return true;
 		}
-		return true;
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
