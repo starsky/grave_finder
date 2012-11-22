@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import pl.itiner.commons.Commons;
-import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.db.NameHintProvider;
 import pl.itiner.db.NameHintProvider.Columns;
 import pl.itiner.db.NameHintProvider.QUERY_TYPES;
@@ -50,7 +49,6 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.common.base.Strings;
 
 public class GFormFragment extends SherlockFragment implements
@@ -234,20 +232,6 @@ public class GFormFragment extends SherlockFragment implements
 				break;
 			}
 		}
-	};
-
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_clear_cache:
-			activity.getContentResolver().delete(
-					GraveFinderProvider.CONTENT_URI, null, null);
-			return true;
-		case R.id.menu_clear_hints:
-			activity.getContentResolver().delete(NameHintProvider.CONTENT_URI,
-					null, null);
-			return true;
-		}
-		return false;
 	};
 
 	private ArrayAdapter<CharSequence> getNecropolisSpinnerAdapter() {

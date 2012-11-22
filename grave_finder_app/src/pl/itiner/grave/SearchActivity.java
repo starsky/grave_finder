@@ -28,6 +28,7 @@ import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SURENAME;
 import java.lang.ref.WeakReference;
 
 import pl.itiner.db.GraveFinderProvider;
+import pl.itiner.db.NameHintProvider;
 import pl.itiner.fetch.JsonFetchService;
 import pl.itiner.fetch.QueryParams;
 import android.content.Context;
@@ -139,6 +140,14 @@ public class SearchActivity extends SherlockFragmentActivity implements
 			intentAboutView
 					.putExtra(GenericAbout.DESC_ID, R.string.description);
 			startActivity(intentAboutView);
+			return true;
+		case R.id.menu_clear_cache:
+			getContentResolver().delete(GraveFinderProvider.CONTENT_URI, null,
+					null);
+			return true;
+		case R.id.menu_clear_hints:
+			getContentResolver().delete(NameHintProvider.CONTENT_URI, null,
+					null);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
