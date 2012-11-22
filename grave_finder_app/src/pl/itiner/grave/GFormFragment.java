@@ -7,15 +7,23 @@ import static pl.itiner.grave.SearchActivity.SearchActivityHandler.NO_CONNECTION
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import pl.itiner.db.NameHintProvider;
+import pl.itiner.db.NameHintProvider.Columns;
+import pl.itiner.db.NameHintProvider.QUERY_TYPES;
 import pl.itiner.fetch.QueryParams;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,11 +36,13 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.google.common.base.Strings;
 
 public class GFormFragment extends SherlockFragment implements
 		SearchActivityFragment {
@@ -110,9 +120,7 @@ public class GFormFragment extends SherlockFragment implements
 		editTextSurname = (AutoCompleteTextView) root
 				.findViewById(R.id.surname);
 		editTextSurname.setSelected(false);
-		String[] suggestions = { "Nowak", "Kowalski" };
-		editTextSurname.setAdapter(new ArrayAdapter<String>(activity,
-				android.R.layout.simple_dropdown_item_1line, suggestions));
+		editTextSurname.setAdapter(createAdapter(QUERY_TYPES.SURNAME));
 
 		editTextName = (EditText) root.findViewById(R.id.name);
 		editTextName.setSelected(false);
@@ -121,6 +129,39 @@ public class GFormFragment extends SherlockFragment implements
 		dateGroup.setOnCheckedChangeListener(onCheckDateType);
 		return root;
 
+	}
+
+	@SuppressLint("DefaultLocale")
+	private SimpleCursorAdapter createAdapter(
+			final NameHintProvider.QUERY_TYPES type) {
+		final int[] to = { android.R.id.text1 };
+		final String[] from = { Columns.COLUMN_VALUE };
+		final SimpleCursorAdapter adapter = new SimpleCursorAdapter(activity,
+				android.R.layout.simple_list_item_1, null, from, to,
+				SimpleCursorAdapter.NO_SELECTION);
+
+		adapter.setCursorToStringConverter(new CursorToStringConverter() {
+			@Override
+			public CharSequence convertToString(Cursor c) {
+				return c.getString(c.getColumnIndex(Columns.COLUMN_VALUE));
+			}
+		});
+
+		adapter.setFilterQueryProvider(new FilterQueryProvider() {
+
+			@Override
+			public Cursor runQuery(CharSequence constraint) {
+				final String[] projection = { Columns._ID, Columns.COLUMN_VALUE };
+				final String whereStatement = Columns.COLUMN_HINT_TYPE
+						+ "=? AND " + Columns.COLUMN_VALUE + " LIKE ?";
+				final String[] selectionArgs = { type.toString(),
+						constraint.toString().toLowerCase().trim() + "%" };
+				return activity.getContentResolver().query(
+						NameHintProvider.CONTENT_URI, projection,
+						whereStatement, selectionArgs, null);
+			}
+		});
+		return adapter;
 	}
 
 	private OnCheckedChangeListener onCheckedDateVisiable = new OnCheckedChangeListener() {
@@ -196,10 +237,28 @@ public class GFormFragment extends SherlockFragment implements
 						.getText().toString(), editTextSurname.getText()
 						.toString(), tmpNecropolisId, birthDate, burialDate,
 						deathDate);
+				addQueryToCache(NameHintProvider.QUERY_TYPES.SURNAME,
+						editTextSurname.getText().toString());
 				dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
 				activity.search(params);
 			}
 		});
+	}
+
+	@SuppressLint("DefaultLocale")
+	private void addQueryToCache(NameHintProvider.QUERY_TYPES type, String query) {
+		if (!Strings.isNullOrEmpty(query)) {
+			final String whereStatement = Columns.COLUMN_HINT_TYPE + "=? AND "
+					+ Columns.COLUMN_VALUE + "=?";
+			query = query.trim().toLowerCase();
+			activity.getContentResolver().delete(NameHintProvider.CONTENT_URI,
+					whereStatement, new String[] { type + "", query });
+			ContentValues values = new ContentValues();
+			values.put(Columns.COLUMN_HINT_TYPE, type + "");
+			values.put(Columns.COLUMN_VALUE, query);
+			activity.getContentResolver().insert(NameHintProvider.CONTENT_URI,
+					values);
+		}
 	}
 
 	private void goToList() {
