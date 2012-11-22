@@ -31,6 +31,7 @@ import java.util.Locale;
 
 import pl.itiner.commons.Commons;
 import pl.itiner.nutiteq.NutiteqMap;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -49,6 +50,24 @@ public class ResultList extends SherlockListFragment implements
 
 	public static final String TAG = "ResultList";
 	private static String[] cementeries;
+	private SearchActivity activity;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (activity instanceof SearchActivity) {
+			this.activity = (SearchActivity) activity;
+		} else {
+			throw new IllegalArgumentException("Activity is not instance of "
+					+ SearchActivity.class.getSimpleName());
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		this.activity = null;
+	}
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,7 +77,11 @@ public class ResultList extends SherlockListFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.list, container, false);
+		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.list, container,
+				false);
+		root.findViewById(R.id.list_offline_warninig_view).setVisibility(
+				activity.isConnectionAvailable() ? View.GONE : View.VISIBLE);
+		return root;
 	}
 
 	@Override
@@ -110,7 +133,7 @@ public class ResultList extends SherlockListFragment implements
 
 	@Override
 	public void handleMessage(Message msg) {
-		
+
 	}
 
 }

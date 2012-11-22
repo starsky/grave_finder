@@ -164,7 +164,7 @@ public class SearchActivity extends SherlockFragmentActivity implements
 
 	}
 
-	private boolean isConnectionAvailable() {
+	public boolean isConnectionAvailable() {
 		ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo i = conMgr.getActiveNetworkInfo();
 		return i != null && i.isConnected();
