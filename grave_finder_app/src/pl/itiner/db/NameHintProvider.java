@@ -1,7 +1,5 @@
 package pl.itiner.db;
 
-import static android.provider.BaseColumns._ID;
-import static pl.itiner.db.NameHintTableHelper.TABLE_NAME;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -54,12 +52,12 @@ public final class NameHintProvider extends ContentProvider {
 		int count = 0;
 		switch (match) {
 		case HINTS:
-			count = db.delete(TABLE_NAME, selection, selectionArgs);
+			count = db.delete(NameHintTableHelper.TABLE_NAME, selection, selectionArgs);
 			getContext().getContentResolver().notifyChange(uri, null);
 			break;
 		case HINT_URI_ID:
 			long id = ContentUris.parseId(uri);
-			count = db.delete(TABLE_NAME, _ID + "=?", new String[] { id + "" });
+			count = db.delete(NameHintTableHelper.TABLE_NAME, Columns._ID + "=?", new String[] { id + "" });
 			getContext().getContentResolver().notifyChange(uri, null);
 			break;
 		}
@@ -82,7 +80,7 @@ public final class NameHintProvider extends ContentProvider {
 	public Uri insert(Uri uri, ContentValues values) {
 		if (sURIMatcher.match(uri) == HINTS) {
 			final SQLiteDatabase db = dbHelper.getWritableDatabase();
-			long id = db.insert(TABLE_NAME, null, values);
+			long id = db.insert(NameHintTableHelper.TABLE_NAME, null, values);
 			Uri insertUri = ContentUris.withAppendedId(CONTENT_URI, id);
 			getContext().getContentResolver().notifyChange(insertUri, null);
 			return insertUri;
@@ -104,7 +102,7 @@ public final class NameHintProvider extends ContentProvider {
 		switch (match) {
 		case HINTS:
 			SQLiteDatabase db = dbHelper.getReadableDatabase();
-			Cursor c = db.query(TABLE_NAME, projection, selection,
+			Cursor c = db.query(NameHintTableHelper.TABLE_NAME, projection, selection,
 					selectionArgs, null, null, Columns.COLUMN_VALUE + " ASC");
 			c.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
 			return c;

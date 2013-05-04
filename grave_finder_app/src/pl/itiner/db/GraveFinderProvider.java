@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static pl.itiner.db.GraveFinderProvider.Columns.*;
-
 import pl.itiner.fetch.QueryParams;
 import android.annotation.SuppressLint;
 import android.content.ContentProvider;
@@ -74,7 +72,7 @@ public final class GraveFinderProvider extends ContentProvider {
 			break;
 		case GRAVE_URI_ID:
 			long departedId = ContentUris.parseId(uri);
-			count = db.delete(DepartedTableHelper.TABLE_NAME, _ID + " = "
+			count = db.delete(DepartedTableHelper.TABLE_NAME, Columns._ID + " = "
 					+ departedId, null);
 			getContext().getContentResolver().notifyChange(uri, null);
 			break;
@@ -124,7 +122,7 @@ public final class GraveFinderProvider extends ContentProvider {
 			return handleQuery(uri, projection, db);
 		case GRAVE_URI_ID:
 			long departedId = ContentUris.parseId(uri);
-			c = db.query(DepartedTableHelper.TABLE_NAME, projection, _ID
+			c = db.query(DepartedTableHelper.TABLE_NAME, projection, Columns._ID
 					+ " = "
 					+ departedId
 					+ (!TextUtils.isEmpty(selection) ? " AND (" + selection
@@ -149,17 +147,17 @@ public final class GraveFinderProvider extends ContentProvider {
 	private static String[] createWhere(Uri uri, StringBuilder builder) {
 		StringBuilder delim = new StringBuilder();
 		ArrayList<String> whereArgs = new ArrayList<String>();
-		putDateToWhere(builder, COLUMN_DATE_BIRTH, delim, whereArgs,
+		putDateToWhere(builder, Columns.COLUMN_DATE_BIRTH, delim, whereArgs,
 				uri.getQueryParameter(BIRTH_DATE_QUERY_PARAM));
-		putDateToWhere(builder, COLUMN_DATE_BURIAL, delim, whereArgs,
+		putDateToWhere(builder, Columns.COLUMN_DATE_BURIAL, delim, whereArgs,
 				uri.getQueryParameter(BURIAL_DATE_QUERY_PARAM));
-		putDateToWhere(builder, COLUMN_DATE_DEATH, delim, whereArgs,
+		putDateToWhere(builder, Columns.COLUMN_DATE_DEATH, delim, whereArgs,
 				uri.getQueryParameter(DEATH_DATE_QUERY_PARAM));
-		putStringToWhere(builder, COLUMN_SURENAME, delim, whereArgs,
+		putStringToWhere(builder, Columns.COLUMN_SURENAME, delim, whereArgs,
 				uri.getQueryParameter(SURENAME_QUERY_PARAM));
-		putStringToWhere(builder, COLUMN_NAME, delim, whereArgs,
+		putStringToWhere(builder, Columns.COLUMN_NAME, delim, whereArgs,
 				uri.getQueryParameter(NAME_QUERY_PARAM));
-		putStringToWhere(builder, COLUMN_CEMENTERY_ID, delim, whereArgs,
+		putStringToWhere(builder, Columns.COLUMN_CEMENTERY_ID, delim, whereArgs,
 				uri.getQueryParameter(CEMENTARY_ID_QUERY_PARAM));
 		return whereArgs.toArray(new String[whereArgs.size()]);
 	}
