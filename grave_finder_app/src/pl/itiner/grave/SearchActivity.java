@@ -58,7 +58,9 @@ public class SearchActivity extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
 
 	private static final int GRAVE_DATA_LOADER_ID = 0;
+	//TODO Set different tags to search and list fragments
 	public static final String CONTENT_FRAGMENT_TAG = "CONTENT_FRAGMENT";
+	public static final String SEARCH_FRAGMENT_TAG = "SEARCH_FRAGMENT";
 	private static final String CONTENT_PROVIDER_URI = "CONTENT_PROVIDER_URI";
 	private FragmentManager fragmentMgr;
 	private SimpleCursorAdapter adapter;
