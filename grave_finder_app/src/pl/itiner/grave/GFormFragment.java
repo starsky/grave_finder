@@ -14,7 +14,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter;
 import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
@@ -41,8 +40,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.google.common.base.Strings;
 
-public class GFormFragment extends SherlockFragment implements
-		SearchActivityFragment {
+public class GFormFragment extends SherlockFragment {
 	public static final String TAG = "GFormFragment";
 
 	private static final int NONE_DATE = 3;
@@ -269,23 +267,5 @@ public class GFormFragment extends SherlockFragment implements
 					values);
 		}
 	}
-
-	@Override
-	public void handleMessage(Message msg) {
-	}
-
-//	private void goToList() {
-//		if (dialogFragment.getDialog() != null
-//				&& dialogFragment.getDialog().isShowing()) {
-//			dialogFragment.dismiss();
-//			FragmentTransaction transaction = fragmentMgr.beginTransaction();
-//			transaction.replace(R.id.content_fragment_placeholder,
-//					activity.getListFragment(),
-//					SearchActivity.CONTENT_FRAGMENT_TAG);
-//			transaction.addToBackStack(null);
-//			transaction.commit();
-//		}
-//	}
-
 
 }

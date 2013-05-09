@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:text="@string/list_offline_warning"
         android:textColor="@color/red"
+        android:visibility="gone"
         android:padding="5dp"/>
     
     <View android:layout_width="match_parent"

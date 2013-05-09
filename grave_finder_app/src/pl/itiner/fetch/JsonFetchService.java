@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import pl.itiner.db.GraveFinderProvider;
-import pl.itiner.grave.SearchActivity;
+import pl.itiner.grave.ResultList;
 import pl.itiner.model.Departed;
 import pl.itiner.model.DepartedFactory;
 import android.app.IntentService;
@@ -40,7 +40,7 @@ public final class JsonFetchService extends IntentService {
 			Messenger messenger = intent.getParcelableExtra(MESSENGER_BUNDLE);
 			if (null != messenger) {
 				Message msg = Message.obtain();
-				msg.what = SearchActivity.SearchActivityHandler.DOWNLOAD_FAILED;
+				msg.what = ResultList.SearchHandler.DOWNLOAD_FAILED;
 				try {
 					messenger.send(msg);
 				} catch (RemoteException e1) {

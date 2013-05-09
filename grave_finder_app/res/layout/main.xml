@@ -10,11 +10,11 @@
         android:name="pl.itiner.grave.GFormFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-  
+
     <fragment
         android:id="@+id/result_list_fragment"
         android:name="pl.itiner.grave.ResultList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:layout_height="match_parent" />
+
 </LinearLayout>
