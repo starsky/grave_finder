@@ -131,6 +131,10 @@ public class ResultList extends SherlockListFragment implements
 			return false;
 		}
 	}
+	
+	public boolean hasData() {
+		return getListAdapter().getCount() > 0;
+	}
 
 	@Override
 	public void handleMessage(Message msg) {
