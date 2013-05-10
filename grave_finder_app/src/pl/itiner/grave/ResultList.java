@@ -62,7 +62,7 @@ public class ResultList extends SherlockListFragment implements
 
 	private static final int GRAVE_DATA_LOADER_ID = 0;
 	private static final String CONTENT_PROVIDER_URI = "CONTENT_PROVIDER_URI";
-	private static final String ALERT_FRAGMENT_TAG = "ALERT_FRAGMENT_TAG";
+	public static final String ALERT_FRAGMENT_TAG = "ALERT_FRAGMENT_TAG";
 
 	private static String[] cementeries;
 	private SearchActivity activity;
