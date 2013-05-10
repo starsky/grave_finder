@@ -5,28 +5,28 @@ import java.util.Locale;
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.db.NameHintProvider;
 import pl.itiner.grave.SearchActivity;
-
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.jayway.android.robotium.solo.Condition;
 import com.jayway.android.robotium.solo.Solo;
 
-public class SearchTest extends
+public abstract class SearchTest extends
 		ActivityInstrumentationTestCase2<SearchActivity> {
 
-	private static final String TEST_NAME = "Jan";
-	private static final String TEST_SURNAME = "Nowak";
-	private static final String TEST_CEMENTERY = "Miłostowo";
+	protected static final String TEST_NAME = "Jan";
+	protected static final String TEST_SURNAME = "Nowak";
+	protected static final String TEST_CEMENTERY = "Miłostowo";
 
 	public SearchTest() {
 		super(SearchActivity.class);
 	}
 
-	private Solo solo;
+	protected Solo solo;
+
+	protected abstract boolean isOnline();
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -38,62 +38,62 @@ public class SearchTest extends
 		super.tearDown();
 	}
 
-	private void helperTestSimpleName(boolean online) {
+	protected void helperTestSimpleName(boolean isOnline) {
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setName(TEST_NAME);
-		startSearchTest(criteria, online);
+		startSearchTest(criteria, isOnline);
 	}
 
-	private void helperTestSimpleSurname(boolean online) {
+	protected void helperTestSimpleSurname(boolean isOnline) {
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setSurename(TEST_SURNAME);
-		startSearchTest(criteria, online);
+		startSearchTest(criteria, isOnline);
 	}
 
-	private void helperTestCapitalName(boolean online) {
+	protected void helperTestCapitalName(boolean isOnline) {
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setName(TEST_NAME.toUpperCase(Locale.US));
-		startSearchTest(criteria, online);
+		startSearchTest(criteria, isOnline);
 	}
 
-	private void helperTestSpacedName(boolean online) {
+	protected void helperTestSpacedName(boolean isOnline) {
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setName("  " + TEST_NAME + "  ");
-		startSearchTest(criteria, online);
+		startSearchTest(criteria, isOnline);
 	}
 
-	private void helperTestCapitalSurname(boolean online) {
+	protected void helperTestCapitalSurname(boolean isOnline) {
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setSurename(TEST_SURNAME.toUpperCase(Locale.US));
-		startSearchTest(criteria, online);
+		startSearchTest(criteria, isOnline);
 	}
 
-	private void helperTestSpacedSurname(boolean online) {
+	protected void helperTestSpacedSurname(boolean isOnline) {
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setSurename("  " + TEST_SURNAME + "  ");
-		startSearchTest(criteria, online);
+		startSearchTest(criteria, isOnline);
 	}
 
-	private void helperTestCementerySelect(boolean online) {
+	protected void helperTestCementerySelect(boolean isOnline) {
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setCementery(TEST_CEMENTERY);
-		startSearchTest(criteria, online);
+		startSearchTest(criteria, isOnline);
 	}
 
-	private void helperTestAllBasicCategories(boolean online) {
+	protected void helperTestAllBasicCategories(boolean isOnline) {
 		SearchCriteria criteria = new SearchCriteria();
 		criteria.setName(TEST_NAME);
 		criteria.setSurename(TEST_SURNAME);
 		criteria.setCementery(TEST_CEMENTERY);
-		startSearchTest(criteria, online);
+		startSearchTest(criteria, isOnline);
 	}
 
-	private void startSearchTest(SearchCriteria criteria, boolean online) {
+	protected void startSearchTest(SearchCriteria criteria, boolean isOnline) {
 		criteria.apply(solo);
 		solo.clickOnButton(solo.getString(pl.itiner.grave.R.string.search));
 		assertTrue(solo.waitForFragmentById(
 				pl.itiner.grave.R.id.result_list_fragment, 5000));
-		assertTrue(solo.waitForView(ProgressBar.class));
+//		assertTrue(solo.waitForView(ProgressBar.class));
 		assertTrue(solo.waitForView(ListView.class));
 		solo.waitForCondition(new Condition() {
 
@@ -104,7 +104,7 @@ public class SearchTest extends
 			}
 		}, 5000);
 		criteria.verifyResult((ListView) solo.getView(android.R.id.list), solo);
-		if (online) {
+		if (isOnline) {
 			assertTrue(solo.getView(
 					pl.itiner.grave.R.id.list_offline_warninig_view)
 					.getVisibility() == View.GONE);
@@ -114,65 +114,62 @@ public class SearchTest extends
 					.getVisibility() == View.VISIBLE);
 		}
 	}
+	
+	protected void clearScr() {
+		solo.clearEditText((EditText) solo.getView(pl.itiner.grave.R.id.name));
+		solo.clearEditText((EditText) solo.getView(pl.itiner.grave.R.id.surname));
+		solo.pressSpinnerItem(0, -2);
+	}
 
-	private void clearResultsCache() {
+	protected void clearResultsCache() {
 		getActivity().getContentResolver().delete(
 				GraveFinderProvider.CONTENT_URI, null, null);
 
 	}
 
-	private void clearHintsCache() {
+	protected void clearHintsCache() {
 		getActivity().getContentResolver().delete(NameHintProvider.CONTENT_URI,
 				null, null);
 
 	}
 
 	public void testSimpleNameNetworkNoCache() {
-		clearResultsCache();
-		helperTestSimpleName(true);
+		helperTestSimpleName(isOnline());
 	}
 
 	public void testSimpleSurnameNetworkNoCache() {
-		clearResultsCache();
-		helperTestSimpleSurname(true);
+		helperTestSimpleSurname(isOnline());
 	}
 
 	public void testSimpleCementerySelectNetworkNoCache() {
-		clearResultsCache();
-		helperTestCementerySelect(true);
+		helperTestCementerySelect(isOnline());
 	}
 
 	public void testAllBasicCategoriesNetworkNoCache() {
-		clearResultsCache();
-		helperTestAllBasicCategories(true);
+		helperTestAllBasicCategories(isOnline());
 	}
 
 	public void testCapitalSurnameNetworkNoCache() {
-		clearResultsCache();
-		helperTestCapitalSurname(true);
+		helperTestCapitalSurname(isOnline());
 	}
 
 	public void testCapitalNameNetworkNoCache() {
-		clearResultsCache();
-		helperTestCapitalName(true);
+		helperTestCapitalName(isOnline());
 	}
 
 	public void testSpacedSurnameNetworkNoCache() {
-		clearResultsCache();
-		helperTestSpacedSurname(true);
+		helperTestSpacedSurname(isOnline());
 	}
 
 	public void testSpacedNameNetworkNoCache() {
-		clearResultsCache();
-		helperTestSpacedName(true);
+		helperTestSpacedName(isOnline());
 	}
 
 	public void testHintForSurname() {
-		clearResultsCache();
 		clearHintsCache();
 		// Assure that there will be something in hint
 		EditText field = (EditText) solo.getView(pl.itiner.grave.R.id.surname);
-		helperTestSimpleSurname(true);
+		helperTestSimpleSurname(isOnline());
 		solo.goBack();
 		assertTrue(
 				"Did not back to search fragment",
@@ -189,10 +186,9 @@ public class SearchTest extends
 	}
 
 	public void testHintForName() {
-		clearResultsCache();
 		clearHintsCache();
 		// Assure that there will be something in hint
-		helperTestSimpleName(true);
+		helperTestSimpleName(isOnline());
 		solo.goBack();
 		assertTrue(
 				"Did not back to search fragment",
@@ -232,16 +228,6 @@ public class SearchTest extends
 		solo.waitForView(ListView.class);
 		criteria.verifyResult((ListView) solo.getView(android.R.id.list), solo);
 	}
-
-	/*
-	 * TODO As I could not find the way how to disable networking in testing
-	 * code, the tests which includes fetching data from cache also download
-	 * data from network. Which actually should be disabled when want to test
-	 * cache.
-	 * 
-	 * The above test will be introduced after making some changes to
-	 * architecture allowing to mock some of classes to emulate no network.
-	 */
 
 	/*
 	 * TODO Add test for extra criteria set (dates)

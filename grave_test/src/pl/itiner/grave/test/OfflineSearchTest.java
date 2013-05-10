@@ -8,26 +8,26 @@ import java.net.SocketException;
 
 import org.apache.commons.net.telnet.TelnetClient;
 
-import pl.itiner.grave.SearchActivity;
-import android.test.ActivityInstrumentationTestCase2;
-
-public class OfflineSearchTest extends
-		ActivityInstrumentationTestCase2<SearchActivity> {
+public class OfflineSearchTest extends SearchTest {
 
 	private static final String GSM_DATA_OFF = "gsm data off\n";
 	private static final String GSM_DATA_ON = "gsm data on\n";
 
-	public OfflineSearchTest() {
-		super(SearchActivity.class);
-	}
+	private static boolean isDataDownloaded = false;
 
 	protected void setUp() throws Exception {
 		super.setUp();
+		if (!isDataDownloaded) {
+			helperTestAllBasicCategories(true);
+			solo.goBack();
+			clearScr();
+			isDataDownloaded = true;
+		}
 		runTelnetCommand(GSM_DATA_OFF);
 	}
 
-	private void runTelnetCommand(String cmd) throws SocketException, IOException,
-			Exception {
+	private void runTelnetCommand(String cmd) throws SocketException,
+			IOException, Exception {
 		TelnetClient client = null;
 		try {
 			client = new TelnetClient();
@@ -58,7 +58,8 @@ public class OfflineSearchTest extends
 		super.tearDown();
 	}
 
-	public void testTelnet() {
-
+	@Override
+	protected boolean isOnline() {
+		return false;
 	}
 }
