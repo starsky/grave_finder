@@ -36,16 +36,23 @@ public final class JsonFetchService extends IntentService {
 						GraveFinderProvider.CONTENT_URI,
 						DepartedFactory.asContentValues(d));
 			}
+			if(results.size() == 0) {
+				sendMsg(intent, ResultList.SearchHandler.NO_ONLINE_RESULTS);
+			}
 		} catch (IOException e) {
-			Messenger messenger = intent.getParcelableExtra(MESSENGER_BUNDLE);
-			if (null != messenger) {
-				Message msg = Message.obtain();
-				msg.what = ResultList.SearchHandler.DOWNLOAD_FAILED;
-				try {
-					messenger.send(msg);
-				} catch (RemoteException e1) {
-					//Skip
-				}
+			sendMsg(intent, ResultList.SearchHandler.DOWNLOAD_FAILED);
+		}
+	}
+
+	private void sendMsg(Intent intent, int what) {
+		Messenger messenger = intent.getParcelableExtra(MESSENGER_BUNDLE);
+		if (null != messenger) {
+			Message msg = Message.obtain();
+			msg.what = what;
+			try {
+				messenger.send(msg);
+			} catch (RemoteException e1) {
+				// Skip
 			}
 		}
 	}

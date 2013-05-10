@@ -135,10 +135,10 @@ public class ResultList extends SherlockListFragment implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
 		adapter.swapCursor(c);
-		if (adapter.getCount() > 0) {
-			setListAdapter(adapter);
-		} else if (!activity.isConnectionAvailable()) {
+		if (adapter.getCount() == 0 && !activity.isConnectionAvailable()) {
 			HANDLER.sendEmptyMessage(SearchHandler.NO_CONNECTION);
+		} else if (!activity.isConnectionAvailable()) {
+			setupOfflineDataWarningHeader();
 		}
 	}
 
@@ -206,7 +206,8 @@ public class ResultList extends SherlockListFragment implements
 	}
 
 	public void search(QueryParams params) {
-		setListAdapter(null);
+		getView().findViewById(R.id.list_offline_warninig_view).setVisibility(
+				View.GONE);
 		Bundle b = new Bundle();
 		String queryUriStr = GraveFinderProvider.createUri(params).toString();
 		b.putString(CONTENT_PROVIDER_URI, queryUriStr);
@@ -222,6 +223,11 @@ public class ResultList extends SherlockListFragment implements
 		}
 	}
 
+	private void setupOfflineDataWarningHeader() {
+		getView().findViewById(R.id.list_offline_warninig_view).setVisibility(
+				activity.isConnectionAvailable() ? View.GONE : View.VISIBLE);
+	}
+
 	public void handleMessage(Message msg) {
 		switch (msg.what) {
 		case SearchHandler.NO_CONNECTION:
@@ -230,10 +236,7 @@ public class ResultList extends SherlockListFragment implements
 						R.string.turn_on_conn).show(getFragmentManager(),
 						ALERT_FRAGMENT_TAG);
 			} else {
-				getView().findViewById(R.id.list_offline_warninig_view)
-						.setVisibility(
-								activity.isConnectionAvailable() ? View.GONE
-										: View.VISIBLE);
+				setupOfflineDataWarningHeader();
 			}
 			break;
 		case SearchHandler.DOWNLOAD_FAILED:
@@ -244,11 +247,18 @@ public class ResultList extends SherlockListFragment implements
 				getView().findViewById(R.id.list_offline_warninig_view)
 						.setVisibility(View.VISIBLE);
 			} else {
+				setupOfflineDataWarningHeader();
+			}
+			break;
+		case SearchHandler.NO_ONLINE_RESULTS:
+			if (!hasData()) {
+				AlertDialogFragment.create(R.string.no_data,
+						R.string.no_data_desc).show(getFragmentManager(),
+						ALERT_FRAGMENT_TAG);
 				getView().findViewById(R.id.list_offline_warninig_view)
-						.setVisibility(
-								activity.isConnectionAvailable() ? View.GONE
-										: View.VISIBLE);
-
+						.setVisibility(View.VISIBLE);
+			} else {
+				setupOfflineDataWarningHeader();
 			}
 			break;
 		}
@@ -256,6 +266,7 @@ public class ResultList extends SherlockListFragment implements
 
 	public static class SearchHandler extends Handler {
 
+		public static final int NO_ONLINE_RESULTS = 3;
 		public static final int DOWNLOAD_FAILED = 2;
 		public static final int NO_CONNECTION = 1;
 		public static final int LOCAL_DATA_AVAILABLE = 0;
