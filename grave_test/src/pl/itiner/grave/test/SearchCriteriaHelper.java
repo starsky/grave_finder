@@ -1,6 +1,13 @@
 package pl.itiner.grave.test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.SocketException;
 import java.util.Locale;
+
+import org.apache.commons.net.telnet.TelnetClient;
 
 import junit.framework.TestCase;
 
@@ -104,6 +111,37 @@ public class SearchCriteriaHelper {
 		solo.clearEditText((EditText) solo
 				.getView(pl.itiner.grave.R.id.surname));
 		solo.pressSpinnerItem(0, -2);
+	}
+
+	public static final String GSM_DATA_OFF = "gsm data off\n";
+	public static final String GSM_DATA_ON = "gsm data on\n";
+
+	
+	public void runTelnetCommand(String cmd) throws SocketException,
+			IOException, Exception {
+		TelnetClient client = null;
+		try {
+			client = new TelnetClient();
+			client.connect("10.0.2.2", 5554);
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					client.getInputStream()));
+			String result = in.readLine();
+			result = in.readLine();
+			if (!result.equals("OK")) {
+				throw new Exception("Telnet failed: " + result);
+			}
+			PrintStream out = new PrintStream(client.getOutputStream());
+			out.print(cmd);
+			out.flush();
+			result = in.readLine();
+			if (!result.equals("OK")) {
+				throw new Exception("Telnet failed: " + result);
+			}
+		} finally {
+			if (null != client) {
+				client.disconnect();
+			}
+		}
 	}
 
 }
