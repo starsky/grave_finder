@@ -60,6 +60,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ZoomControls;
@@ -90,6 +91,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 	private Place userPlace;
 	private LocationManager locManager;
 	private LocationListener locListener;
+
 	private OnMapElementListener elemListener = new OnMapElementListener() {
 
 		@Override
@@ -340,6 +342,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle b) {
 		long id = b.getLong(DEPARTED_ID_BUND);
+		Log.e("NUTITEQ_MAP", "Received id " + id);
 		final Uri uri = ContentUris.withAppendedId(
 				GraveFinderProvider.CONTENT_URI, id);
 		return new CursorLoader(this, uri, new String[] { COLUMN_CEMENTERY_ID,
@@ -351,11 +354,13 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		if (cursor.getCount() == 0) {
+			Log.e("NUTITEQ_MAP", "Cursor has 0 results for id");
+		}
 		Departed d = new DepartedCursor(cursor);
 		cursor.moveToFirst();
 		fillHeaderWithData(d);
 		placeGravePin(d);
-
 	}
 
 	@Override
@@ -363,7 +368,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 	}
 
-	public static Bitmap createMissingTileBitmap(final int tileSize,
+	public Bitmap createMissingTileBitmap(final int tileSize,
 			final String bitmapText, Resources res) {
 		Bitmap canvasBitmap = Bitmap.createBitmap(tileSize, tileSize,
 				Bitmap.Config.RGB_565);
