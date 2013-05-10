@@ -1,9 +1,5 @@
 package pl.itiner.grave;
 
-import static pl.itiner.grave.SearchActivity.SearchActivityHandler.DOWNLOAD_FAILED;
-import static pl.itiner.grave.SearchActivity.SearchActivityHandler.LOCAL_DATA_AVAILABLE;
-import static pl.itiner.grave.SearchActivity.SearchActivityHandler.NO_CONNECTION;
-
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -14,16 +10,10 @@ import pl.itiner.db.NameHintProvider.QUERY_TYPES;
 import pl.itiner.fetch.QueryParams;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Message;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter.CursorToStringConverter;
 import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
@@ -47,14 +37,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.google.common.base.Strings;
 
-public class GFormFragment extends SherlockFragment implements
-		SearchActivityFragment {
+public class GFormFragment extends SherlockFragment {
 	public static final String TAG = "GFormFragment";
-	private static final String DIALOG_FRAGMENT = "DIALOG_FRAGMENT";
 
 	private static final int NONE_DATE = 3;
 	private static final int BURIAL_DATE = 1;
@@ -73,17 +60,6 @@ public class GFormFragment extends SherlockFragment implements
 	private RadioGroup dateGroup;
 
 	private SearchActivity activity;
-	private FragmentManager fragmentMgr;
-
-	private SherlockDialogFragment dialogFragment = new SherlockDialogFragment() {
-		public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
-			ProgressDialog dialog = new ProgressDialog(getActivity());
-			dialog.setIndeterminate(true);
-			dialog.setTitle(R.string.downloading_data);
-			dialog.setCancelable(true);
-			return dialog;
-		};
-	};
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -100,12 +76,6 @@ public class GFormFragment extends SherlockFragment implements
 	public void onDetach() {
 		super.onDetach();
 		this.activity = null;
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		fragmentMgr = getFragmentManager();
 	}
 
 	@Override
@@ -279,7 +249,6 @@ public class GFormFragment extends SherlockFragment implements
 				.getText().toString());
 		addQueryToCache(NameHintProvider.QUERY_TYPES.NAME, editTextName
 				.getText().toString());
-		dialogFragment.show(fragmentMgr, DIALOG_FRAGMENT);
 		activity.search(params);
 	}
 
@@ -296,56 +265,6 @@ public class GFormFragment extends SherlockFragment implements
 			values.put(Columns.COLUMN_VALUE, query);
 			activity.getContentResolver().insert(NameHintProvider.CONTENT_URI,
 					values);
-		}
-	}
-
-	private void goToList() {
-		if (dialogFragment.getDialog() != null
-				&& dialogFragment.getDialog().isShowing()) {
-			dialogFragment.dismiss();
-			FragmentTransaction transaction = fragmentMgr.beginTransaction();
-			transaction.replace(R.id.content_fragment_placeholder,
-					activity.getListFragment(),
-					SearchActivity.CONTENT_FRAGMENT_TAG);
-			transaction.addToBackStack(null);
-			transaction.commit();
-		}
-	}
-
-	@Override
-	public void handleMessage(Message msg) {
-		if (activity != null) {
-			switch (msg.what) {
-			case LOCAL_DATA_AVAILABLE:
-				goToList();
-				break;
-			case NO_CONNECTION:
-				dialogFragment.dismiss();
-				new SherlockDialogFragment() {
-					public Dialog onCreateDialog(Bundle savedInstanceState) {
-						AlertDialog.Builder b = new AlertDialog.Builder(
-								activity);
-						b.setTitle(R.string.no_conn);
-						b.setMessage(R.string.turn_on_conn);
-						b.setPositiveButton(R.string.ok, null);
-						return b.create();
-					};
-				}.show(fragmentMgr, DIALOG_FRAGMENT);
-				break;
-			case DOWNLOAD_FAILED:
-				dialogFragment.dismiss();
-				new SherlockDialogFragment() {
-					public Dialog onCreateDialog(Bundle savedInstanceState) {
-						AlertDialog.Builder b = new AlertDialog.Builder(
-								activity);
-						b.setTitle(R.string.no_conn);
-						b.setMessage(R.string.check_conn);
-						b.setPositiveButton(R.string.ok, null);
-						return b.create();
-					};
-				}.show(fragmentMgr, DIALOG_FRAGMENT);
-				break;
-			}
 		}
 	}
 

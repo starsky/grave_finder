@@ -33,6 +33,7 @@
     <string name="geopoz_logo_desc">GeoPoz-logo</string>
     <string name="itiner_logo_desc">Itiner-logo</string>
     <string name="no_data">Brak danych</string>
+    <string name="no_data_desc">Nie udało się znaleźć wyników dla podanego zapytania.</string>
     <string name="map_no_connection">Brak połączenia</string>
     <string name="downloading_data">Pobieranie danych</string>
     <string name="ok">OK</string>

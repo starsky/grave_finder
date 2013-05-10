@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import pl.itiner.db.GraveFinderProvider;
-import pl.itiner.grave.SearchActivity;
+import pl.itiner.grave.ResultList;
 import pl.itiner.model.Departed;
 import pl.itiner.model.DepartedFactory;
 import android.app.IntentService;
@@ -36,16 +36,23 @@ public final class JsonFetchService extends IntentService {
 						GraveFinderProvider.CONTENT_URI,
 						DepartedFactory.asContentValues(d));
 			}
+			if(results.size() == 0) {
+				sendMsg(intent, ResultList.SearchHandler.NO_ONLINE_RESULTS);
+			}
 		} catch (IOException e) {
-			Messenger messenger = intent.getParcelableExtra(MESSENGER_BUNDLE);
-			if (null != messenger) {
-				Message msg = Message.obtain();
-				msg.what = SearchActivity.SearchActivityHandler.DOWNLOAD_FAILED;
-				try {
-					messenger.send(msg);
-				} catch (RemoteException e1) {
-					//Skip
-				}
+			sendMsg(intent, ResultList.SearchHandler.DOWNLOAD_FAILED);
+		}
+	}
+
+	private void sendMsg(Intent intent, int what) {
+		Messenger messenger = intent.getParcelableExtra(MESSENGER_BUNDLE);
+		if (null != messenger) {
+			Message msg = Message.obtain();
+			msg.what = what;
+			try {
+				messenger.send(msg);
+			} catch (RemoteException e1) {
+				// Skip
 			}
 		}
 	}

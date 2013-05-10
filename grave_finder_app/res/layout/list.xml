@@ -9,13 +9,26 @@
         style="@style/list_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:text="@string/list_offline_warning"
         android:textColor="@color/red"
-        android:padding="5dp"/>
-    
-    <View android:layout_width="match_parent"
+        android:visibility="gone" />
+
+    <View
+        android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="#80000000"/>
+        android:background="#80000000" />
+
+    <FrameLayout
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ProgressBar
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 
     <ListView
         android:id="@android:id/list"
