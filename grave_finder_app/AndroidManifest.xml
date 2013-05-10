@@ -17,7 +17,9 @@
         android:allowBackup="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/Theme.Sherlock.Light" >
+        
         <uses-library android:name="com.google.android.maps" />
 
         <activity android:name="pl.itiner.map.GraveMap" />
@@ -41,7 +43,6 @@
             android:icon="@drawable/icon"
             android:label="@string/app_name" >
         </activity>
- 
         <activity
             android:name="pl.itiner.nutiteq.NutiteqMap"
             android:label="@string/app_name" >
@@ -52,7 +53,6 @@
             android:authorities="pl.itiner.grave.GraveFinderProvider"
             android:exported="false" >
         </provider>
-        
         <provider
             android:name="pl.itiner.db.NameHintProvider"
             android:authorities="pl.itiner.grave.NameHintProvider"
