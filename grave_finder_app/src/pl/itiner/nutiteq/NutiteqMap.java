@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import pl.itiner.commons.Commons;
 import pl.itiner.db.DepartedCursor;
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.grave.R;
@@ -197,7 +198,9 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
 		mapSurnameName
-				.setText(departed.getName() + " " + departed.getSurname());
+				.setText(Commons.capitalizeFirstLetter(departed.getName())
+						+ " "
+						+ Commons.capitalizeFirstLetter(departed.getSurname()));
 
 		mapBirthDate = (TextView) findViewById(R.id.map_value_dateBirth);
 		mapBirthDate.setText(formatDate(departed.getBirthDate()));
