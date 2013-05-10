@@ -18,10 +18,9 @@ public abstract class SearchTest extends
 		ActivityInstrumentationTestCase2<SearchActivity> {
 
 	private static final String NO_SUCH_SURNAME = "NO_SUCH_SURNAME";
-	protected static final String TEST_NAME = "Jan";
-	protected static final String TEST_SURNAME = "Nowak";
-	protected static final String TEST_CEMENTERY = "Miłostowo";
-
+	
+	protected SearchCriteriaHelper helper;
+	
 	public SearchTest() {
 		super(SearchActivity.class);
 	}
@@ -33,6 +32,7 @@ public abstract class SearchTest extends
 	protected void setUp() throws Exception {
 		super.setUp();
 		solo = new Solo(getInstrumentation(), getActivity());
+		helper = new SearchCriteriaHelper(solo);
 	}
 
 	protected void tearDown() throws Exception {
@@ -40,88 +40,6 @@ public abstract class SearchTest extends
 		super.tearDown();
 	}
 
-	protected void helperTestSimpleName(boolean isOnline) {
-		SearchCriteria criteria = new SearchCriteria();
-		criteria.setName(TEST_NAME);
-		startSearchTest(criteria, isOnline);
-	}
-
-	protected void helperTestSimpleSurname(boolean isOnline) {
-		SearchCriteria criteria = new SearchCriteria();
-		criteria.setSurename(TEST_SURNAME);
-		startSearchTest(criteria, isOnline);
-	}
-
-	protected void helperTestCapitalName(boolean isOnline) {
-		SearchCriteria criteria = new SearchCriteria();
-		criteria.setName(TEST_NAME.toUpperCase(Locale.US));
-		startSearchTest(criteria, isOnline);
-	}
-
-	protected void helperTestSpacedName(boolean isOnline) {
-		SearchCriteria criteria = new SearchCriteria();
-		criteria.setName("  " + TEST_NAME + "  ");
-		startSearchTest(criteria, isOnline);
-	}
-
-	protected void helperTestCapitalSurname(boolean isOnline) {
-		SearchCriteria criteria = new SearchCriteria();
-		criteria.setSurename(TEST_SURNAME.toUpperCase(Locale.US));
-		startSearchTest(criteria, isOnline);
-	}
-
-	protected void helperTestSpacedSurname(boolean isOnline) {
-		SearchCriteria criteria = new SearchCriteria();
-		criteria.setSurename("  " + TEST_SURNAME + "  ");
-		startSearchTest(criteria, isOnline);
-	}
-
-	protected void helperTestCementerySelect(boolean isOnline) {
-		SearchCriteria criteria = new SearchCriteria();
-		criteria.setCementery(TEST_CEMENTERY);
-		startSearchTest(criteria, isOnline);
-	}
-
-	protected void helperTestAllBasicCategories(boolean isOnline) {
-		SearchCriteria criteria = new SearchCriteria();
-		criteria.setName(TEST_NAME);
-		criteria.setSurename(TEST_SURNAME);
-		criteria.setCementery(TEST_CEMENTERY);
-		startSearchTest(criteria, isOnline);
-	}
-
-	protected void startSearchTest(SearchCriteria criteria, boolean isOnline) {
-		criteria.apply(solo);
-		solo.clickOnButton(solo.getString(pl.itiner.grave.R.string.search));
-		assertTrue(solo.waitForFragmentById(
-				pl.itiner.grave.R.id.result_list_fragment, 5000));
-		assertTrue(solo.waitForView(ListView.class));
-		solo.waitForCondition(new Condition() {
-
-			@Override
-			public boolean isSatisfied() {
-				View view = solo.getView(android.R.id.empty);
-				return view != null && view.getVisibility() == View.GONE;
-			}
-		}, 5000);
-		criteria.verifyResult((ListView) solo.getView(android.R.id.list), solo);
-		if (isOnline) {
-			assertTrue(solo.getView(
-					pl.itiner.grave.R.id.list_offline_warninig_view)
-					.getVisibility() == View.GONE);
-		} else {
-			assertTrue(solo.getView(
-					pl.itiner.grave.R.id.list_offline_warninig_view)
-					.getVisibility() == View.VISIBLE);
-		}
-	}
-
-	protected void clearScr() {
-		solo.clearEditText((EditText) solo.getView(pl.itiner.grave.R.id.name));
-		solo.clearEditText((EditText) solo
-				.getView(pl.itiner.grave.R.id.surname));
-		solo.pressSpinnerItem(0, -2);
-	}
 
 	protected void clearResultsCache() {
 		getActivity().getContentResolver().delete(
@@ -136,42 +54,42 @@ public abstract class SearchTest extends
 	}
 
 	public void testSimpleName() {
-		helperTestSimpleName(isOnline());
+		helper.helperTestSimpleName(isOnline());
 	}
 
 	public void testSimpleSurname() {
-		helperTestSimpleSurname(isOnline());
+		helper.helperTestSimpleSurname(isOnline());
 	}
 
 	public void testSimpleCementerySelect() {
-		helperTestCementerySelect(isOnline());
+		helper.helperTestCementerySelect(isOnline());
 	}
 
 	public void testAllBasicCategories() {
-		helperTestAllBasicCategories(isOnline());
+		helper.helperTestAllBasicCategories(isOnline());
 	}
 
 	public void testCapitalSurname() {
-		helperTestCapitalSurname(isOnline());
+		helper.helperTestCapitalSurname(isOnline());
 	}
 
 	public void testCapitalName() {
-		helperTestCapitalName(isOnline());
+		helper.helperTestCapitalName(isOnline());
 	}
 
 	public void testSpacedSurname() {
-		helperTestSpacedSurname(isOnline());
+		helper.helperTestSpacedSurname(isOnline());
 	}
 
 	public void testSpacedName() {
-		helperTestSpacedName(isOnline());
+		helper.helperTestSpacedName(isOnline());
 	}
 
 	public void testHintForSurname() {
 		clearHintsCache();
 		// Assure that there will be something in hint
 		EditText field = (EditText) solo.getView(pl.itiner.grave.R.id.surname);
-		helperTestSimpleSurname(isOnline());
+		helper.helperTestSimpleSurname(isOnline());
 		solo.goBack();
 		assertTrue(
 				"Did not back to search fragment",
@@ -179,25 +97,25 @@ public abstract class SearchTest extends
 		assertTrue(solo.waitForView(field));
 		solo.clearEditText(field);
 		solo.typeText(field,
-				TEST_SURNAME.toCharArray()[0] + "".toLowerCase(Locale.US));
+				SearchCriteriaHelper.TEST_SURNAME.toCharArray()[0] + "".toLowerCase(Locale.US));
 		assertTrue(
-				"Hint list did not contain expected surname " + TEST_SURNAME,
-				solo.waitForText(TEST_SURNAME));
-		solo.clickLongOnText(TEST_SURNAME);
-		assertEquals(TEST_SURNAME, field.getText().toString());
+				"Hint list did not contain expected surname " + SearchCriteriaHelper.TEST_SURNAME,
+				solo.waitForText(SearchCriteriaHelper.TEST_SURNAME));
+		solo.clickLongOnText(SearchCriteriaHelper.TEST_SURNAME);
+		assertEquals(SearchCriteriaHelper.TEST_SURNAME, field.getText().toString());
 	}
 
 	public void testHintForName() {
 		clearHintsCache();
 		// Assure that there will be something in hint
-		helperTestSimpleName(isOnline());
+		helper.helperTestSimpleName(isOnline());
 		solo.goBack();
 		assertTrue(
 				"Did not back to search fragment",
 				solo.waitForFragmentById(pl.itiner.grave.R.id.search_form_fragment));
 		EditText field = (EditText) solo.getView(pl.itiner.grave.R.id.name);
 		solo.clearEditText(field);
-		String name = TEST_NAME;
+		String name = SearchCriteriaHelper.TEST_NAME;
 		solo.typeText(field, name.toCharArray()[0] + "".toLowerCase(Locale.US));
 		assertTrue("Hint list did not contain expected surname " + name,
 				solo.waitForText(name));
@@ -207,9 +125,9 @@ public abstract class SearchTest extends
 
 	public void testScreenRotationAfterCriteria() {
 		SearchCriteria criteria = new SearchCriteria();
-		criteria.setName(TEST_NAME);
-		criteria.setSurename(TEST_SURNAME);
-		criteria.setCementery(TEST_CEMENTERY);
+		criteria.setName(SearchCriteriaHelper.TEST_NAME);
+		criteria.setSurename(SearchCriteriaHelper.TEST_SURNAME);
+		criteria.setCementery(SearchCriteriaHelper.TEST_CEMENTERY);
 		criteria.apply(solo);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		criteria.verifySearchView(solo);
@@ -217,9 +135,9 @@ public abstract class SearchTest extends
 
 	public void testScreenRotationAfterSearchHit() {
 		SearchCriteria criteria = new SearchCriteria();
-		criteria.setName(TEST_NAME);
-		criteria.setSurename(TEST_SURNAME);
-		criteria.setCementery(TEST_CEMENTERY);
+		criteria.setName(SearchCriteriaHelper.TEST_NAME);
+		criteria.setSurename(SearchCriteriaHelper.TEST_SURNAME);
+		criteria.setCementery(SearchCriteriaHelper.TEST_CEMENTERY);
 		criteria.apply(solo);
 
 		solo.clickOnButton(solo.getString(pl.itiner.grave.R.string.search));

@@ -18,9 +18,9 @@ public class OfflineSearchTest extends SearchTest {
 	protected void setUp() throws Exception {
 		super.setUp();
 		if (!isDataDownloaded) {
-			helperTestAllBasicCategories(true);
+			helper.helperTestAllBasicCategories(true);
 			solo.goBack();
-			clearScr();
+			helper.clearScr();
 			isDataDownloaded = true;
 		}
 		runTelnetCommand(GSM_DATA_OFF);
