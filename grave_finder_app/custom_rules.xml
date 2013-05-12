@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="grave_finder_custom" >
+
+    <target
+        name="-package-resources"
+        depends="-crunch" >
+
+        <!-- only package resources if *not* a library project -->
+
+        <do-only-if-not-library elseText="Library project: do not package resources..." >
+	    <property name="custom.manifest.package" value="${project.app.package}" />
+            <aapt
+                androidjar="${project.target.android.jar}"
+                apkfolder="${out.absolute.dir}"
+                assets="${asset.absolute.dir}"
+                buildType="${build.target}"
+                command="package"
+                debug="${build.is.packaging.debug}"
+                executable="${aapt}"
+                ignoreAssets="${aapt.ignore.assets}"
+                libraryPackagesRefid="project.library.packages"
+                libraryRFileRefid="project.library.bin.r.file.path"
+                libraryResFolderPathRefid="project.library.res.folder.path"
+                manifest="${out.manifest.abs.file}"
+                manifestPackage="${custom.manifest.package}"
+                nocrunch="${build.packaging.nocrunch}"
+                previousBuildType="${build.last.target}"
+                resourcefilename="${resource.package.file.name}"
+                resourcefilter="${aapt.resource.filter}"
+                versioncode="${version.code}"
+                versionname="${version.name}" >
+
+                <res path="${out.res.absolute.dir}" />
+
+                <res path="${resource.absolute.dir}" />
+                <!-- <nocompress /> forces no compression on any files in assets or res/raw -->
+                <!-- <nocompress extension="xml" /> forces no compression on specific file extensions in assets and res/raw -->
+            </aapt>
+        </do-only-if-not-library>
+    </target>
+
+</project>
