@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="grave_finder_custom" >
 
+   <target name="copy-binaries">
+       <xpath input="${manifest.abs.file}" expression="/manifest/@android:versionCode"
+                output="version.code" default=""/>
+       <xpath input="${manifest.abs.file}" expression="/manifest/@android:versionName"
+                output="version.name" default=""/>
+	<property name="custom.output.dir" location="${custom.dest.dir}/${version.name}.${version.code}" />
+	<if>
+		<condition>
+      			<available file="${custom.output.dir}" type="dir"/>
+    		</condition>
+		<then>
+			<fail message="${custom.output.dir} exists!!!" />
+		</then>
+	</if>
+	<mkdir dir="${custom.output.dir}"/>
+
+	<copy todir="${custom.output.dir}">
+    		<fileset dir="${out.absolute.dir}">
+      			<include name="*.apk"/>
+    		</fileset>
+  	</copy>
+   </target>
+
+    <target name="custom-beta-build">
+	<property name="custom.package.debuggable" value="true" />
+	<property name="custom.dest.dir" value="releases/beta" />
+    </target>
+
+    <target name="custom-production-build">
+	<property name="custom.dest.dir" value="releases/production" />
+    </target>
+
     <target
         name="-package-resources"
         depends="-crunch" >
@@ -8,14 +40,17 @@
         <!-- only package resources if *not* a library project -->
 
         <do-only-if-not-library elseText="Library project: do not package resources..." >
+
 	    <property name="custom.manifest.package" value="${project.app.package}" />
+	    <property name="custom.package.debuggable" value="${build.is.packaging.debug}" />
+
             <aapt
                 androidjar="${project.target.android.jar}"
                 apkfolder="${out.absolute.dir}"
                 assets="${asset.absolute.dir}"
                 buildType="${build.target}"
                 command="package"
-                debug="${build.is.packaging.debug}"
+                debug="${custom.package.debuggable}"
                 executable="${aapt}"
                 ignoreAssets="${aapt.ignore.assets}"
                 libraryPackagesRefid="project.library.packages"
