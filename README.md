@@ -3,7 +3,7 @@ Lokalizator grobów to aplikacja mobilna ułatwiająca odnalezienie grobu na poz
 
 ##Co nowego?
 
-**Wersja 2.1.8: Dostęp do wcześniej wyszukiwanych danych podczas braku połączenia z internetem. Jeżeli użytkownik nie posiada aktywnego połączenia internetowego, aplikacja zwróci listę na podstawie wyników poprzednich wyszukiwań z aktywnym połączeniem. Pozwoli to użytkownikom np. na wcześniejsze pobranie danych np. poprzez sieć WiFi, a następnie na skorzystanie z wcześniej pobranych danych na cmentarzu, bez konieczności włączania połączenia internetowego.
+**Wersja 2.1.8:** Dostęp do wcześniej wyszukiwanych danych podczas braku połączenia z internetem. Jeżeli użytkownik nie posiada aktywnego połączenia internetowego, aplikacja zwróci listę na podstawie wyników poprzednich wyszukiwań z aktywnym połączeniem. Pozwoli to użytkownikom np. na wcześniejsze pobranie danych np. poprzez sieć WiFi, a następnie na skorzystanie z wcześniej pobranych danych na cmentarzu, bez konieczności włączania połączenia internetowego.
 
 Podpowiedzi wcześniej wyszukiwanych imion i nazwisk w polach wyszukiwania.
  
