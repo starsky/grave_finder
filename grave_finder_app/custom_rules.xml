@@ -20,7 +20,8 @@
 	<copy todir="${custom.output.dir}">
     		<fileset dir="${out.absolute.dir}">
       			<include name="*.apk"/>
-    		</fileset>
+      			<include name="proguard/*.txt"/>
+     		</fileset>
   	</copy>
    </target>
 
