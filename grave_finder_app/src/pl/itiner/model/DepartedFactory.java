@@ -9,6 +9,7 @@ import android.content.ContentValues;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 public final class DepartedFactory {
@@ -30,8 +31,12 @@ public final class DepartedFactory {
 	}
 
 	public static List<? extends Departed> parseJson(String json) {
-		Gson gson = g.create();
-		return gson.fromJson(json, COLLECTION_TYPE);
+		final Gson gson = g.create();
+		final List<? extends Departed> result = gson.fromJson(json, COLLECTION_TYPE);
+		if(result == null) {
+			throw new JsonParseException("Result is null.");
+		}
+		return result;
 	}
 
 	public static ContentValues asContentValues(Departed departed) {

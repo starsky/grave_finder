@@ -16,6 +16,8 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
+import com.google.gson.JsonParseException;
+
 public final class JsonFetchService extends IntentService {
 
 	public static final String QUERY_PARAMS_BUNDLE = "QueryParamsBundle";
@@ -54,6 +56,8 @@ public final class JsonFetchService extends IntentService {
 			if (results.size() == 0) {
 				sendMsg(intent, ResultList.SearchHandler.NO_ONLINE_RESULTS);
 			}
+		} catch (JsonParseException e) {
+			sendMsg(intent, ResultList.SearchHandler.UNEXPECTED_SEVER_ANSWER);
 		} catch (IOException e) {
 			sendMsg(intent, ResultList.SearchHandler.DOWNLOAD_FAILED);
 		}

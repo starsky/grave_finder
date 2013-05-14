@@ -261,11 +261,23 @@ public class ResultList extends SherlockListFragment implements
 				setupOfflineDataWarningHeader();
 			}
 			break;
+		case SearchHandler.UNEXPECTED_SEVER_ANSWER:
+			if (!hasData()) {
+				AlertDialogFragment.create(R.string.no_conn,
+						R.string.unexpected_server_err).show(
+						getFragmentManager(), ALERT_FRAGMENT_TAG);
+				getView().findViewById(R.id.list_offline_warninig_view)
+						.setVisibility(View.VISIBLE);
+			} else {
+				setupOfflineDataWarningHeader();
+			}
+			break;
 		}
 	}
 
 	public static class SearchHandler extends Handler {
 
+		public static final int UNEXPECTED_SEVER_ANSWER = 4;
 		public static final int NO_ONLINE_RESULTS = 3;
 		public static final int DOWNLOAD_FAILED = 2;
 		public static final int NO_CONNECTION = 1;
