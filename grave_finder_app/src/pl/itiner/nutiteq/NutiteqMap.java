@@ -69,7 +69,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.mgmaps.utils.Tools;
 import com.nutiteq.BasicMapComponent;
 import com.nutiteq.android.MapView;
-import com.nutiteq.cache.AndroidFileSystemCache;
 import com.nutiteq.cache.Cache;
 import com.nutiteq.cache.CachingChain;
 import com.nutiteq.cache.MemoryCache;
@@ -161,7 +160,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 		if (!cacheDir.exists()) {
 			cacheDir.mkdir();
 		}
-		final AndroidFileSystemCache fileSystemCache = new AndroidFileSystemCache(
+		final FileCache fileSystemCache = new FileCache(
 				this, "network_cache", cacheDir, FILE_CACHE_SIZE);
 		mapComponent.setNetworkCache(new CachingChain(new Cache[] {
 				memoryCache, fileSystemCache }));

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="libs/android_maps_lib-1.1.1.jar" sourcepath="libs/android_maps_lib-1.1.1.src.zip"/>
+	<classpathentry exported="true" kind="lib" path="libs/android_maps_lib-1.1.1.jar" sourcepath="/home/michal/projects/Hobby/Android/Grave/maps-lib-nutiteq"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="lib" path="libs/projector.jar"/>
