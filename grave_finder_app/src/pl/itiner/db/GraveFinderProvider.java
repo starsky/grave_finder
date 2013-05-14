@@ -9,9 +9,12 @@ import java.util.List;
 import pl.itiner.fetch.QueryParams;
 import android.annotation.SuppressLint;
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -58,6 +61,21 @@ public final class GraveFinderProvider extends ContentProvider {
 			"dd-MM-yyyy");
 
 	@Override
+	public ContentProviderResult[] applyBatch(
+			ArrayList<ContentProviderOperation> operations)
+			throws OperationApplicationException {
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		db.beginTransaction();
+		try {
+			ContentProviderResult[] results = super.applyBatch(operations);
+			db.setTransactionSuccessful();
+			return results;
+		} finally {
+			db.endTransaction();
+		}
+	}
+
+	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		int match = sURIMatcher.match(uri);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -72,8 +90,8 @@ public final class GraveFinderProvider extends ContentProvider {
 			break;
 		case GRAVE_URI_ID:
 			long departedId = ContentUris.parseId(uri);
-			count = db.delete(DepartedTableHelper.TABLE_NAME, Columns._ID + " = "
-					+ departedId, null);
+			count = db.delete(DepartedTableHelper.TABLE_NAME, Columns._ID
+					+ " = " + departedId, null);
 			getContext().getContentResolver().notifyChange(uri, null);
 			break;
 		}
@@ -122,11 +140,15 @@ public final class GraveFinderProvider extends ContentProvider {
 			return handleQuery(uri, projection, db);
 		case GRAVE_URI_ID:
 			long departedId = ContentUris.parseId(uri);
-			c = db.query(DepartedTableHelper.TABLE_NAME, projection, Columns._ID
-					+ " = "
-					+ departedId
-					+ (!TextUtils.isEmpty(selection) ? " AND (" + selection
-							+ ')' : ""), selectionArgs, null, null, sortOrder);
+			c = db.query(
+					DepartedTableHelper.TABLE_NAME,
+					projection,
+					Columns._ID
+							+ " = "
+							+ departedId
+							+ (!TextUtils.isEmpty(selection) ? " AND ("
+									+ selection + ')' : ""), selectionArgs,
+					null, null, sortOrder);
 
 			c.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
 			return c;
@@ -157,8 +179,8 @@ public final class GraveFinderProvider extends ContentProvider {
 				uri.getQueryParameter(SURENAME_QUERY_PARAM));
 		putStringToWhere(builder, Columns.COLUMN_NAME, delim, whereArgs,
 				uri.getQueryParameter(NAME_QUERY_PARAM));
-		putStringToWhere(builder, Columns.COLUMN_CEMENTERY_ID, delim, whereArgs,
-				uri.getQueryParameter(CEMENTARY_ID_QUERY_PARAM));
+		putStringToWhere(builder, Columns.COLUMN_CEMENTERY_ID, delim,
+				whereArgs, uri.getQueryParameter(CEMENTARY_ID_QUERY_PARAM));
 		return whereArgs.toArray(new String[whereArgs.size()]);
 	}
 

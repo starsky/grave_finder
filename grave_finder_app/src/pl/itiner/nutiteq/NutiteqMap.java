@@ -60,7 +60,6 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ZoomControls;
@@ -342,7 +341,6 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 	@Override
 	public Loader<Cursor> onCreateLoader(int loaderId, Bundle b) {
 		long id = b.getLong(DEPARTED_ID_BUND);
-		Log.e("NUTITEQ_MAP", "Received id " + id);
 		final Uri uri = ContentUris.withAppendedId(
 				GraveFinderProvider.CONTENT_URI, id);
 		return new CursorLoader(this, uri, new String[] { COLUMN_CEMENTERY_ID,
@@ -355,7 +353,9 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 		if (cursor.getCount() == 0) {
-			Log.e("NUTITEQ_MAP", "Cursor has 0 results for id");
+			final CursorLoader l = (CursorLoader) loader;
+			throw new RuntimeException(
+					"Cursor has 0 results for loader with URI: " + l.getUri());
 		}
 		Departed d = new DepartedCursor(cursor);
 		cursor.moveToFirst();
