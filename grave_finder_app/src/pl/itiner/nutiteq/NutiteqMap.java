@@ -85,7 +85,7 @@ import com.nutiteq.wrappers.Image;
 
 public class NutiteqMap extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
-	private static final int FILE_CACHE_SIZE = 3 * 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
+	private static final int FILE_CACHE_SIZE = 5 * 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
 	private static final int MEM_CACHE_SIZE = 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
 	public static final String DEPARTED_ID_BUND = "DEPARTED_ID_BUND";
 	private BasicMapComponent mapComponent;
