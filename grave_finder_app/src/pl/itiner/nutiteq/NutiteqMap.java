@@ -32,6 +32,7 @@ import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_QUARTER;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_ROW;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SURENAME;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -68,6 +69,10 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.mgmaps.utils.Tools;
 import com.nutiteq.BasicMapComponent;
 import com.nutiteq.android.MapView;
+import com.nutiteq.cache.AndroidFileSystemCache;
+import com.nutiteq.cache.Cache;
+import com.nutiteq.cache.CachingChain;
+import com.nutiteq.cache.MemoryCache;
 import com.nutiteq.components.MapTile;
 import com.nutiteq.components.OnMapElement;
 import com.nutiteq.components.Place;
@@ -81,6 +86,8 @@ import com.nutiteq.wrappers.Image;
 
 public class NutiteqMap extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
+	private static final int FILE_CACHE_SIZE = 3 * 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
+	private static final int MEM_CACHE_SIZE = 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
 	public static final String DEPARTED_ID_BUND = "DEPARTED_ID_BUND";
 	private BasicMapComponent mapComponent;
 	private GeoMap map;
@@ -149,6 +156,15 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 		mapComponent = new BasicMapComponent(mapKey, new AppContext(this), 1,
 				1, center, initialZoom);
+		final MemoryCache memoryCache = new MemoryCache(MEM_CACHE_SIZE);
+		final File cacheDir = getCacheDir();
+		if (!cacheDir.exists()) {
+			cacheDir.mkdir();
+		}
+		final AndroidFileSystemCache fileSystemCache = new AndroidFileSystemCache(
+				this, "network_cache", cacheDir, FILE_CACHE_SIZE);
+		mapComponent.setNetworkCache(new CachingChain(new Cache[] {
+				memoryCache, fileSystemCache }));
 		map = getMap();
 		mapComponent.setMap(map);
 		mapComponent.setSmoothZoom(true);
@@ -157,6 +173,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 		userPlace = new Place(0, userLocationLabel, gps, userLocation);
 		mapComponent.setOnMapElementListener(elemListener);
+
 	}
 
 	@Override
