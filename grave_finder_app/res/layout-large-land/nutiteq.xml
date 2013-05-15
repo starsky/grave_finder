@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:itiner="http://itiner.pl/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TableLayout
+        android:id="@+id/header_graveinfo"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:stretchColumns="0" >
+
+        <TableRow>
+
+            <pl.itiner.view.TextView
+                android:id="@+id/map_surname_name"
+                style="@style/map_header_text_highlighted"
+                itiner:default_text="@string/no_data"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow>
+
+            <pl.itiner.view.TextView
+                android:id="@+id/map_value_cementry"
+                style="@style/map_header_text_highlighted"
+                itiner:default_text="@string/no_data"
+                android:textSize="18sp" />
+        </TableRow>
+
+        <TableRow>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <TextView
+                    style="@style/map_header_text"
+                    android:text="@string/born_abv" />
+
+                <pl.itiner.view.TextView
+                    android:id="@+id/map_value_dateBirth"
+                    style="@style/map_header_text_highlighted"
+                    itiner:default_text="@string/no_data" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/map_header_text"
+                android:text="@string/quater" />
+
+            <pl.itiner.view.TextView
+                android:id="@+id/map_quater_value"
+                style="@style/map_header_text_highlighted" />
+        </TableRow>
+
+        <TableRow>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <TextView
+                    style="@style/map_header_text"
+                    android:text="@string/died_abv" />
+
+                <pl.itiner.view.TextView
+                    android:id="@+id/map_value_dateDeath"
+                    style="@style/map_header_text_highlighted"
+                    itiner:default_text="@string/no_data" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/map_header_text"
+                android:text="@string/row" />
+
+            <pl.itiner.view.TextView
+                android:id="@+id/map_row_value"
+                style="@style/map_header_text_highlighted" />
+        </TableRow>
+
+        <TableRow>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <TextView
+                    style="@style/map_header_text"
+                    android:text="@string/funreal" />
+
+                <pl.itiner.view.TextView
+                    android:id="@+id/map_value_dateFunreal"
+                    style="@style/map_header_text_highlighted"
+                    itiner:default_text="@string/no_data" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/map_header_text"
+                android:text="@string/field" />
+
+            <pl.itiner.view.TextView
+                android:id="@+id/map_field_value"
+                style="@style/map_header_text_highlighted" />
+        </TableRow>
+    </TableLayout>
+
+    <com.nutiteq.android.MapView
+        android:id="@+id/nutiteq_mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/header_graveinfo" />
+
+    <ZoomControls
+        android:id="@+id/zoomcontrols"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

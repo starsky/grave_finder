@@ -28,6 +28,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.LinearLayout;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -40,15 +41,24 @@ public class SearchActivity extends SherlockFragmentActivity {
 	private ResultList listFragment;
 	private GFormFragment formFragment;
 
+	private boolean dualFragments = false;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		dualFragments = isDualFragments();
 		fragmentMgr = getSupportFragmentManager();
 		listFragment = (ResultList) fragmentMgr
 				.findFragmentById(R.id.result_list_fragment);
 		formFragment = (GFormFragment) fragmentMgr
 				.findFragmentById(R.id.search_form_fragment);
+		if (!dualFragments) {
+			hideFragment(savedInstanceState);
+		}
+	}
+
+	private void hideFragment(Bundle savedInstanceState) {
 		int hideFragmentId = R.id.result_list_fragment;
 		if (null != savedInstanceState) {
 			hideFragmentId = savedInstanceState.getInt("HIDDEN_FRAGMENT_ID",
@@ -66,10 +76,17 @@ public class SearchActivity extends SherlockFragmentActivity {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putInt("HIDDEN_FRAGMENT_ID",
-				formFragment.isHidden() ? R.id.search_form_fragment
-						: R.id.result_list_fragment);
+		if(!dualFragments) {
+			outState.putInt("HIDDEN_FRAGMENT_ID",
+					formFragment.isHidden() ? R.id.search_form_fragment
+							: R.id.result_list_fragment);
+		}
 		super.onSaveInstanceState(outState);
+	}
+
+	private boolean isDualFragments() {
+		return ((LinearLayout) findViewById(R.id.content_fragment_placeholder))
+				.getOrientation() == LinearLayout.HORIZONTAL;
 	}
 
 	public void search(QueryParams params) {
