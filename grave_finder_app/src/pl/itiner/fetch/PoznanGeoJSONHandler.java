@@ -31,7 +31,6 @@ import android.content.Context;
 import android.net.Uri;
 
 /**
- * TODO złap gdzieś wyjątek parsowania
  * 
  */
 public final class PoznanGeoJSONHandler {

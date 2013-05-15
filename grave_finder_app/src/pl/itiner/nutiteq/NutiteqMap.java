@@ -32,10 +32,12 @@ import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_QUARTER;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_ROW;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SURENAME;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import pl.itiner.commons.Commons;
 import pl.itiner.db.DepartedCursor;
 import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.grave.R;
@@ -67,6 +69,9 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.mgmaps.utils.Tools;
 import com.nutiteq.BasicMapComponent;
 import com.nutiteq.android.MapView;
+import com.nutiteq.cache.Cache;
+import com.nutiteq.cache.CachingChain;
+import com.nutiteq.cache.MemoryCache;
 import com.nutiteq.components.MapTile;
 import com.nutiteq.components.OnMapElement;
 import com.nutiteq.components.Place;
@@ -80,6 +85,8 @@ import com.nutiteq.wrappers.Image;
 
 public class NutiteqMap extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
+	private static final int FILE_CACHE_SIZE = 5 * 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
+	private static final int MEM_CACHE_SIZE = 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
 	public static final String DEPARTED_ID_BUND = "DEPARTED_ID_BUND";
 	private BasicMapComponent mapComponent;
 	private GeoMap map;
@@ -89,6 +96,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 	private Place userPlace;
 	private LocationManager locManager;
 	private LocationListener locListener;
+
 	private OnMapElementListener elemListener = new OnMapElementListener() {
 
 		@Override
@@ -147,6 +155,15 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 		mapComponent = new BasicMapComponent(mapKey, new AppContext(this), 1,
 				1, center, initialZoom);
+		final MemoryCache memoryCache = new MemoryCache(MEM_CACHE_SIZE);
+		final File cacheDir = getCacheDir();
+		if (!cacheDir.exists()) {
+			cacheDir.mkdir();
+		}
+		final FileCache fileSystemCache = new FileCache(
+				this, "network_cache", cacheDir, FILE_CACHE_SIZE);
+		mapComponent.setNetworkCache(new CachingChain(new Cache[] {
+				memoryCache, fileSystemCache }));
 		map = getMap();
 		mapComponent.setMap(map);
 		mapComponent.setSmoothZoom(true);
@@ -155,6 +172,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 		userPlace = new Place(0, userLocationLabel, gps, userLocation);
 		mapComponent.setOnMapElementListener(elemListener);
+
 	}
 
 	@Override
@@ -197,7 +215,9 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
 		mapSurnameName
-				.setText(departed.getName() + " " + departed.getSurname());
+				.setText(Commons.capitalizeFirstLetter(departed.getName())
+						+ " "
+						+ Commons.capitalizeFirstLetter(departed.getSurname()));
 
 		mapBirthDate = (TextView) findViewById(R.id.map_value_dateBirth);
 		mapBirthDate.setText(formatDate(departed.getBirthDate()));
@@ -348,11 +368,15 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		if (cursor.getCount() == 0) {
+			final CursorLoader l = (CursorLoader) loader;
+			throw new RuntimeException(
+					"Cursor has 0 results for loader with URI: " + l.getUri());
+		}
 		Departed d = new DepartedCursor(cursor);
 		cursor.moveToFirst();
 		fillHeaderWithData(d);
 		placeGravePin(d);
-
 	}
 
 	@Override
@@ -360,7 +384,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 
 	}
 
-	public static Bitmap createMissingTileBitmap(final int tileSize,
+	public Bitmap createMissingTileBitmap(final int tileSize,
 			final String bitmapText, Resources res) {
 		Bitmap canvasBitmap = Bitmap.createBitmap(tileSize, tileSize,
 				Bitmap.Config.RGB_565);

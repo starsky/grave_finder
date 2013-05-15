@@ -17,39 +17,15 @@
  */
 package pl.itiner.grave;
 
-import android.content.Intent;
+import android.os.Bundle;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.app.SherlockActivity;
 
-public class About extends GenericAbout {
-
-	
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.about_menu, menu);
-		return true;
-	}
+public final class About extends SherlockActivity {
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		final Intent intent = new Intent(this.getApplicationContext(),
-				GenericAbout.class);
-		switch (item.getItemId()) {
-		case R.id.license:
-			intent.putExtra(GenericAbout.DESC_ID, R.string.license_txt);
-			startActivity(intent);
-			return true;
-		case R.id.libraries:
-			intent.putExtra(GenericAbout.DESC_ID, R.string.libraries_txt);
-			startActivity(intent);
-			return true;
-		}
-		return false;
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.about);
 	}
-
 }

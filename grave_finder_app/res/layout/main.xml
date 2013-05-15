@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_fragment_placeholder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/content_fragment_placeholder"
+    <fragment
+        android:id="@+id/search_form_fragment"
+        android:name="pl.itiner.grave.GFormFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <fragment
+        android:id="@+id/result_list_fragment"
+        android:name="pl.itiner.grave.ResultList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

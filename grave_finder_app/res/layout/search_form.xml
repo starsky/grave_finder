@@ -4,14 +4,9 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <include
-        android:id="@+id/actionbar"
-        layout="@layout/header" />
-
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/actionbar"
         android:background="@drawable/background"
         android:isScrollContainer="false" >
 
@@ -41,19 +36,21 @@
                     android:layout_height="wrap_content"
                     android:weightSum="2" >
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/name"
                         style="@style/main_view_edit_text"
+                        android:completionThreshold="1"
                         android:hint="@string/name"
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName"
                         android:nextFocusDown="@+id/surname" />
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/surname"
                         style="@style/main_view_edit_text"
+                        android:completionThreshold="1"
                         android:hint="@string/surname"
-                        android:imeOptions="actionDone"
+                        android:imeOptions="actionSearch"
                         android:inputType="textNoSuggestions" />
                 </LinearLayout>
             </LinearLayout>
@@ -123,6 +120,7 @@
                 <DatePicker
                     android:id="@+id/datepicker"
                     android:layout_width="fill_parent"
+                    android:calendarViewShown="false"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
                     android:visibility="gone" />
