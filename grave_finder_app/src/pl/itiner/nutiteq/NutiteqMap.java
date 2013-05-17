@@ -158,7 +158,7 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 		final BalloonLabel userLocationLabel = new BalloonLabel(
 				res.getString(R.string.your_location), "");
 
-		mapComponent = new BasicMapComponent(mapKey, new AppContext(this), 1,
+		mapComponent = new MyMapComponent(mapKey, new AppContext(this), 1,
 				1, center, initialZoom);
 		final MemoryCache memoryCache = new MemoryCache(MEM_CACHE_SIZE);
 		final File cacheDir = getCacheDir();
