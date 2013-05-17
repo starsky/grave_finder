@@ -42,5 +42,7 @@
     <string name="clear_cache">Wyczyść pamięć podręczną</string>
     <string name="about_app">O programie</string>
     <string name="libraries">Biblioteki:</string>
+    <string name="no_results">Brak wyników</string>
+    <string name="searching">Wyszukiwnie</string>
 
 </resources>

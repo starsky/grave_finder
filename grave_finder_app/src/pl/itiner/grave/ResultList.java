@@ -135,6 +135,7 @@ public class ResultList extends SherlockListFragment implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
 		adapter.swapCursor(c);
+		HANDLER.sendEmptyMessage(SearchHandler.LOADER_FINISHED);
 		if (adapter.getCount() == 0 && !activity.isConnectionAvailable()) {
 			HANDLER.sendEmptyMessage(SearchHandler.NO_CONNECTION);
 		} else if (!activity.isConnectionAvailable()) {
@@ -272,11 +273,14 @@ public class ResultList extends SherlockListFragment implements
 				setupOfflineDataWarningHeader();
 			}
 			break;
+		case SearchHandler.LOADER_FINISHED:
+			activity.dismissProgressDialog();
 		}
 	}
 
 	public static class SearchHandler extends Handler {
 
+		public static final int LOADER_FINISHED = 5;
 		public static final int UNEXPECTED_SEVER_ANSWER = 4;
 		public static final int NO_ONLINE_RESULTS = 3;
 		public static final int DOWNLOAD_FAILED = 2;
@@ -302,6 +306,10 @@ public class ResultList extends SherlockListFragment implements
 				fragmentRef.handleMessage(msg);
 			}
 		}
+	}
+
+	public void cancelSearch() {
+		getLoaderManager().destroyLoader(GRAVE_DATA_LOADER_ID);
 	}
 
 }

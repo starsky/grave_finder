@@ -37,6 +37,8 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class SearchActivity extends SherlockFragmentActivity {
 
+	public static String PROGRESS_DIALOG_TAG = "PROGRESS_DIALOG_TAG";
+
 	private FragmentManager fragmentMgr;
 	private ResultList listFragment;
 	private GFormFragment formFragment;
@@ -55,6 +57,7 @@ public class SearchActivity extends SherlockFragmentActivity {
 				.findFragmentById(R.id.search_form_fragment);
 		if (!dualFragments) {
 			hideFragment(savedInstanceState);
+			dismissProgressDialog();
 		}
 	}
 
@@ -76,7 +79,7 @@ public class SearchActivity extends SherlockFragmentActivity {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		if(!dualFragments) {
+		if (!dualFragments) {
 			outState.putInt("HIDDEN_FRAGMENT_ID",
 					formFragment.isHidden() ? R.id.search_form_fragment
 							: R.id.result_list_fragment);
@@ -96,6 +99,9 @@ public class SearchActivity extends SherlockFragmentActivity {
 			transaction.show(listFragment);
 			transaction.addToBackStack(null);
 			transaction.commit();
+		} else {
+			new ProgressDialogFragment().show(getSupportFragmentManager(),
+					PROGRESS_DIALOG_TAG);
 		}
 		listFragment.search(params);
 	}
@@ -137,6 +143,17 @@ public class SearchActivity extends SherlockFragmentActivity {
 	public void gotoSearchForm() {
 		if (!formFragment.isVisible()) {
 			onBackPressed();
+		}
+	}
+
+	public void cancelSearch() {
+		listFragment.cancelSearch();
+	}
+
+	public void dismissProgressDialog() {
+		if (getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG_TAG) != null) {
+			((ProgressDialogFragment) getSupportFragmentManager()
+					.findFragmentByTag(PROGRESS_DIALOG_TAG)).dismiss();
 		}
 	}
 
