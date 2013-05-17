@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="5dp" >
 
-    <LinearLayout
-        android:id="@+id/mainL"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-        android:gravity="left"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp" >
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp" >
 
         <ImageView
             android:layout_width="wrap_content"
@@ -20,12 +18,11 @@
             android:contentDescription="@string/itiner_logo_desc"
             android:padding="4dp"
             android:src="@drawable/itiner_logo" />
-    </LinearLayout>
+    </FrameLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/mainL"
         android:background="@android:color/white"
         android:scrollbarStyle="insideInset" >
 
@@ -71,4 +68,4 @@
         </LinearLayout>
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>
