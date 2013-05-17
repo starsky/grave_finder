@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:itiner="http://itiner.pl/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:padding="10dp" >
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:fillViewport="true" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <pl.itiner.view.TextView
+                    android:id="@+id/map_name"
+                    style="@style/map_header_text_highlighted"
+                    android:textSize="20sp"
+                    itiner:default_text="@string/no_data" />
+
+                <pl.itiner.view.TextView
+                    android:id="@+id/map_surname"
+                    style="@style/map_header_text_highlighted"
+                    android:textSize="20sp"
+                    itiner:default_text="@string/no_data" />
+            </LinearLayout>
+
+            <pl.itiner.view.TextView
+                android:id="@+id/map_value_cementry"
+                style="@style/map_header_text_highlighted"
+                android:textSize="18sp"
+                itiner:default_text="@string/no_data" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/screen_background_light_transparent"
+                android:orientation="vertical" >
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp" >
+
+                    <TableRow>
+
+                        <TextView
+                            style="@style/map_header_text"
+                            android:text="@string/born_abv" />
+
+                        <pl.itiner.view.TextView
+                            android:id="@+id/map_value_dateBirth"
+                            style="@style/map_header_text_highlighted"
+                            itiner:default_text="@string/no_data" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            style="@style/map_header_text"
+                            android:text="@string/died_abv" />
+
+                        <pl.itiner.view.TextView
+                            android:id="@+id/map_value_dateDeath"
+                            style="@style/map_header_text_highlighted"
+                            itiner:default_text="@string/no_data" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            style="@style/map_header_text"
+                            android:text="@string/funreal" />
+
+                        <pl.itiner.view.TextView
+                            android:id="@+id/map_value_dateFunreal"
+                            style="@style/map_header_text_highlighted"
+                            itiner:default_text="@string/no_data" />
+                    </TableRow>
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp" >
+
+                    <TableRow>
+
+                        <TextView
+                            style="@style/map_header_text"
+                            android:layout_gravity="right"
+                            android:text="@string/quater" />
+
+                        <pl.itiner.view.TextView
+                            android:id="@+id/map_quater_value"
+                            style="@style/map_header_text_highlighted"
+                            android:layout_gravity="right" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            style="@style/map_header_text"
+                            android:text="@string/row" />
+
+                        <pl.itiner.view.TextView
+                            android:id="@+id/map_row_value"
+                            style="@style/map_header_text_highlighted" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            style="@style/map_header_text"
+                            android:text="@string/field" />
+
+                        <pl.itiner.view.TextView
+                            android:id="@+id/map_field_value"
+                            style="@style/map_header_text_highlighted" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <com.nutiteq.android.MapView
+            android:id="@+id/nutiteq_mapview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+
+        <ZoomControls
+            android:id="@+id/zoomcontrols"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+</LinearLayout>

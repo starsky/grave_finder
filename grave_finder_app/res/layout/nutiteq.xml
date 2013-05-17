@@ -1,122 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:itiner="http://itiner.pl/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
 
-    <TableLayout
-        android:id="@+id/header_graveinfo"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@android:drawable/screen_background_light_transparent"
-        android:stretchColumns="0" >
+        android:orientation="vertical" >
 
-        <TableRow>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
             <pl.itiner.view.TextView
-                android:id="@+id/map_surname_name"
+                android:id="@+id/map_name"
                 style="@style/map_header_text_highlighted"
-                itiner:default_text="@string/no_data"
-                android:textSize="20sp" />
-        </TableRow>
-
-        <TableRow>
+                android:text="Jan"
+                android:textSize="20sp"
+                itiner:default_text="@string/no_data" />
 
             <pl.itiner.view.TextView
-                android:id="@+id/map_value_cementry"
+                android:id="@+id/map_surname"
                 style="@style/map_header_text_highlighted"
-                itiner:default_text="@string/no_data"
-                android:textSize="18sp" />
-        </TableRow>
+                android:text="Kowalski"
+                android:textSize="20sp"
+                itiner:default_text="@string/no_data" />
+        </LinearLayout>
 
-        <TableRow>
+        <pl.itiner.view.TextView
+            android:id="@+id/map_value_cementry"
+            style="@style/map_header_text_highlighted"
+            android:text="Junikowo"
+            android:textSize="18sp"
+            itiner:default_text="@string/no_data" />
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:baselineAligned="false"
+            android:orientation="horizontal" >
 
-                <TextView
-                    style="@style/map_header_text"
-                    android:text="@string/born_abv" />
+            <TableLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
 
-                <pl.itiner.view.TextView
-                    android:id="@+id/map_value_dateBirth"
-                    style="@style/map_header_text_highlighted"
-                    itiner:default_text="@string/no_data" />
-            </LinearLayout>
+                <TableRow>
 
-            <TextView
-                style="@style/map_header_text"
-                android:text="@string/quater" />
+                    <TextView
+                        style="@style/map_header_text"
+                        android:text="@string/born_abv" />
 
-            <pl.itiner.view.TextView
-                android:id="@+id/map_quater_value"
-                style="@style/map_header_text_highlighted" />
-        </TableRow>
+                    <pl.itiner.view.TextView
+                        android:id="@+id/map_value_dateBirth"
+                        style="@style/map_header_text_highlighted"
+                        itiner:default_text="@string/no_data" />
+                </TableRow>
 
-        <TableRow>
+                <TableRow>
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
+                    <TextView
+                        style="@style/map_header_text"
+                        android:text="@string/died_abv" />
 
-                <TextView
-                    style="@style/map_header_text"
-                    android:text="@string/died_abv" />
+                    <pl.itiner.view.TextView
+                        android:id="@+id/map_value_dateDeath"
+                        style="@style/map_header_text_highlighted"
+                        itiner:default_text="@string/no_data" />
+                </TableRow>
 
-                <pl.itiner.view.TextView
-                    android:id="@+id/map_value_dateDeath"
-                    style="@style/map_header_text_highlighted"
-                    itiner:default_text="@string/no_data" />
-            </LinearLayout>
+                <TableRow>
 
-            <TextView
-                style="@style/map_header_text"
-                android:text="@string/row" />
+                    <TextView
+                        style="@style/map_header_text"
+                        android:text="@string/funreal" />
 
-            <pl.itiner.view.TextView
-                android:id="@+id/map_row_value"
-                style="@style/map_header_text_highlighted" />
-        </TableRow>
+                    <pl.itiner.view.TextView
+                        android:id="@+id/map_value_dateFunreal"
+                        style="@style/map_header_text_highlighted"
+                        itiner:default_text="@string/no_data" />
+                </TableRow>
+            </TableLayout>
 
-        <TableRow>
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
+                <TableRow>
 
-                <TextView
-                    style="@style/map_header_text"
-                    android:text="@string/funreal" />
+                    <TextView
+                        style="@style/map_header_text"
+                        android:layout_gravity="right"
+                        android:text="@string/quater" />
 
-                <pl.itiner.view.TextView
-                    android:id="@+id/map_value_dateFunreal"
-                    style="@style/map_header_text_highlighted"
-                    itiner:default_text="@string/no_data" />
-            </LinearLayout>
+                    <pl.itiner.view.TextView
+                        android:id="@+id/map_quater_value"
+                        style="@style/map_header_text_highlighted"
+                        android:layout_gravity="right" />
+                </TableRow>
 
-            <TextView
-                style="@style/map_header_text"
-                android:text="@string/field" />
+                <TableRow>
 
-            <pl.itiner.view.TextView
-                android:id="@+id/map_field_value"
-                style="@style/map_header_text_highlighted" />
-        </TableRow>
-    </TableLayout>
+                    <TextView
+                        style="@style/map_header_text"
+                        android:text="@string/row" />
 
-    <com.nutiteq.android.MapView
-        android:id="@+id/nutiteq_mapview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/header_graveinfo" />
+                    <pl.itiner.view.TextView
+                        android:id="@+id/map_row_value"
+                        style="@style/map_header_text_highlighted" />
+                </TableRow>
 
-    <ZoomControls
-        android:id="@+id/zoomcontrols"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" />
+                <TableRow>
 
-</RelativeLayout>
+                    <TextView
+                        style="@style/map_header_text"
+                        android:text="@string/field" />
+
+                    <pl.itiner.view.TextView
+                        android:id="@+id/map_field_value"
+                        style="@style/map_header_text_highlighted" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <com.nutiteq.android.MapView
+            android:id="@+id/nutiteq_mapview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+
+        <ZoomControls
+            android:id="@+id/zoomcontrols"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
+</LinearLayout>

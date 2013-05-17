@@ -85,8 +85,13 @@ import com.nutiteq.wrappers.Image;
 
 public class NutiteqMap extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
-	private static final int FILE_CACHE_SIZE = 5 * 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
-	private static final int MEM_CACHE_SIZE = 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
+	private static final int FILE_CACHE_SIZE = 5 * 1024 * 1024; // I assume that
+																// it is in
+																// bytes no docs
+																// from nutiteq
+	private static final int MEM_CACHE_SIZE = 1024 * 1024; // I assume that it
+															// is in bytes no
+															// docs from nutiteq
 	public static final String DEPARTED_ID_BUND = "DEPARTED_ID_BUND";
 	private BasicMapComponent mapComponent;
 	private GeoMap map;
@@ -160,8 +165,8 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 		if (!cacheDir.exists()) {
 			cacheDir.mkdir();
 		}
-		final FileCache fileSystemCache = new FileCache(
-				this, "network_cache", cacheDir, FILE_CACHE_SIZE);
+		final FileCache fileSystemCache = new FileCache(this, "network_cache",
+				cacheDir, FILE_CACHE_SIZE);
 		mapComponent.setNetworkCache(new CachingChain(new Cache[] {
 				memoryCache, fileSystemCache }));
 		map = getMap();
@@ -202,7 +207,8 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 	}
 
 	private void fillHeaderWithData(Departed departed) {
-		final TextView mapSurnameName;
+		final TextView mapName;
+		final TextView mapSurname;
 		final TextView mapBirthDate;
 		final TextView mapDeathDate;
 		final TextView mapFunrealDate;
@@ -213,11 +219,12 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 		final String[] cementeries = getResources().getStringArray(
 				R.array.necropolises);
 
-		mapSurnameName = (TextView) findViewById(R.id.map_surname_name);
-		mapSurnameName
-				.setText(Commons.capitalizeFirstLetter(departed.getName())
-						+ " "
-						+ Commons.capitalizeFirstLetter(departed.getSurname()));
+		mapName = (TextView) findViewById(R.id.map_name);
+		mapName.setText(Commons.capitalizeFirstLetter(departed.getName()));
+
+		mapSurname = (TextView) findViewById(R.id.map_surname);
+		mapSurname
+				.setText(Commons.capitalizeFirstLetter(departed.getSurname()));
 
 		mapBirthDate = (TextView) findViewById(R.id.map_value_dateBirth);
 		mapBirthDate.setText(formatDate(departed.getBirthDate()));
