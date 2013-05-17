@@ -4,20 +4,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
+    <LinearLayout
         android:id="@+id/list_offline_warninig_view"
-        style="@style/list_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="@string/list_offline_warning"
-        android:textColor="@color/red"
-        android:visibility="gone" />
+        android:orientation="vertical" >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="#80000000" />
+        <TextView
+            style="@style/list_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/list_offline_warning"
+            android:textColor="@color/red"
+            android:visibility="gone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="#80000000" />
+    </LinearLayout>
 
     <FrameLayout
         android:id="@android:id/empty"
@@ -26,10 +32,10 @@
 
         <TextView
             style="@android:style/TextAppearance.Large"
-            android:text="@string/no_results"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/no_results" />
     </FrameLayout>
 
     <ListView

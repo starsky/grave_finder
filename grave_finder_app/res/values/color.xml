@@ -6,5 +6,6 @@
     <color name="blue">#0000ff</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="spacer_background">#80000000</color>
 
 </resources>

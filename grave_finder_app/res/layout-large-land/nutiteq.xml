@@ -126,6 +126,11 @@
         </LinearLayout>
     </LinearLayout>
 
+    <View
+        android:layout_width="5dp"
+        android:layout_height="match_parent"
+        android:background="@color/spacer_background" />
+
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
