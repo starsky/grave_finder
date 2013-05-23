@@ -32,8 +32,10 @@ public final class JsonFetchService extends IntentService {
 		QueryParams params = (QueryParams) intent.getExtras().get(
 				QUERY_PARAMS_BUNDLE);
 		try {
-			final List<? extends Departed> results = new PoznanGeoJSONHandler(
-					params, getApplicationContext()).executeQuery();
+//			final List<? extends Departed> results = new PoznanGeoJSONHandler(
+//					params, getApplicationContext()).executeQuery();
+			final List<? extends Departed> results = new WroclawDataHandler(
+					params).executeQuery();
 			ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>(
 					results.size() + 1);
 			final ContentProviderOperation deleteOp = ContentProviderOperation

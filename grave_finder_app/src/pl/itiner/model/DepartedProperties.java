@@ -17,6 +17,15 @@ class DepartedProperties {
 	private String g_field;
 	private String g_size;
 	private Date g_date_birth;
+	private String w_url;
+
+	public String getW_url() {
+		return w_url;
+	}
+
+	public void setW_url(String w_url) {
+		this.w_url = w_url;
+	}
 
 	private static String capitalizeFirstLetter(String str) {
 		// if (str != null && str.length() > 1)
@@ -35,6 +44,19 @@ class DepartedProperties {
 	}
 
 	public DepartedProperties() {
+	}
+	
+
+	public DepartedProperties(String g_surname, String g_name,
+			Date g_date_burial, Date g_date_death, Date g_date_birth, String w_url) {
+		super();
+		this.g_surname = g_surname;
+		this.g_name = g_name;
+		this.g_date_burial = g_date_burial;
+		this.g_date_death = g_date_death;
+		this.g_date_birth = g_date_birth;
+		this.w_url = w_url;
+		this.cm_id = (long) 666;
 	}
 
 	public String getSurname() {

@@ -8,9 +8,12 @@ import java.io.OutputStream;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.jsoup.Connection.Response;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;
@@ -60,5 +63,62 @@ final class HttpDownloadTask {
 			return new String(content.toByteArray());
 		}
 	}
+	static HttpResponse getHttpResponse(Uri uri) throws IOException {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+			AndroidHttpClient client = AndroidHttpClient
+					.newInstance(USER_AGENT);
+			HttpResponse resp;
+			OutputStream os = new ByteArrayOutputStream();
+			try {
+				resp = client.execute(new HttpGet(uri.toString()));
+				resp.getEntity().writeTo(os);
+			} finally {
+				client.close();
+				os.close();
+			}
+			return resp;
+		} else {
+			HttpClient client = new DefaultHttpClient();
+			HttpGet request = new HttpGet(uri.toString());
+			request.setHeader("User-Agent", USER_AGENT);
+			HttpResponse response = client.execute(request);
+			return response;
+		}
+	}
+	
+	public static HttpResponse sendPostRequest(HttpPost httpPost)
+	{
+		HttpClient client = new DefaultHttpClient();
+		HttpResponse response = null;
+		try {
+			response = client.execute(httpPost);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return response;
+		
+	}
+	
+	public static HttpResponse sendGetRequest(HttpGet httpGet)
+	{
+		HttpClient client = new DefaultHttpClient();
+		HttpResponse response = null;
+		try {
+			response = client.execute(httpGet);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return response;
+		
+	}
+	
 
 }
