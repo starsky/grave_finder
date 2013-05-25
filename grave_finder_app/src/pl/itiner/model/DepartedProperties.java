@@ -47,7 +47,7 @@ class DepartedProperties {
 	}
 	
 
-	public DepartedProperties(String g_surname, String g_name,
+	public DepartedProperties(long cm_id, String g_surname, String g_name,
 			Date g_date_burial, Date g_date_death, Date g_date_birth, String w_url) {
 		super();
 		this.g_surname = g_surname;
@@ -56,7 +56,7 @@ class DepartedProperties {
 		this.g_date_death = g_date_death;
 		this.g_date_birth = g_date_birth;
 		this.w_url = w_url;
-		this.cm_id = (long) 666;
+		this.cm_id = cm_id;
 	}
 
 	public String getSurname() {

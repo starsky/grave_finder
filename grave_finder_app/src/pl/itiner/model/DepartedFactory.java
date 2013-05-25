@@ -27,6 +27,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.location.Location;
 
@@ -78,11 +79,6 @@ public final class DepartedFactory {
 			if (p != null)
 				list.add(p);
 		}
-		if (list.size() > 0) {
-			// Message dbmsg = activityUIHandler.obtainMessage();
-			// dbmsg.what = RESULT_READY;
-			// activityUIHandler.sendMessage(dbmsg);
-		}
 		return list;
 	}
 
@@ -102,22 +98,19 @@ public final class DepartedFactory {
 
 		Elements elems = elem.select("a");// .first().attr("href");
 		String href = elems.first().attr("href");
-		DepartedProperties dp = new DepartedProperties(elem
-				.select("span[class=link]").get(0).html(), elem
-				.select("span[class=link]").get(1).html(), parseToDate(elem
+		String id;
+		int personId = 0;
+		if (href != null) {
+			id = href.trim().substring(href.indexOf("=") + 1, href.length());
+			personId = Integer.parseInt(id);
+		}
+		DepartedProperties dp = new DepartedProperties(1, cleanStr(elem
+				.select("span[class=link]").get(0).html()), cleanStr(elem
+				.select("span[class=link]").get(1).html()), parseToDate(elem
 				.select("span[class=link]").get(5).html()), parseToDate(elem
 				.select("span[class=link]").get(4).html()), parseToDate(elem
 				.select("span[class=link]").get(3).html()), href);
-		// Person person = new Person(0, elem.select("span[class=link]").get(1)
-		// .html(), elem.select("span[class=link]").get(0).html(), elem
-		// .select("span[class=link]").get(5).html(), elem
-		// .select("span[class=link]").get(3).html(), elem
-		// .select("span[class=link]").get(4).html());
-		// Elements elems = elem.select("a");// .first().attr("href");
-		// String href = elems.first().attr("href");
-		// person.setUrl(href);
-		
-		return new DepartedImpl(dp, 666, new Location("dummy"));
+		return new DepartedImpl(dp, personId, new Location("dummy"));
 	}
 
 	public static ContentValues asContentValues(Departed departed) {
@@ -147,6 +140,18 @@ public final class DepartedFactory {
 		values.put(COLUMN_CEMENTERY_ID, departed.getCmId());
 		return values;
 
+	}
+
+	private static boolean filledStr(String str) {
+		return str != null && !str.equals("");
+	}
+
+	@SuppressLint("DefaultLocale")
+	private static String cleanStr(String str) {
+		if (filledStr(str))
+			return str.toLowerCase().trim();
+		else
+			return str;
 	}
 
 }
