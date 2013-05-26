@@ -34,6 +34,7 @@ import pl.itiner.db.GraveFinderProvider;
 import pl.itiner.fetch.JsonFetchService;
 import pl.itiner.fetch.QueryParams;
 import pl.itiner.nutiteq.NutiteqMap;
+import pl.itiner.nutiteq.WroclawResultView;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -119,7 +120,10 @@ public class ResultList extends SherlockListFragment implements
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Intent i = new Intent(getActivity(), NutiteqMap.class);
+//		Intent i = new Intent(getActivity(), NutiteqMap.class);
+//		i.putExtra(NutiteqMap.DEPARTED_ID_BUND, id);
+//		startActivity(i);
+		Intent i = new Intent(getActivity(), WroclawResultView.class);
 		i.putExtra(NutiteqMap.DEPARTED_ID_BUND, id);
 		startActivity(i);
 	}

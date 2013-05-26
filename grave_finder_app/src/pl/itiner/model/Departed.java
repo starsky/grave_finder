@@ -34,5 +34,9 @@ public interface Departed {
 	public abstract Location getLocation();
 
 	public abstract long getId();
+	
+	public abstract String getURL();
+	
+	public abstract void setURL(String url);
 
 }

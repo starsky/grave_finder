@@ -23,7 +23,8 @@ final class DepartedTableHelper {
 			+ COLUMN_SURENAME + " TEXT NULL, "
 			+ COLUMN_LAT + " DECIMAL(9,6) NOT NULL, "
 			+ COLUMN_LON + " DECIMAL(9,6) NOT NULL, "
-			+ COLUMN_FETCHED_TIME + " TIMESTAMP"
+			+ COLUMN_FETCHED_TIME + " TIMESTAMP, "
+			+ COLUMN_URL + " TEXT NULL"
 			+ ");";
 	
 	private DepartedTableHelper() {

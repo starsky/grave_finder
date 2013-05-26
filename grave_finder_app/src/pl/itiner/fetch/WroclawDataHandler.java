@@ -9,15 +9,14 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 
 import pl.itiner.model.Departed;
 import pl.itiner.model.DepartedFactory;
@@ -36,27 +35,39 @@ public class WroclawDataHandler {
 	public List<? extends Departed> executeQuery() throws IOException {
 		jSessionId = getJSessionId();
 		String postData = postData();
-		return DepartedFactory.parseElements(postData);
+		List<? extends Departed> depatreds = DepartedFactory.parseElements(postData);
+		getDetails(depatreds, jSessionId);
+		return depatreds;
 	}
-
-	public HttpEntity getDetails(String partOfURL, String jSessionId) {
+	
+	public void getDetails(List <? extends Departed> list, String jSessionId) {
 		HttpEntity entity = null;
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet("http://iwroclaw.pl" + partOfURL);
-		try {
+		String url = null;
+		String content = null;
+		for (int i = 0; i < list.size(); i++) {
+			HttpGet httpget = new HttpGet("http://iwroclaw.pl/" + list.get(i).getURL());
 			httpget.setHeader("Cookie", "JSESSIONID=" + jSessionId);
-			HttpResponse response = httpclient.execute(httpget);
+			HttpResponse response = HttpDownloadTask.sendGetRequest(httpget);
 			entity = response.getEntity();
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+			try {
+				content = EntityUtils.toString(entity);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(content != null) {
+				Element doc = Jsoup.parse(content);
+				Element img = doc.select("img").first();
+				url = img.attr("src");
+				list.get(i).setURL(url);
+				
+			}
 		}
-		return entity;
+		
 	}
 
 	public String getJSessionId() {

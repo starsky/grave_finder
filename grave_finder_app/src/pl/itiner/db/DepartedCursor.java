@@ -106,4 +106,17 @@ public final class DepartedCursor extends CursorWrapper implements Departed {
 		return getLong(idx);
 	}
 
+	@Override
+	public String getURL() {
+		// TODO Auto-generated method stub
+		int idx = getColumnIndexOrThrow(COLUMN_URL);
+		return isNull(idx) ? "" : getString(idx);
+	}
+
+	@Override
+	public void setURL(String url) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

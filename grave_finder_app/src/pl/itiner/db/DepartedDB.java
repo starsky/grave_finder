@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 final class DepartedDB extends SQLiteOpenHelper {
 
 	public static final String DATABASE_NAME = "departed_db";
-	public static final Integer DATABASE_VERSION = 2;
+	public static final Integer DATABASE_VERSION = 3;
 	public DepartedDB(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}

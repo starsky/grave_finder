@@ -145,4 +145,17 @@ class DepartedImpl implements Departed {
 		return id;
 	}
 
+	@Override
+	public String getURL() {
+		// TODO Auto-generated method stub
+		return properties.getW_url();
+	}
+
+	@Override
+	public void setURL(String url) {
+		// TODO Auto-generated method stub
+		properties.setW_url(url);
+		
+	}
+
 }

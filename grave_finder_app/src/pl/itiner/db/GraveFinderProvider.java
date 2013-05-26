@@ -275,6 +275,7 @@ public final class GraveFinderProvider extends ContentProvider {
 		public static final String COLUMN_FIELD = "field";
 		public static final String COLUMN_SIZE = "size";
 		public static final String COLUMN_FETCHED_TIME = "fetched_time";
+		public static final String COLUMN_URL = "map_url";
 	}
 
 }

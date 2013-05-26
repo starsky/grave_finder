@@ -15,6 +15,7 @@ import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_QUARTER;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_ROW;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SIZE;
 import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_SURENAME;
+import static pl.itiner.db.GraveFinderProvider.Columns.COLUMN_URL;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -70,6 +71,8 @@ public final class DepartedFactory {
 		Elements even = doc.select("table[class=list]").select("tr.even");
 		for (Element el : even) {
 			DepartedImpl p = parseDeparted(el);
+			
+//			p.getURL()
 			if (p != null)
 				list.add(p);
 		}
@@ -104,7 +107,7 @@ public final class DepartedFactory {
 			id = href.trim().substring(href.indexOf("=") + 1, href.length());
 			personId = Integer.parseInt(id);
 		}
-		DepartedProperties dp = new DepartedProperties(1, cleanStr(elem
+		DepartedProperties dp = new DepartedProperties(0, cleanStr(elem
 				.select("span[class=link]").get(0).html()), cleanStr(elem
 				.select("span[class=link]").get(1).html()), parseToDate(elem
 				.select("span[class=link]").get(5).html()), parseToDate(elem
@@ -138,6 +141,7 @@ public final class DepartedFactory {
 		values.put(COLUMN_SIZE, departed.getSize());
 		values.put(COLUMN_SURENAME, departed.getSurname());
 		values.put(COLUMN_CEMENTERY_ID, departed.getCmId());
+		values.put(COLUMN_URL, departed.getURL());
 		return values;
 
 	}
