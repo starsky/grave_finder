@@ -2,10 +2,11 @@
 <classpath>
 	<classpathentry exported="true" kind="lib" path="libs/android_maps_lib-1.1.1.jar" sourcepath="/home/michal/projects/Hobby/Android/Grave/maps-lib-nutiteq"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="lib" path="libs/projector.jar"/>
 	<classpathentry kind="lib" path="libs/gson.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

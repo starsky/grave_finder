@@ -63,6 +63,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -85,8 +86,13 @@ import com.nutiteq.wrappers.Image;
 
 public class NutiteqMap extends SherlockFragmentActivity implements
 		LoaderCallbacks<Cursor> {
-	private static final int FILE_CACHE_SIZE = 5 * 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
-	private static final int MEM_CACHE_SIZE = 1024 * 1024; //I assume that it is in bytes no docs from nutiteq
+	private static final int FILE_CACHE_SIZE = 5 * 1024 * 1024; // I assume that
+																// it is in
+																// bytes no docs
+																// from nutiteq
+	private static final int MEM_CACHE_SIZE = 1024 * 1024; // I assume that it
+															// is in bytes no
+															// docs from nutiteq
 	public static final String DEPARTED_ID_BUND = "DEPARTED_ID_BUND";
 	private BasicMapComponent mapComponent;
 	private GeoMap map;
@@ -131,8 +137,13 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 		locListener = new NutiteqLocationListener();
 		locManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
-		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-				locListener);
+		try {
+			locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
+					20, locListener);
+		} catch (IllegalArgumentException e) {
+			Toast.makeText(this, getText(R.string.warning_turn_on_gps),
+					Toast.LENGTH_LONG).show();
+		}
 		// setup map
 		mapComponent = (BasicMapComponent) getLastCustomNonConfigurationInstance();
 		if (mapComponent == null) {
@@ -160,8 +171,8 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 		if (!cacheDir.exists()) {
 			cacheDir.mkdir();
 		}
-		final FileCache fileSystemCache = new FileCache(
-				this, "network_cache", cacheDir, FILE_CACHE_SIZE);
+		final FileCache fileSystemCache = new FileCache(this, "network_cache",
+				cacheDir, FILE_CACHE_SIZE);
 		mapComponent.setNetworkCache(new CachingChain(new Cache[] {
 				memoryCache, fileSystemCache }));
 		map = getMap();

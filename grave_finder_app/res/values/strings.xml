@@ -42,5 +42,6 @@
     <string name="clear_cache">Wyczyść pamięć podręczną</string>
     <string name="about_app">O programie</string>
     <string name="libraries">Biblioteki:</string>
+    <string name="warning_turn_on_gps">Włącz GPS w urządzeniu.</string>
 
 </resources>
