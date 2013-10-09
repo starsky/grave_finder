@@ -63,6 +63,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -136,8 +137,13 @@ public class NutiteqMap extends SherlockFragmentActivity implements
 		locListener = new NutiteqLocationListener();
 		locManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
-		locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-				locListener);
+		try {
+			locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
+					20, locListener);
+		} catch (IllegalArgumentException e) {
+			Toast.makeText(this, getText(R.string.warning_turn_on_gps),
+					Toast.LENGTH_LONG).show();
+		}
 		// setup map
 		mapComponent = (BasicMapComponent) getLastCustomNonConfigurationInstance();
 		if (mapComponent == null) {

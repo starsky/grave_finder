@@ -44,5 +44,6 @@
     <string name="libraries">Biblioteki:</string>
     <string name="no_results">Brak wyników</string>
     <string name="searching">Wyszukiwnie</string>
+    <string name="warning_turn_on_gps">Włącz GPS w urządzeniu.</string>
 
 </resources>
